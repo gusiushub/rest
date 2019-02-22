@@ -1,62 +1,71 @@
 <?php
 
-$arr =[];
-var_dump(showTree('./incoming'));
+showTree('./incoming');
 
 
+/**
+ * @param $fileName
+ * @return string
+ */
 function nextLetter($fileName)
 {
     $array = getL();
     $fileName = explode('/',$fileName);
     $partName = explode('.',$fileName[2]);
     $fileName[2] = $partName[0] ;
-        if ($fileName[2]<998){
-            $fileName[2]++;
-            if (iconv_strlen($fileName[2])==1){
-                return $fileName[0].'/'.$fileName[1].'/00'.$fileName[2].'.jpg';
-            }
-            if (iconv_strlen($fileName[2])==2){
-                return $fileName[0].'/'.$fileName[1].'/0'.$fileName[2].'.jpg';
-            }
-            return $fileName[0].'/'.$fileName[1].'/'.$fileName[2].'.jpg';
+    if ($fileName[2]<998){
+        $fileName[2]++;
+        if (iconv_strlen($fileName[2])==1){
 
-        }elseif($fileName[1]<998 && $fileName[2]>997){
-            $fileName[1]++;
-
-            $fileName[2]='000';
-            if (iconv_strlen($fileName[1])==1){
-                mkdir(__DIR__.'/app/img/'.$fileName[0].'/00'.$fileName[1],0700);
-                return $fileName[0].'/00'.$fileName[1].'/'.$fileName[2].'.jpg';
-            }
-            if (iconv_strlen($fileName[1])==2){
-                mkdir(__DIR__.'/app/img/'.$fileName[0].'/0'.$fileName[1],0700);
-                return $fileName[0].'/0'.$fileName[1].'/'.$fileName[2].'.jpg';
-            }
-            mkdir(__DIR__.'/app/img/'.$fileName[0].'/'.$fileName[1],0700);
-            return $fileName[0].'/'.$fileName[1].'/'.$fileName[2].'.jpg';
-        }elseif($fileName[1]>998 && $fileName[2]>997){
-
-            $numLetter = getLetter(getLastLetter($fileName[0]));
-    $arr = getName($fileName[0]);
-    $count = count($arr);
-    if ($numLetter!=26){
-        $arr[$count-1]=$array[$numLetter+1];
-        mkdir(__DIR__.'/app/img/'.implode($arr),0700);
-        mkdir(__DIR__.'/app/img/'.implode($arr).'/000/',0700);
-        return implode($arr).'/000/000.jpg';
-    }else{
-        $arrLet = array();
-        for ($i=0;$i<$count+1;$i++){
-            $arrLet[$i]='a';
+            return $fileName[0].'/'.$fileName[1].'/00'.$fileName[2].'.jpg';
         }
-        mkdir(__DIR__.'/app/img/'.implode($arrLet),0700);
-        mkdir(__DIR__.'/app/img/'.implode($arrLet).'/000/',0700);
-        return implode($arrLet).'/000/000.jpg';
+        if (iconv_strlen($fileName[2])==2){
+
+            return $fileName[0].'/'.$fileName[1].'/0'.$fileName[2].'.jpg';
+        }
+
+        return $fileName[0].'/'.$fileName[1].'/'.$fileName[2].'.jpg';
+
+    }elseif($fileName[1]<998 && $fileName[2]>997){
+        $fileName[1]++;
+        $fileName[2]='000';
+        if (iconv_strlen($fileName[1])==1){
+            mkdir(__DIR__.'/app/img/'.$fileName[0].'/00'.$fileName[1],0700);
+            return $fileName[0].'/00'.$fileName[1].'/'.$fileName[2].'.jpg';
+        }
+        if (iconv_strlen($fileName[1])==2){
+            mkdir(__DIR__.'/app/img/'.$fileName[0].'/0'.$fileName[1],0700);
+            return $fileName[0].'/0'.$fileName[1].'/'.$fileName[2].'.jpg';
+        }
+        mkdir(__DIR__.'/app/img/'.$fileName[0].'/'.$fileName[1],0700);
+
+        return $fileName[0].'/'.$fileName[1].'/'.$fileName[2].'.jpg';
+    }elseif($fileName[1]>998 && $fileName[2]>997){
+
+        $numLetter = getLetter(getLastLetter($fileName[0]));
+        $arr = getName($fileName[0]);
+        $count = count($arr);
+        if ($numLetter!=26){
+            $arr[$count-1]=$array[$numLetter+1];
+            mkdir(__DIR__.'/app/img/'.implode($arr),0700);
+            mkdir(__DIR__.'/app/img/'.implode($arr).'/000/',0700);
+            return implode($arr).'/000/000.jpg';
+        }else{
+            $arrLet = array();
+            for ($i=0;$i<$count+1;$i++){
+                $arrLet[$i]='a';
+            }
+            mkdir(__DIR__.'/app/img/'.implode($arrLet),0700);
+            mkdir(__DIR__.'/app/img/'.implode($arrLet).'/000/',0700);
+            return implode($arrLet).'/000/000.jpg';
+        }
     }
-        }
 }
 
 
+/**
+ * @param $filename
+ */
 function compareLetter($filename)
 {
     $numLast = getLetter(getLastLetter($filename));
@@ -66,6 +75,9 @@ function compareLetter($filename)
     }
 }
 
+/**
+ * @param $folder
+ */
 function showTree($folder) {
     /* Получаем полный список файлов и каталогов внутри $folder */
     $files = scandir($folder);
@@ -78,24 +90,37 @@ function showTree($folder) {
             $fileName = file_get_contents(__DIR__.'/dir.txt');
             file_put_contents(__DIR__.'/dir.txt', nextLetter($fileName));
             if (!copy(showTree($f0), './../app/img/'.$fileName)) {
+                unlink(showTree($f0));
                 echo "не удалось скопировать $file...\n";
+            }else {
+                unlink(showTree($f0));
             }
         }
         $fileName = file_get_contents(__DIR__.'/dir.txt');
         file_put_contents(__DIR__.'/dir.txt', nextLetter($fileName));
-        if (!copy('./incoming/'.$file, './app/img/'.$fileName)) {
+        if (!copy($f0, './app/img/'.$fileName)) {
+            unlink($f0);
             echo "не удалось скопировать $file...\n";
+        }else{
+            unlink($f0);
         }
-
     }
 }
 
 
+/**
+ * @param $filename
+ * @return array
+ */
 function getName($filename)
 {
     return str_split($filename);
 }
 
+/**
+ * @param $filename
+ * @return mixed
+ */
 function getLastLetter($filename)
 {
     $arr = getName($filename);
@@ -103,6 +128,9 @@ function getLastLetter($filename)
     return $arr[$count-1];
 }
 
+/**
+ * @return array
+ */
 function getL()
 {
     $arr = [
@@ -137,6 +165,10 @@ function getL()
     return $arr;
 }
 
+/**
+ * @param $name
+ * @return int
+ */
 function getLetter($name)
 {
     switch ($name){

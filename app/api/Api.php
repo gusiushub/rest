@@ -2,20 +2,19 @@
 
 namespace app\api;
 
-use MongoDB\Driver\Exception\RuntimeException;
 
 abstract class Api
 {
     public $apiName=''; //users
-
     protected $method = ''; //GET|POST|PUT|DELETE
-
     public $requestUri = [];
     public $requestParams = [];
-
     protected $action = ''; //Название метод для выполнения
 
 
+    /**
+     * Api constructor.
+     */
     public function __construct() {
         header("Access-Control-Allow-Orgin: *");
         header("Access-Control-Allow-Methods: *");
@@ -41,6 +40,9 @@ abstract class Api
         }
     }
 
+    /**
+     * @return mixed
+     */
     public function run() {
 
         //Определение действия для обработки
@@ -54,11 +56,20 @@ abstract class Api
         }
     }
 
+    /**
+     * @param $data
+     * @param int $status
+     * @return string
+     */
     protected function response($data, $status = 500) {
         header("HTTP/1.1 " . $status . " " . $this->requestStatus($status));
         return json_encode($data);
     }
 
+    /**
+     * @param $code
+     * @return mixed
+     */
     private function requestStatus($code) {
         $status = array(
             200 => 'OK',
@@ -69,6 +80,9 @@ abstract class Api
         return ($status[$code])?$status[$code]:$status[500];
     }
 
+    /**
+     * @return null|string
+     */
     protected function getAction()
     {
         $method = $this->method;
@@ -83,13 +97,7 @@ abstract class Api
                 }
                 break;
 //            case 'POST':
-//                return 'createAction';
-//                break;
-//            case 'PUT':
-//                return 'updateAction';
-//                break;
-//            case 'DELETE':
-//                return 'deleteAction';
+//                return ;
 //                break;
             default:
                 return null;

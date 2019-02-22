@@ -43,9 +43,9 @@ class UserApi extends Api
             if (iconv_strlen($fileName[1])==2){
                 return $fileName[0].'/0'.$fileName[1].'/'.$fileName[2].'.jpg';
             }
+
             return $fileName[0].'/'.$fileName[1].'/'.$fileName[2].'.jpg';
         }elseif($fileName[1]>998 && $fileName[2]>997){
-
             $numLetter = $this->getLetter($this->getLastLetter($fileName[0]));
             $arr = $this->getName($fileName[0]);
             $count = count($arr);
@@ -58,6 +58,7 @@ class UserApi extends Api
                 for ($i=0;$i<$count+1;$i++){
                     $arrLet[$i]='a';
                 }
+
                 return implode($arrLet).'/000/000.jpg';
             }
         }
@@ -213,17 +214,19 @@ class UserApi extends Api
      */
     public function viewAction()
     {
-            $get = $this->requestParams;
-            $opts = array(
-                'user'    => 'root',
-                'pass'    => '',
-                'db'      => 'rest',
-                'charset' => 'utf8'
+        $get = $this->requestParams;
 
-            );
-            $db= new SafeMySQL($opts);
-            $user = $db->query("SELECT * FROM users WHERE Login='".$get['login']."'");
-            $user = $db->fetch($user);
+        $opts = array(
+            'user'    => 'root',
+            'pass'    => '',
+            'db'      => 'rest',
+            'charset' => 'utf8'
+
+        );
+
+        $db= new SafeMySQL($opts);
+        $user = $db->query("SELECT * FROM users WHERE Login='".$get['login']."'");
+        $user = $db->fetch($user);
         if ($user) {
             $type = 'image/jpeg';
             header('Content-Type:'.$type);
@@ -308,12 +311,12 @@ class UserApi extends Api
         );
         $db = new SafeMySQL($opts);
 
-    if (isset($get['newstatus'])) {
-        $update = $db->query("UPDATE users SET Status=".(int)$get['newstatus']." WHERE Login='".$get['login']."'");
-        if ($update) {
-            return $this->response('Data updated.', 200);
+        if (isset($get['newstatus'])) {
+            $update = $db->query("UPDATE users SET Status=".(int)$get['newstatus']." WHERE Login='".$get['login']."'");
+            if ($update) {
+                return $this->response('Data updated.', 200);
+            }
         }
-    }
         return $this->response("Update error", 400);
     }
 

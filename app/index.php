@@ -2,7 +2,6 @@
 
 use app\api\UserApi;
 
-include '../vendor/autoload.php';
 require_once 'api/UserApi.php';
 
 try {
