@@ -6,26 +6,14 @@ namespace app\api;
 use app\db\Db;
 use app\db\SafeMySQL;
 use app\models\Users;
-//use app\db\SafeMySQL;
 
-//use app\api\Api;
-//use app\a\Users;
 
 require_once 'Api.php';
-//require_once 'Db.php';
-//require_once 'models/Users.php';
 require_once 'db/SafeMySQL.php';
 
 class UserApi extends Api
 {
 //    public $apiName='users';
-
-//    public function __construct()
-//    {
-//        var_dump(explode('/',$this->requestUri[0][0])[1]);
-//        $this->apiName='users';
-//    }
-
     /**
      * Метод GET
      * Вывод списка всех записей
@@ -52,6 +40,184 @@ class UserApi extends Api
         return $this->response('Data not found', 404);
     }
 
+    public function nextLetter($fileName)
+    {
+        $array = $this->getL();
+        $fileName = explode('/',$fileName);
+        $partName = explode('.',$fileName[2]);
+        $fileName[2] = $partName[0] ;
+//    for ($i=2;$i>0;$i--){
+        if ($fileName[2]<998){
+            $fileName[2]++;
+            if (iconv_strlen($fileName[2])==1){
+                return $fileName[0].'/'.$fileName[1].'/00'.$fileName[2].'.jpg';
+            }
+            if (iconv_strlen($fileName[2])==2){
+                return $fileName[0].'/'.$fileName[1].'/0'.$fileName[2].'.jpg';
+            }
+            return $fileName[0].'/'.$fileName[1].'/'.$fileName[2].'.jpg';
+
+        }elseif($fileName[1]<998 && $fileName[2]>997){
+            $fileName[1]++;
+
+            $fileName[2]='000';
+            if (iconv_strlen($fileName[1])==1){
+                return $fileName[0].'/00'.$fileName[1].'/'.$fileName[2].'.jpg';
+            }
+            if (iconv_strlen($fileName[1])==2){
+                return $fileName[0].'/0'.$fileName[1].'/'.$fileName[2].'.jpg';
+            }
+            return $fileName[0].'/'.$fileName[1].'/'.$fileName[2].'.jpg';
+        }elseif($fileName[1]>998 && $fileName[2]>997){
+
+            $numLetter = $this->getLetter($this->getLastLetter($fileName[0]));
+            $arr = $this->getName($fileName[0]);
+            $count = count($arr);
+            if ($numLetter!=26){
+                $arr[$count-1]=$array[$numLetter+1];
+
+                return implode($arr).'/000/000.jpg';
+            }else{
+                $arrLet = array();
+                for ($i=0;$i<$count+1;$i++){
+                    $arrLet[$i]='a';
+                }
+//        $arrLet[$count]=
+
+                return implode($arrLet).'/000/000.jpg';
+//        return implode($arrLet).'/'.$fileName[1].'/'.$fileName[2].'.jpg';
+            }
+//    $newLetter = $array[getLetter(getLastLetter($fileName))+1];
+        }
+//    }
+    }
+    public  function getName($filename)
+    {
+        return str_split($filename);
+    }
+    public function getLastLetter($filename)
+    {
+        $arr = $this->getName($filename);
+        $count = count($arr);
+        return $arr[$count-1];
+    }
+    public function getL()
+    {
+        $arr = [
+            1=>'a',
+            2=>'b',
+            3=>'c',
+            4=>'d',
+            5=>'e',
+            6=>'f',
+            7=>'g',
+            8=>'h',
+            9=>'i',
+            10=>'j',
+            11=>'k',
+            12=>'l',
+            13=>'m',
+            14=>'n',
+            15=>'o',
+            16=>'p',
+            17=>'q',
+            18=>'r',
+            19=>'s',
+            20=>'t',
+            21=>'u',
+            22=>'v',
+            23=>'w',
+            24=>'x',
+            25=>'y',
+            26=>'z',
+        ];
+
+        return $arr;
+    }
+
+    function getLetter($name)
+    {
+        switch ($name){
+            case 'a':
+                return 1;
+                break;
+            case 'b':
+                return 2;
+                break;
+            case 'c':
+                return 3;
+                break;
+            case 'd':
+                return 4;
+                break;
+            case 'e':
+                return 5;
+                break;
+            case 'f':
+                return 6;
+                break;
+            case 'g':
+                return 7;
+                break;
+            case 'h':
+                return 8;
+                break;
+            case 'i':
+                return 9;
+                break;
+            case 'j':
+                return 10;
+                break;
+            case 'k':
+                return 11;
+                break;
+            case 'l':
+                return 12;
+                break;
+            case 'm':
+                return 13;
+                break;
+            case 'n':
+                return 14;
+                break;
+            case 'o':
+                return 15;
+                break;
+            case 'p':
+                return 16;
+                break;
+            case 'q':
+                return 17;
+                break;
+            case 'r':
+                return 18;
+                break;
+            case 's':
+                return 19;
+                break;
+            case 't':
+                return 20;
+                break;
+            case 'u':
+                return 21;
+                break;
+            case 'v':
+                return 22;
+                break;
+            case 'w':
+                return 23;
+                break;
+            case 'x':
+                return 24;
+                break;
+            case 'y':
+                return 25;
+                break;
+            case 'z':
+                return 26;
+        }
+    }
+
     /**
      * Метод GET
      * Просмотр отдельной записи (по id)
@@ -60,16 +226,7 @@ class UserApi extends Api
      */
     public function viewAction()
     {
-
-        //id должен быть первым параметром после /users/x
-        $id = array_shift($this->requestUri);
-//        echo $id;
-//        exit;
-//        var_dump($id);exit;
-        if($id){
-
-//            $db = (new Db())->getConnect();
-//            $db = new Db();
+            $get = $this->requestParams;
             $opts = array(
                 'user'    => 'root',
                 'pass'    => '',
@@ -78,14 +235,17 @@ class UserApi extends Api
 
             );
             $db= new SafeMySQL($opts);
-
-            $user = $db->getOne("SELECT * FROM users WHERE id=?i", $id);
-            var_dump($user);
-//            $user = $db->getById($id);
-            if($user){
-                return $this->response($user, 200);
-            }
+            $user = $db->query("SELECT * FROM users WHERE Login='".$get['login']."'");
+            $user = $db->fetch($user);
+        if ($user) {
+            $type = 'image/jpeg';
+            header('Content-Type:'.$type);
+            header('Content-Length: ' . filesize('img/'.$user['Profilepicture']));
+            return   readfile('img/'.$user['Profilepicture']);
         }
+
+//                return $this->response($user, 200);
+//        }
         return $this->response('Data not found', 404);
     }
 
@@ -99,28 +259,54 @@ class UserApi extends Api
     {
         $val = $this->requestUri;
         $get = $this->requestParams;
-        if(isset($get['token']) && isset( $get['id'])) {
+        if(isset($get['token']) &&
+            isset( $get['login'])&&
+            isset( $get['password'])&&
+            isset( $get['phone'])&&
+            isset( $get['ip'])&&
+            isset( $get['country'])&&
+            isset( $get['sex'])&&
+            isset( $get['fullname'])&&
+            isset( $get['age'])) {
             $opts = array(
                 'user' => 'root',
                 'pass' => '',
-                'db' => 'tttt',
+                'db' => 'rest',
                 'charset' => 'utf8'
 
             );
             $db = new SafeMySQL($opts);
-            $user = $db->fetch($db->query("SELECT * FROM qqqq WHERE id='" . (int)$get['id'] . "'"));
-//            var_dump($user);
-//            if ($user['name'] === $get['token']) {
-                $uniq = $db->query("SELECT * FROM qqqq WHERE id=" .(int)$get['id']);
-//                $uniq = $db->query("SELECT * FROM qqqq WHERE name='" . $val[1][0] . "'");
+//            $user = $db->fetch($db->query("SELECT * FROM users WHERE id='" . (int)$get['id'] . "'"));
+                $uniq = $db->query("SELECT * FROM users WHERE Login='".$get['login']."'");
                 if ($uniq->num_rows === 0) {
-                    $user = $db->query("INSERT INTO qqqq (name, email) VALUES ('" . $val[1][0] . "','asdasdasd')");
-//
+                    $lastUser = $db->fetch($db->query("SELECT * FROM users WHERE id=(SELECT MAX(id) FROM users)"));
+
+                    $lastPic = $this->nextLetter($lastUser['Profilepicture']);
+                    if ($lastUser['Profilepicture']=="") {
+                        $lastPic='a/000/000.jpg';
+//                        $lastUser['Profilepicture']='a/000/000.jpg';
+                    }
+//                    var_dump(); exit;
+                        $user = $db->query("INSERT INTO users (Login, Password,Phone,ip,Country,Sex,Age,Fullname,Profilepicture) VALUES (
+                    '" . $get['login'] . "',
+                    '" . $get['password'] . "',
+                    '" . $get['phone'] . "',
+                    '" . $get['ip'] . "',
+                    '" . $get['country'] . "',
+                    '" . $get['sex'] . "',
+                    '" . $get['age'] . "',
+                    '" . $get['fullname'] . "',
+                    '" . $lastPic. "')");
+//var_dump($lastPic); exit;
                     if ($user) {
-                        return $this->response('Data saved.', 200);
+//                        $filename = file_get_contents('./../dir.txt');
+                        $type = 'image/jpeg';
+                        header('Content-Type:'.$type);
+                        header('Content-Length: ' . filesize('img/'.$lastPic));
+                        return   readfile('img/'.$lastPic);
                     }
                 }
-//            }
+            return $this->response("login exists", 500);
         }
         return $this->response("Saving error", 500);
     }

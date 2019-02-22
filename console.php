@@ -1,14 +1,15 @@
 <?php
-$files = scandir(__DIR__.'/incoming/ff');
+//$files = scandir(__DIR__.'/incoming/ff');
 //mkdir(__DIR__.'/incoming/ff',0700);
 
 $arr =[];
- $fileName = file_get_contents(__DIR__.'/dir.txt');
-var_dump($fileName);
-var_dump(nextLetter($filename));
-file_put_contents(__DIR__.'/dir.txt', nextLetter($fileName));
+var_dump(showTree('./incoming'));
+// $filename = file_get_contents(__DIR__.'/dir.txt');
+//var_dump($fileName);
+//var_dump(nextLetter($filename));
+//file_put_contents(__DIR__.'/dir.txt', nextLetter($filename));
 
-var_dump(nextLetter('sdfsdf'));
+//var_dump(nextLetter('sdfsdf'));
 //for($i=0;$i<$count;$i++){
 function isPlusLetter()
 {
@@ -18,24 +19,64 @@ function isPlusLetter()
 function nextLetter($fileName)
 {
     $array = getL();
-    $numLetter = getLetter(getLastLetter($fileName));
-    $arr = getName($fileName);
+    $fileName = explode('/',$fileName);
+    $partName = explode('.',$fileName[2]);
+    $fileName[2] = $partName[0] ;
+//    for ($i=2;$i>0;$i--){
+        if ($fileName[2]<998){
+            $fileName[2]++;
+            if (iconv_strlen($fileName[2])==1){
+                return $fileName[0].'/'.$fileName[1].'/00'.$fileName[2].'.jpg';
+            }
+            if (iconv_strlen($fileName[2])==2){
+                return $fileName[0].'/'.$fileName[1].'/0'.$fileName[2].'.jpg';
+            }
+            return $fileName[0].'/'.$fileName[1].'/'.$fileName[2].'.jpg';
+
+        }elseif($fileName[1]<998 && $fileName[2]>997){
+            $fileName[1]++;
+
+            $fileName[2]='000';
+            if (iconv_strlen($fileName[1])==1){
+                mkdir(__DIR__.'/app/img/'.$fileName[0].'/00'.$fileName[1],0700);
+                return $fileName[0].'/00'.$fileName[1].'/'.$fileName[2].'.jpg';
+            }
+            if (iconv_strlen($fileName[1])==2){
+                mkdir(__DIR__.'/app/img/'.$fileName[0].'/0'.$fileName[1],0700);
+                return $fileName[0].'/0'.$fileName[1].'/'.$fileName[2].'.jpg';
+            }
+            mkdir(__DIR__.'/app/img/'.$fileName[0].'/'.$fileName[1],0700);
+            return $fileName[0].'/'.$fileName[1].'/'.$fileName[2].'.jpg';
+        }elseif($fileName[1]>998 && $fileName[2]>997){
+//        }elseif ($fileName[1]==999){
+
+
+//    var_dump($fileName); exit;
+    $numLetter = getLetter(getLastLetter($fileName[0]));
+    $arr = getName($fileName[0]);
     $count = count($arr);
     if ($numLetter!=26){
         $arr[$count-1]=$array[$numLetter+1];
-        return implode($arr);
+        mkdir(__DIR__.'/app/img/'.implode($arr),0700);
+        mkdir(__DIR__.'/app/img/'.implode($arr).'/000/',0700);
+        return implode($arr).'/000/000.jpg';
     }else{
         $arrLet = array();
         for ($i=0;$i<$count+1;$i++){
             $arrLet[$i]='a';
         }
 //        $arrLet[$count]=
-        return implode($arrLet);
+        mkdir(__DIR__.'/app/img/'.implode($arrLet),0700);
+        mkdir(__DIR__.'/app/img/'.implode($arrLet).'/000/',0700);
+        return implode($arrLet).'/000/000.jpg';
+//        return implode($arrLet).'/'.$fileName[1].'/'.$fileName[2].'.jpg';
     }
 //    $newLetter = $array[getLetter(getLastLetter($fileName))+1];
+        }
+//    }
 }
 //    var_dump();
-    var_dump($arr[$count-1]=$newLetter);
+//    var_dump($arr[$count-1]=$newLetter);
 
 function compareLetter($filename)
 {
@@ -56,15 +97,16 @@ function showTree($folder) {
         $f0 = $folder.'/'.$file; //Получаем полный путь к файлу
         /* Если это директория */
         if (is_dir($f0)) {
-            $fileName = file_get_contents('./dir.txt');
-            file_put_contents('./dir',$fileName.'dsf');
-            if (!copy(showTree($f0), './app/img/'.$fileName)) {
+            $fileName = file_get_contents(__DIR__.'/dir.txt');
+            file_put_contents(__DIR__.'/dir.txt', nextLetter($fileName));
+            if (!copy(showTree($f0), './../app/img/'.$fileName)) {
                 echo "не удалось скопировать $file...\n";
             }
         }
-        $fileName = file_get_contents('./dir.txt');
-        file_put_contents('./dir',$fileName.'dsf');
-        if (!copy($file, './app/img/'.$fileName)) {
+        $fileName = file_get_contents(__DIR__.'/dir.txt');
+        file_put_contents(__DIR__.'/dir.txt', nextLetter($fileName));
+//        if (!copy($file, './../app/img/'.$fileName)) {
+        if (!copy('./incoming/'.$file, './app/img/'.$fileName)) {
             echo "не удалось скопировать $file...\n";
         }
         /* Если это файл, то просто выводим название файла */

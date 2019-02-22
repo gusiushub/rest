@@ -87,12 +87,12 @@ abstract class Api
 //        var_dump($method); exit;
         switch ($method) {
             case 'GET':
-                if(!$this->requestUri){
+                if($this->apiName=='show'){
                     return 'viewAction';
                 } elseif (!empty($this->requestUri[1][0])){
                     return 'createAction';
                 } else {
-                    return 'indexAction';
+                    return 'viewAction';
                 }
                 break;
             case 'POST':
