@@ -1,0 +1,16 @@
+{
+    "name": "zolow/rest",
+    "description": "restAip",
+    "authors": [
+        {
+            "name": "Zolovkin Nikita",
+            "email": "zolowkin.nikita@yandex.ru"
+        }
+    ],
+    "autoload": {
+        "psr4": {
+            "App\\Api\\": "app"
+        }
+    },
+    "require": {}
+}
