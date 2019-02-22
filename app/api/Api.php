@@ -2,10 +2,6 @@
 
 namespace app\api;
 
-
-//use Exception;
-//use http\Exception\RuntimeException;
-
 use MongoDB\Driver\Exception\RuntimeException;
 
 abstract class Api
@@ -46,15 +42,7 @@ abstract class Api
     }
 
     public function run() {
-        //Первые 2 элемента массива URI должны быть "api" и название таблицы
-        $reqUri = explode('/',$this->requestUri[0][0]);
-//        var_dump($this->requestUri); exit;
-//        var_dump(explode('/',$this->requestUri[0][0]));
-//        var_dump($reqUri); exit;
-//        var_dump(explode('/',$this->requestUri[0][0]));exit;
-        if(array_shift(explode('/',$this->requestUri[0][0])) !== 'api' || $reqUri[1] !== $this->apiName){
-            throw new RuntimeException('API Not Found', 404);
-        }
+
         //Определение действия для обработки
         $this->action = $this->getAction();
 
@@ -84,17 +72,14 @@ abstract class Api
     protected function getAction()
     {
         $method = $this->method;
-//        var_dump($method); exit;
         switch ($method) {
             case 'GET':
-                if($this->apiName=='show'){
+                if($this->requestParams['action']=='show'){
                     return 'viewAction';
-                } elseif ($this->apiName=='setstatus'){
+                } elseif ($this->requestParams['action']=='setstatus'){
                     return 'updateAction';
-                } elseif (!empty($this->requestUri[1][0])){
+                } elseif ($this->requestParams['action']=='add' && !empty($this->requestUri[1][0])){
                     return 'createAction';
-                } else {
-                    return 'viewAction';
                 }
                 break;
             case 'POST':

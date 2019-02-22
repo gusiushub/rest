@@ -1,11 +1,5 @@
 <?php
 
-//use app\api\UserApi;
-
-//use app\api\UserApi;
-
-//use App\UserAp/i;
-
 use app\api\UserApi;
 
 include '../vendor/autoload.php';

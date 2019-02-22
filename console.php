@@ -1,20 +1,8 @@
 <?php
-//$files = scandir(__DIR__.'/incoming/ff');
-//mkdir(__DIR__.'/incoming/ff',0700);
 
 $arr =[];
 var_dump(showTree('./incoming'));
-// $filename = file_get_contents(__DIR__.'/dir.txt');
-//var_dump($fileName);
-//var_dump(nextLetter($filename));
-//file_put_contents(__DIR__.'/dir.txt', nextLetter($filename));
 
-//var_dump(nextLetter('sdfsdf'));
-//for($i=0;$i<$count;$i++){
-function isPlusLetter()
-{
-
-}
 
 function nextLetter($fileName)
 {
@@ -22,7 +10,6 @@ function nextLetter($fileName)
     $fileName = explode('/',$fileName);
     $partName = explode('.',$fileName[2]);
     $fileName[2] = $partName[0] ;
-//    for ($i=2;$i>0;$i--){
         if ($fileName[2]<998){
             $fileName[2]++;
             if (iconv_strlen($fileName[2])==1){
@@ -48,11 +35,8 @@ function nextLetter($fileName)
             mkdir(__DIR__.'/app/img/'.$fileName[0].'/'.$fileName[1],0700);
             return $fileName[0].'/'.$fileName[1].'/'.$fileName[2].'.jpg';
         }elseif($fileName[1]>998 && $fileName[2]>997){
-//        }elseif ($fileName[1]==999){
 
-
-//    var_dump($fileName); exit;
-    $numLetter = getLetter(getLastLetter($fileName[0]));
+            $numLetter = getLetter(getLastLetter($fileName[0]));
     $arr = getName($fileName[0]);
     $count = count($arr);
     if ($numLetter!=26){
@@ -65,22 +49,16 @@ function nextLetter($fileName)
         for ($i=0;$i<$count+1;$i++){
             $arrLet[$i]='a';
         }
-//        $arrLet[$count]=
         mkdir(__DIR__.'/app/img/'.implode($arrLet),0700);
         mkdir(__DIR__.'/app/img/'.implode($arrLet).'/000/',0700);
         return implode($arrLet).'/000/000.jpg';
-//        return implode($arrLet).'/'.$fileName[1].'/'.$fileName[2].'.jpg';
     }
-//    $newLetter = $array[getLetter(getLastLetter($fileName))+1];
         }
-//    }
 }
-//    var_dump();
-//    var_dump($arr[$count-1]=$newLetter);
+
 
 function compareLetter($filename)
 {
-    $last = getLastLetter($filename);
     $numLast = getLetter(getLastLetter($filename));
     $arr = getL();
     if ($numLast!=1) {
@@ -105,16 +83,13 @@ function showTree($folder) {
         }
         $fileName = file_get_contents(__DIR__.'/dir.txt');
         file_put_contents(__DIR__.'/dir.txt', nextLetter($fileName));
-//        if (!copy($file, './../app/img/'.$fileName)) {
         if (!copy('./incoming/'.$file, './app/img/'.$fileName)) {
             echo "не удалось скопировать $file...\n";
         }
-        /* Если это файл, то просто выводим название файла */
-//        else echo $file."<br />";
+
     }
 }
-/* Запускаем функцию для текущего каталога */
-//showTree("./incoming", "");
+
 
 function getName($filename)
 {

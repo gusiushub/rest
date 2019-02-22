@@ -14,17 +14,12 @@ require_once 'db/SafeMySQL.php';
 class UserApi extends Api
 {
 //    public $apiName='users';
+
     /**
-     * Метод GET
-     * Вывод списка всех записей
-     * http://ДОМЕН/users
      * @return string
      */
     public function indexAction()
     {
-//        $db = (new Db())->getConnect();
-//        $db = new Users();
-//        $users = $db->getAll();
         $opts = array(
             'user'    => 'root',
             'pass'    => '',
@@ -40,13 +35,16 @@ class UserApi extends Api
         return $this->response('Data not found', 404);
     }
 
+    /**
+     * @param $fileName
+     * @return string
+     */
     public function nextLetter($fileName)
     {
         $array = $this->getL();
         $fileName = explode('/',$fileName);
         $partName = explode('.',$fileName[2]);
         $fileName[2] = $partName[0] ;
-//    for ($i=2;$i>0;$i--){
         if ($fileName[2]<998){
             $fileName[2]++;
             if (iconv_strlen($fileName[2])==1){
@@ -82,25 +80,34 @@ class UserApi extends Api
                 for ($i=0;$i<$count+1;$i++){
                     $arrLet[$i]='a';
                 }
-//        $arrLet[$count]=
-
                 return implode($arrLet).'/000/000.jpg';
-//        return implode($arrLet).'/'.$fileName[1].'/'.$fileName[2].'.jpg';
             }
-//    $newLetter = $array[getLetter(getLastLetter($fileName))+1];
         }
-//    }
     }
+
+    /**
+     * @param $filename
+     * @return array
+     */
     public  function getName($filename)
     {
         return str_split($filename);
     }
+
+    /**
+     * @param $filename
+     * @return mixed
+     */
     public function getLastLetter($filename)
     {
         $arr = $this->getName($filename);
         $count = count($arr);
         return $arr[$count-1];
     }
+
+    /**
+     * @return array
+     */
     public function getL()
     {
         $arr = [
@@ -135,7 +142,11 @@ class UserApi extends Api
         return $arr;
     }
 
-    function getLetter($name)
+    /**
+     * @param $name
+     * @return int
+     */
+    public function getLetter($name)
     {
         switch ($name){
             case 'a':
@@ -219,12 +230,8 @@ class UserApi extends Api
     }
 
 
-
     /**
-     * Метод GET
-     * Просмотр отдельной записи (по id)
-     * http://ДОМЕН/users/1
-     * @return string
+     * @return false|int|string
      */
     public function viewAction()
     {
@@ -246,17 +253,10 @@ class UserApi extends Api
             return   readfile('img/'.$user['Profilepicture']);
         }
 
-//                return $this->response($user, 200);
-//        }
         return $this->response('Data not found', 404);
     }
 
-    /**
-     * Метод POST
-     * Создание новой записи
-     * http://ДОМЕН/users + параметры запроса name, email
-     * @return string
-     */
+
     public function createAction()
     {
         $val = $this->requestUri;
@@ -278,7 +278,6 @@ class UserApi extends Api
 
             );
             $db = new SafeMySQL($opts);
-//            $user = $db->fetch($db->query("SELECT * FROM users WHERE id='" . (int)$get['id'] . "'"));
                 $uniq = $db->query("SELECT * FROM users WHERE Login='".$get['login']."'");
                 if ($uniq->num_rows === 0) {
                     $lastUser = $db->fetch($db->query("SELECT * FROM users WHERE id=(SELECT MAX(id) FROM users)"));
@@ -286,9 +285,7 @@ class UserApi extends Api
                     $lastPic = $this->nextLetter($lastUser['Profilepicture']);
                     if ($lastUser['Profilepicture']=="") {
                         $lastPic='a/000/000.jpg';
-//                        $lastUser['Profilepicture']='a/000/000.jpg';
                     }
-//                    var_dump(); exit;
                         $user = $db->query("INSERT INTO users (Login, Password,Phone,ip,Country,Sex,Age,Fullname,Profilepicture) VALUES (
                     '" . $get['login'] . "',
                     '" . $get['password'] . "',
@@ -299,13 +296,11 @@ class UserApi extends Api
                     '" . $get['age'] . "',
                     '" . $get['fullname'] . "',
                     '" . $lastPic. "')");
-//var_dump($lastPic); exit;
                     if ($user) {
-//                        $filename = file_get_contents('./../dir.txt');
                         $type = 'image/jpeg';
                         header('Content-Type:'.$type);
                         header('Content-Length: ' . filesize('img/'.$lastPic));
-                        return   readfile('img/'.$lastPic);
+                        return  readfile('img/'.$lastPic);
                     }
                 }
             return $this->response("login exists", 500);
@@ -313,10 +308,8 @@ class UserApi extends Api
         return $this->response("Saving error", 500);
     }
 
+
     /**
-     * Метод PUT
-     * Обновление отдельной записи (по ее id)
-     * http://ДОМЕН/users/1 + параметры запроса name, email
      * @return string
      */
     public function updateAction()
@@ -331,14 +324,12 @@ class UserApi extends Api
         );
         $db = new SafeMySQL($opts);
 
-if (isset($get['newstatus'])) {
-    $update = $db->query("UPDATE users SET Status=".(int)$get['newstatus']." WHERE Login='".$get['login']."'");
-    if ($update) {
-//        if ($user = Users::update($db, $userId, $name, $email)) {
+    if (isset($get['newstatus'])) {
+        $update = $db->query("UPDATE users SET Status=".(int)$get['newstatus']." WHERE Login='".$get['login']."'");
+        if ($update) {
             return $this->response('Data updated.', 200);
-//        }
+        }
     }
-}
         return $this->response("Update error", 400);
     }
 
