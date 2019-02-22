@@ -96,9 +96,7 @@ abstract class Api
         }
     }
 
-    abstract protected function indexAction();
     abstract protected function viewAction();
     abstract protected function createAction();
     abstract protected function updateAction();
-    abstract protected function deleteAction();
 }

@@ -16,26 +16,6 @@ class UserApi extends Api
 //    public $apiName='users';
 
     /**
-     * @return string
-     */
-    public function indexAction()
-    {
-        $opts = array(
-            'user'    => 'root',
-            'pass'    => '',
-            'db'      => 'rest',
-            'charset' => 'utf8'
-
-        );
-        $db= new SafeMySQL($opts);
-        $users = $db->getAll("SELECT * FROM users");
-        if($users){
-            return $this->response($users, 200);
-        }
-        return $this->response('Data not found', 404);
-    }
-
-    /**
      * @param $fileName
      * @return string
      */
@@ -257,6 +237,9 @@ class UserApi extends Api
     }
 
 
+    /**
+     * @return false|int|string
+     */
     public function createAction()
     {
         $val = $this->requestUri;
@@ -286,7 +269,7 @@ class UserApi extends Api
                     if ($lastUser['Profilepicture']=="") {
                         $lastPic='a/000/000.jpg';
                     }
-                        $user = $db->query("INSERT INTO users (Login, Password,Phone,ip,Country,Sex,Age,Fullname,Profilepicture) VALUES (
+                        $user = $db->query("INSERT INTO users (Login, Password,Phone,ip,Country,Sex,Age,Fullname,Date,Profilepicture) VALUES (
                     '" . $get['login'] . "',
                     '" . $get['password'] . "',
                     '" . $get['phone'] . "',
@@ -295,6 +278,7 @@ class UserApi extends Api
                     '" . $get['sex'] . "',
                     '" . $get['age'] . "',
                     '" . $get['fullname'] . "',
+                    '" . date('Y-m-d H:i:s', time()) . "',
                     '" . $lastPic. "')");
                     if ($user) {
                         $type = 'image/jpeg';
@@ -331,28 +315,6 @@ class UserApi extends Api
         }
     }
         return $this->response("Update error", 400);
-    }
-
-    /**
-     * Метод DELETE
-     * Удаление отдельной записи (по ее id)
-     * http://ДОМЕН/users/1
-     * @return string
-     */
-    public function deleteAction()
-    {
-        $parse_url = parse_url($this->requestUri[0]);
-        $userId = $parse_url['path'] ?? null;
-
-        $db = (new Db())->getConnect();
-
-        if(!$userId || !Users::getById($db, $userId)){
-            return $this->response("User with id=$userId not found", 404);
-        }
-        if(Users::deleteById($db, $userId)){
-            return $this->response('Data deleted.', 200);
-        }
-        return $this->response("Delete error", 500);
     }
 
 }
