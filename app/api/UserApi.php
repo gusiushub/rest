@@ -218,6 +218,8 @@ class UserApi extends Api
         }
     }
 
+
+
     /**
      * Метод GET
      * Просмотр отдельной записи (по id)
@@ -319,23 +321,24 @@ class UserApi extends Api
      */
     public function updateAction()
     {
-        $parse_url = parse_url($this->requestUri[0]);
-        $userId = $parse_url['path'] ?? null;
+        $get = $this->requestParams;
+        $opts = array(
+            'user' => 'root',
+            'pass' => '',
+            'db' => 'rest',
+            'charset' => 'utf8'
 
-        $db = (new Db())->getConnect();
+        );
+        $db = new SafeMySQL($opts);
 
-        if(!$userId || !Users::getById($db, $userId)){
-            return $this->response("User with id=$userId not found", 404);
-        }
-
-        $name = $this->requestParams['name'] ?? '';
-        $email = $this->requestParams['email'] ?? '';
-
-        if($name && $email){
-            if($user = Users::update($db, $userId, $name, $email)){
-                return $this->response('Data updated.', 200);
-            }
-        }
+if (isset($get['newstatus'])) {
+    $update = $db->query("UPDATE users SET Status=".(int)$get['newstatus']." WHERE Login='".$get['login']."'");
+    if ($update) {
+//        if ($user = Users::update($db, $userId, $name, $email)) {
+            return $this->response('Data updated.', 200);
+//        }
+    }
+}
         return $this->response("Update error", 400);
     }
 

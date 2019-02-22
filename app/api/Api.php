@@ -89,6 +89,8 @@ abstract class Api
             case 'GET':
                 if($this->apiName=='show'){
                     return 'viewAction';
+                } elseif ($this->apiName=='setstatus'){
+                    return 'updateAction';
                 } elseif (!empty($this->requestUri[1][0])){
                     return 'createAction';
                 } else {
