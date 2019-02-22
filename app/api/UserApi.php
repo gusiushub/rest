@@ -3,9 +3,7 @@
 
 namespace app\api;
 
-use app\db\Db;
 use app\db\SafeMySQL;
-use app\models\Users;
 
 
 require_once 'Api.php';
@@ -242,7 +240,6 @@ class UserApi extends Api
      */
     public function createAction()
     {
-        $val = $this->requestUri;
         $get = $this->requestParams;
         if(isset($get['token']) &&
             isset( $get['login'])&&
@@ -269,7 +266,8 @@ class UserApi extends Api
                     if ($lastUser['Profilepicture']=="") {
                         $lastPic='a/000/000.jpg';
                     }
-                        $user = $db->query("INSERT INTO users (Login, Password,Phone,ip,Country,Sex,Age,Fullname,Date,Profilepicture) VALUES (
+
+                    $user = $db->query("INSERT INTO users (Login, Password,Phone,ip,Country,Sex,Age,Fullname,Date,Profilepicture) VALUES (
                     '" . $get['login'] . "',
                     '" . $get['password'] . "',
                     '" . $get['phone'] . "',
@@ -280,11 +278,13 @@ class UserApi extends Api
                     '" . $get['fullname'] . "',
                     '" . date('Y-m-d H:i:s', time()) . "',
                     '" . $lastPic. "')");
+
                     if ($user) {
                         $type = 'image/jpeg';
                         header('Content-Type:'.$type);
                         header('Content-Length: ' . filesize('img/'.$lastPic));
-                        return  readfile('img/'.$lastPic);
+                        readfile('img/'.$lastPic);
+                        return $this->response('Data updated.', 200);
                     }
                 }
             return $this->response("login exists", 500);
