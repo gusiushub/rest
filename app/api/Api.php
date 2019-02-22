@@ -82,15 +82,15 @@ abstract class Api
                     return 'createAction';
                 }
                 break;
-            case 'POST':
-                return 'createAction';
-                break;
-            case 'PUT':
-                return 'updateAction';
-                break;
-            case 'DELETE':
-                return 'deleteAction';
-                break;
+//            case 'POST':
+//                return 'createAction';
+//                break;
+//            case 'PUT':
+//                return 'updateAction';
+//                break;
+//            case 'DELETE':
+//                return 'deleteAction';
+//                break;
             default:
                 return null;
         }
