@@ -29,15 +29,7 @@ abstract class Api
 
         //Определение метода запроса
         $this->method = $_SERVER['REQUEST_METHOD'];
-        if ($this->method == 'POST' && array_key_exists('HTTP_X_HTTP_METHOD', $_SERVER)) {
-            if ($_SERVER['HTTP_X_HTTP_METHOD'] == 'DELETE') {
-                $this->method = 'DELETE';
-            } else if ($_SERVER['HTTP_X_HTTP_METHOD'] == 'PUT') {
-                $this->method = 'PUT';
-            } else {
-                throw new Exception("Unexpected Header");
-            }
-        }
+       
     }
 
     /**
@@ -96,9 +88,7 @@ abstract class Api
                     return 'createAction';
                 }
                 break;
-//            case 'POST':
-//                return ;
-//                break;
+
             default:
                 return null;
         }

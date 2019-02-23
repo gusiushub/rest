@@ -13,6 +13,8 @@ class UserApi extends Api
 {
 //    public $apiName='users';
 
+    private $token = 'li2j3fojewf';
+
     /**
      * @param $fileName
      * @return string
@@ -216,6 +218,11 @@ class UserApi extends Api
     {
         $get = $this->requestParams;
 
+        if (isset($get['token'])) {
+            
+        if ($get['token']==$this->token) {
+            
+
         $opts = array(
             'user'    => 'root',
             'pass'    => '',
@@ -233,6 +240,8 @@ class UserApi extends Api
             header('Content-Length: ' . filesize('img/'.$user['Profilepicture']));
             return   readfile('img/'.$user['Profilepicture']);
         }
+    }
+}
 
         return $this->response('Data not found', 404);
     }
@@ -244,6 +253,10 @@ class UserApi extends Api
     public function createAction()
     {
         $get = $this->requestParams;
+        if (isset($get['token'])) {
+            
+        if ($get['token']==$this->token) {
+
         if(isset($get['token']) &&
             isset( $get['login'])&&
             isset( $get['password'])&&
@@ -292,6 +305,8 @@ class UserApi extends Api
                 }
             return $this->response("login exists", 500);
         }
+    }
+}
         return $this->response("Saving error", 500);
     }
 
@@ -302,6 +317,10 @@ class UserApi extends Api
     public function updateAction()
     {
         $get = $this->requestParams;
+
+        if (isset($get['token'])) {
+            
+        if ($get['token']==$this->token) {
         $opts = array(
             'user' => 'root',
             'pass' => '',
@@ -317,6 +336,8 @@ class UserApi extends Api
                 return $this->response('Data updated.', 200);
             }
         }
+    }
+}
         return $this->response("Update error", 400);
     }
 
