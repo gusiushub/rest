@@ -1,5 +1,6 @@
 <?php
-
+use app\db\SafeMySQL;
+require_once 'app/db/SafeMySQL.php';
 showTree('./incoming');
 
 
@@ -81,6 +82,15 @@ function compareLetter($filename)
 function showTree($folder) {
     /* Получаем полный список файлов и каталогов внутри $folder */
     $files = scandir($folder);
+    $opts = array(
+            'user'    => 'root',
+            'pass'    => '',
+            'db'      => 'rest',
+            'charset' => 'utf8'
+
+        );
+
+        $db= new SafeMySQL($opts);
     foreach($files as $file) {
         /* Отбрасываем текущий и родительский каталог */
         if (($file == '.') || ($file == '..')) continue;
@@ -93,6 +103,7 @@ function showTree($folder) {
                 unlink(showTree($f0));
                 echo "не удалось скопировать $file...\n";
             }else {
+$avatars = $db->query("INSERT INTO avatars (name, new_path) VALUES ('".$file."','./../app/img/".$fileName."')");
                 unlink(showTree($f0));
             }
         }
@@ -102,6 +113,7 @@ function showTree($folder) {
             unlink($f0);
             echo "не удалось скопировать $file...\n";
         }else{
+            $avatars = $db->query("INSERT INTO avatars (name, new_path) VALUES ('".$file."','./../app/img/".$fileName."')");
             unlink($f0);
         }
     }
