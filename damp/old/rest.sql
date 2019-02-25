@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.5.2
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Фев 22 2019 г., 10:00
--- Версия сервера: 5.6.34-log
--- Версия PHP: 7.1.0
+-- Время создания: Фев 24 2019 г., 17:21
+-- Версия сервера: 5.6.41
+-- Версия PHP: 7.0.32
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -19,6 +21,42 @@ SET time_zone = "+00:00";
 --
 -- База данных: `rest`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `avatars`
+--
+
+CREATE TABLE `avatars` (
+  `id` int(11) NOT NULL,
+  `name` text NOT NULL,
+  `new_path` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `avatars`
+--
+
+INSERT INTO `avatars` (`id`, `name`, `new_path`) VALUES
+(1, 'Animals___Wild_cats_Moody_tiger_076162_ - ', './../app/img/a/000/001.jpg'),
+(2, 'Animals___Wild_cats_Moody_tiger_076162_ - ', './../app/img/a/000/002.jpg'),
+(3, 'Animals___Wild_cats_Moody_tiger_076162_ - ', './../app/img/a/000/003.jpg'),
+(4, 'Animals___Wild_cats_Moody_tiger_076162_ - ', './../app/img/a/000/004.jpg'),
+(5, 'Animals___Wild_cats_Moody_tiger_076162_ - ', './../app/img/a/000/005.jpg'),
+(6, 'Animals___Wild_cats_Moody_tiger_076162_ - ', './../app/img/a/000/006.jpg'),
+(7, 'Animals___Wild_cats_Moody_tiger_076162_ - ', './../app/img/a/000/007.jpg'),
+(8, 'Animals___Wild_cats_Moody_tiger_076162_ - ', './../app/img/a/000/008.jpg'),
+(9, 'Animals___Wild_cats_Moody_tiger_076162_.jpg', './../app/img/a/000/009.jpg'),
+(10, 'Movies_Chameleon_Rango_from_the_movie_064247_ - ', './../app/img/a/000/010.jpg'),
+(11, 'Movies_Chameleon_Rango_from_the_movie_064247_ - ', './../app/img/a/000/011.jpg'),
+(12, 'Movies_Chameleon_Rango_from_the_movie_064247_ - ', './../app/img/a/000/012.jpg'),
+(13, 'Movies_Chameleon_Rango_from_the_movie_064247_ - ', './../app/img/a/000/013.jpg'),
+(14, 'Movies_Chameleon_Rango_from_the_movie_064247_ - ', './../app/img/a/000/014.jpg'),
+(15, 'Movies_Chameleon_Rango_from_the_movie_064247_ - ', './../app/img/a/000/015.jpg'),
+(16, 'Movies_Chameleon_Rango_from_the_movie_064247_ - ', './../app/img/a/000/016.jpg'),
+(17, 'Movies_Chameleon_Rango_from_the_movie_064247_ - ', './../app/img/a/000/017.jpg'),
+(18, 'Movies_Chameleon_Rango_from_the_movie_064247_.jpg', './../app/img/a/000/018.jpg');
 
 -- --------------------------------------------------------
 
@@ -81,6 +119,12 @@ INSERT INTO `users` (`id`, `Date`, `Login`, `Password`, `Phone`, `ip`, `Country`
 --
 
 --
+-- Индексы таблицы `avatars`
+--
+ALTER TABLE `avatars`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Индексы таблицы `users`
 --
 ALTER TABLE `users`
@@ -91,10 +135,18 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT для таблицы `avatars`
+--
+ALTER TABLE `avatars`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

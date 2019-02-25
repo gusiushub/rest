@@ -178,57 +178,57 @@ class Helper
     }
 
     /**
-     * @param $fileName
+     * @param $filename
      * @return string
      */
-    public function nextLetter($fileName, $type = null)
+    public function nextLetter($filename, $type = null)
     {
         $array = self::getLetterByNum();
-        $fileName = explode('/',$fileName);
-        $partName = explode('.',$fileName[2]);
-        $fileName[2] = $partName[0] ;
-        if ($fileName[2]<998){
-            $fileName[2]++;
-            if (iconv_strlen($fileName[2])==1){
+        $filename = explode('/',$filename);
+        $partName = explode('.',$filename[2]);
+        $filename[2] = $partName[0] ;
+        if ($filename[2]<998){
+            $filename[2]++;
+            if (iconv_strlen($filename[2])==1){
 
-                return $fileName[0].'/'.$fileName[1].'/00'.$fileName[2].'.jpg';
+                return $filename[0].'/'.$filename[1].'/00'.$filename[2].'.jpg';
             }
-            if (iconv_strlen($fileName[2])==2){
+            if (iconv_strlen($filename[2])==2){
 
-                return $fileName[0].'/'.$fileName[1].'/0'.$fileName[2].'.jpg';
+                return $filename[0].'/'.$filename[1].'/0'.$filename[2].'.jpg';
             }
 
-            return $fileName[0].'/'.$fileName[1].'/'.$fileName[2].'.jpg';
+            return $filename[0].'/'.$filename[1].'/'.$filename[2].'.jpg';
 
-        }elseif($fileName[1]<998 && $fileName[2]>997){
-            $fileName[1]++;
-            $fileName[2]='000';
-            if (iconv_strlen($fileName[1])==1){
+        }elseif($filename[1]<998 && $filename[2]>997){
+            $filename[1]++;
+            $filename[2]='000';
+            if (iconv_strlen($filename[1])==1){
                 if ($type=='console') {
-                    mkdir(__DIR__ . '/app/img/' . $fileName[0] . '/00' . $fileName[1], 0700);
+                    mkdir(self::dirImg() . $filename[0] . '/00' . $filename[1], 0700);
                 }
-                return $fileName[0].'/00'.$fileName[1].'/'.$fileName[2].'.jpg';
+                return $filename[0].'/00'.$filename[1].'/'.$filename[2].'.jpg';
             }
-            if (iconv_strlen($fileName[1])==2){
+            if (iconv_strlen($filename[1])==2){
                 if ($type=='console') {
-                    mkdir(__DIR__ . '/app/img/' . $fileName[0] . '/0' . $fileName[1], 0700);
+                    mkdir(self::dirImg() . $filename[0] . '/0' . $filename[1], 0700);
                 }
-                return $fileName[0].'/0'.$fileName[1].'/'.$fileName[2].'.jpg';
+                return $filename[0].'/0'.$filename[1].'/'.$filename[2].'.jpg';
             }
             if ($type=='console') {
-                mkdir(__DIR__ . '/app/img/' . $fileName[0] . '/' . $fileName[1], 0700);
+                mkdir(self::dirImg() . $filename[0] . '/' . $filename[1], 0700);
             }
-            return $fileName[0].'/'.$fileName[1].'/'.$fileName[2].'.jpg';
-        }elseif($fileName[1]>998 && $fileName[2]>997){
+            return $filename[0].'/'.$filename[1].'/'.$filename[2].'.jpg';
+        }elseif($filename[1]>998 && $filename[2]>997){
 
-            $numLetter = self::getLetter(self::getLastLetter($fileName[0]));
-            $arr = self::getName($fileName[0]);
+            $numLetter = self::getLetter(self::getLastLetter($filename[0]));
+            $arr = self::getName($filename[0]);
             $count = count($arr);
             if ($numLetter!=26){
                 $arr[$count-1]=$array[$numLetter+1];
                 if ($type=='console') {
-                    mkdir(__DIR__ . '/app/img/' . implode($arr), 0700);
-                    mkdir(__DIR__ . '/app/img/' . implode($arr) . '/000/', 0700);
+                    mkdir(self::dirImg() . implode($arr), 0700);
+                    mkdir(self::dirImg() . implode($arr) . '/000/', 0700);
                 }
                 return implode($arr).'/000/000.jpg';
             }else{
@@ -237,8 +237,8 @@ class Helper
                     $arrLet[$i]='a';
                 }
                 if ($type=='console') {
-                    mkdir(__DIR__ . '/app/img/' . implode($arrLet), 0700);
-                    mkdir(__DIR__ . '/app/img/' . implode($arrLet) . '/000/', 0700);
+                    mkdir(self::dirImg() . implode($arrLet), 0700);
+                    mkdir(self::dirImg() . implode($arrLet) . '/000/', 0700);
                 }
                 return implode($arrLet).'/000/000.jpg';
             }
@@ -257,32 +257,34 @@ class Helper
             if (($file == '.') || ($file == '..')) continue;
 
             $f0 = $folder.'/'.$file; //Получаем полный путь к файлу
-            $fileName = file_get_contents(self::dir());
+            $filename = file_get_contents(self::dir());
             /* Если это директория */
             if (is_dir($f0)) {
-                $this->copy($file,$this->showTree($f0), self::dirImg().$fileName);
+                $this->copy($file,$this->showTree($f0), self::dirImg().$filename);
             }
-            $this->copy($file,$f0,self::dirImg().$fileName);
+            $this->copy($file,$f0,self::dirImg().$filename);
 
-            file_put_contents(self::dir(), $this->nextLetter($fileName,'console'));
+            file_put_contents(self::dir(), $this->nextLetter($filename,'console'));
         }
     }
 
     /**
      * @param $filename
-     * @param $dirFile
-     * @param $dirToCopy
+     * @param $dirFileOld
+     * @param $dirFileNew
      */
-    private function copy($filename, $dirFile, $dirToCopy)
+    private function copy($filename, $dirFileOld, $dirFileNew)
     {
         $db = new SafeMySQL();
-        if (!empty($dirFile) && !empty($dirToCopy)) {
-            if (!copy($dirFile, $dirToCopy)) {
-                unlink($dirFile);
+        if (!empty($dirFileOld) && !empty($dirFileNew)) {
+            if (!copy($dirFileOld, $dirFileNew)) {
+                unlink($dirFileOld);
                 echo "не удалось скопировать $filename...\n";
             } else {
-                $db->query("INSERT INTO avatars (name, new_path) VALUES ('" . $filename . "','/" . $dirToCopy . "')");
-                unlink($dirFile);
+                $newName = explode('/',$dirFileNew);
+//                var_dump($newName);
+                $db->query("INSERT INTO avatars (old_name,new_name, old_path, new_path) VALUES ('" . $filename . "','" . $newName[5] . "','" . $dirFileOld . "','" . $dirFileNew . "')");
+                unlink($dirFileOld);
             }
         }
     }
