@@ -36,17 +36,13 @@ class UserApi extends Api
     {
         $get = $this->requestParams;
 
-        if( isset( $get['login'])&&
-            isset( $get['password'])&&
-            isset( $get['phone'])&&
-            isset( $get['ip'])&&
-            isset( $get['country'])&&
-            isset( $get['sex'])&&
-            isset( $get['fullname'])&&
-            isset( $get['age'])) {
+        if( isset( $get['login'])&& isset( $get['password'])&&
+            isset( $get['phone'])&& isset( $get['ip'])&&
+            isset( $get['country'])&& isset( $get['sex'])&&
+            isset( $get['fullname'])&& isset( $get['age'])) {
 
                 $uniq = $this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'");
-                if ($uniq->num_rows === 0) {
+                if (!$uniq) {
                     $lastUser = $this->db->fetch($this->db->query("SELECT * FROM users WHERE id=(SELECT MAX(id) FROM users)"));
 
                     $lastPic = Helper::nextLetter($lastUser['Profilepicture']);
@@ -55,15 +51,10 @@ class UserApi extends Api
                     }
 
                     $user = $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,
-                     Sex,Age,Fullname,Date,Profilepicture) VALUES (
-                    '" . $get['login'] . "',
-                    '" . $get['password'] . "',
-                    '" . $get['phone'] . "',
-                    '" . $get['ip'] . "',
-                    '" . $get['country'] . "',
-                    '" . $get['sex'] . "',
-                    '" . $get['age'] . "',
-                    '" . $get['fullname'] . "',
+                     Sex,Age,Fullname,Date,Profilepicture) VALUES ('" . $get['login'] . "','" . $get['password'] . "',
+                    '" . $get['phone'] . "','" . $get['ip'] . "',
+                    '" . $get['country'] . "','" . $get['sex'] . "',
+                    '" . $get['age'] . "','" . $get['fullname'] . "',
                     '" . date('Y-m-d H:i:s', time()) . "',
                     '" . $lastPic. "')");
 
@@ -75,8 +66,9 @@ class UserApi extends Api
                         return $this->response('Data updated.', 200);
                     }
                 }
-                    return $this->response("login exists", 500);
-                }
+
+                return $this->response("login exists", 500);
+        }
 
         return $this->response("Saving error", 500);
     }

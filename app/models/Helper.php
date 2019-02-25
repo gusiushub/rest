@@ -181,7 +181,7 @@ class Helper
      * @param $filename
      * @return string
      */
-    public function nextLetter($filename, $type = null)
+    public static function  nextLetter($filename, $type = null)
     {
         $array = self::getLetterByNum();
         $filename = explode('/',$filename);
@@ -248,7 +248,7 @@ class Helper
     /**
      * @param $folder
      */
-    public function showTree($folder) {
+    public static function showTree($folder) {
         /* Получаем полный список файлов и каталогов внутри $folder */
         $files = scandir($folder);
 
@@ -260,11 +260,11 @@ class Helper
             $filename = file_get_contents(self::dir());
             /* Если это директория */
             if (is_dir($f0)) {
-                $this->copy($file,$this->showTree($f0), self::dirImg().$filename);
+                self::copy($file,self::showTree($f0), self::dirImg().$filename);
             }
-            $this->copy($file,$f0,self::dirImg().$filename);
+            self::copy($file,$f0,self::dirImg().$filename);
 
-            file_put_contents(self::dir(), $this->nextLetter($filename,'console'));
+            file_put_contents(self::dir(), self::nextLetter($filename,'console'));
         }
     }
 
@@ -273,12 +273,14 @@ class Helper
      * @param $dirFileOld
      * @param $dirFileNew
      */
-    private function copy($filename, $dirFileOld, $dirFileNew)
+    private static function copy($filename, $dirFileOld, $dirFileNew)
     {
         $db = new SafeMySQL();
         if (!empty($dirFileOld) && !empty($dirFileNew)) {
             if (!copy($dirFileOld, $dirFileNew)) {
+
                 unlink($dirFileOld);
+                rmdir($dirFileOld);
                 echo "не удалось скопировать $filename...\n";
             } else {
                 $newName = explode('/',$dirFileNew);
