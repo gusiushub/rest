@@ -3,14 +3,16 @@
 namespace app\api;
 
 
+use app\db\SafeMySQL;
+use RuntimeException;
+
 abstract class Api
 {
-    public $apiName=''; //users
     protected $method = ''; //GET|POST|PUT|DELETE
-    public $requestUri = [];
     public $requestParams = [];
     protected $action = ''; //Название метод для выполнения
-
+    protected $db;
+    protected $token = 'li2j3fojewf';
 
     /**
      * Api constructor.
@@ -20,32 +22,28 @@ abstract class Api
         header("Access-Control-Allow-Methods: *");
         header("Content-Type: application/json");
 
-        //Массив GET параметров разделенных слешем
-
-        $this->requestUri[0] = explode('?', trim($_SERVER['REQUEST_URI'],'/'));
-        $this->requestUri[1] = explode('&', $this->requestUri[0][1]);
-        $this->apiName=explode('/',$this->requestUri[0][0])[1];
         $this->requestParams = $_REQUEST;
-
-        //Определение метода запроса
-        $this->method = $_SERVER['REQUEST_METHOD'];
-       
+        $this->db = new SafeMySQL();
     }
 
     /**
      * @return mixed
      */
     public function run() {
-
+        $get = $this->requestParams;
         //Определение действия для обработки
         $this->action = $this->getAction();
-
-        //Если метод(действие) определен в дочернем классе API
-        if (method_exists($this, $this->action)) {
-            return $this->{$this->action}();
-        } else {
-            throw new RuntimeException('Invalid Method', 405);
+        if (isset($get['token'])) {
+            if ($get['token']==$this->token) {
+                //Если метод(действие) определен в дочернем классе API
+                if (method_exists($this, $this->action)) {
+                    return $this->{$this->action}();
+                } else {
+                    throw new RuntimeException('Invalid Method', 405);
+                }
+            }
         }
+        return $this->response('Data not found', 404);
     }
 
     /**
@@ -77,24 +75,24 @@ abstract class Api
      */
     protected function getAction()
     {
-        $method = $this->method;
-        switch ($method) {
-            case 'GET':
-                if($this->requestParams['action']=='show'){
-                    return 'viewAction';
-                } elseif ($this->requestParams['action']=='setstatus'){
-                    return 'updateAction';
-                } elseif ($this->requestParams['action']=='add' && !empty($this->requestUri[1][0])){
-                    return 'createAction';
-                }
-                break;
+        $action = $this->requestParams['action'];
 
+        switch ($action) {
+            case 'showpic':
+                return 'viewAction';
+                break;
+            case 'setstatus':
+                return 'statusAction';
+                break;
+            case 'add':
+                return 'addAction';
+                break;
             default:
                 return null;
         }
     }
 
     abstract protected function viewAction();
-    abstract protected function createAction();
-    abstract protected function updateAction();
+    abstract protected function addAction();
+    abstract protected function statusAction();
 }

@@ -76,7 +76,7 @@ class SafeMySQL
         'host'      => 'localhost',
         'user'      => 'root',
         'pass'      => '',
-        'db'        => 'tttt',
+        'db'        => 'rest',
         'port'      => NULL,
         'socket'    => NULL,
         'pconnect'  => FALSE,

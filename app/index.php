@@ -2,7 +2,7 @@
 
 use app\api\UserApi;
 
-require_once 'api/UserApi.php';
+require __DIR__.'/../vendor/autoload.php';
 
 try {
     $api = new UserApi();

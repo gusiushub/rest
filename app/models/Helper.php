@@ -1,12 +1,42 @@
 <?php
 
-
 namespace app\models;
 
 
+use app\db\SafeMySQL;
+
 class Helper
 {
-    public function getLetterByNum()
+    /**
+     * @return array
+     */
+    public static function getConfig()
+    {
+        return require __DIR__.'/../config/config.php';
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function dir()
+    {
+        $config = self::getConfig();
+        return $config['dir'];
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function dirImg()
+    {
+        $config = self::getConfig();
+        return $config['img'];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getLetterByNum()
     {
         $arr = [
             1 => 'a',
@@ -40,7 +70,11 @@ class Helper
         return $arr;
     }
 
-    public function getLetter($name)
+    /**
+     * @param $name
+     * @return int
+     */
+    public static function getLetter($name)
     {
         switch ($name) {
             case 'a':
@@ -120,6 +154,136 @@ class Helper
                 break;
             case 'z':
                 return 26;
+        }
+    }
+
+    /**
+     * @param $filename
+     * @return array
+     */
+    public static function getName($filename)
+    {
+        return str_split($filename);
+    }
+
+    /**
+     * @param $filename
+     * @return mixed
+     */
+    public static function getLastLetter($filename)
+    {
+        $arr = self::getName($filename);
+        $count = count($arr);
+        return $arr[$count-1];
+    }
+
+    /**
+     * @param $fileName
+     * @return string
+     */
+    public function nextLetter($fileName, $type = null)
+    {
+        $array = self::getLetterByNum();
+        $fileName = explode('/',$fileName);
+        $partName = explode('.',$fileName[2]);
+        $fileName[2] = $partName[0] ;
+        if ($fileName[2]<998){
+            $fileName[2]++;
+            if (iconv_strlen($fileName[2])==1){
+
+                return $fileName[0].'/'.$fileName[1].'/00'.$fileName[2].'.jpg';
+            }
+            if (iconv_strlen($fileName[2])==2){
+
+                return $fileName[0].'/'.$fileName[1].'/0'.$fileName[2].'.jpg';
+            }
+
+            return $fileName[0].'/'.$fileName[1].'/'.$fileName[2].'.jpg';
+
+        }elseif($fileName[1]<998 && $fileName[2]>997){
+            $fileName[1]++;
+            $fileName[2]='000';
+            if (iconv_strlen($fileName[1])==1){
+                if ($type=='console') {
+                    mkdir(__DIR__ . '/app/img/' . $fileName[0] . '/00' . $fileName[1], 0700);
+                }
+                return $fileName[0].'/00'.$fileName[1].'/'.$fileName[2].'.jpg';
+            }
+            if (iconv_strlen($fileName[1])==2){
+                if ($type=='console') {
+                    mkdir(__DIR__ . '/app/img/' . $fileName[0] . '/0' . $fileName[1], 0700);
+                }
+                return $fileName[0].'/0'.$fileName[1].'/'.$fileName[2].'.jpg';
+            }
+            if ($type=='console') {
+                mkdir(__DIR__ . '/app/img/' . $fileName[0] . '/' . $fileName[1], 0700);
+            }
+            return $fileName[0].'/'.$fileName[1].'/'.$fileName[2].'.jpg';
+        }elseif($fileName[1]>998 && $fileName[2]>997){
+
+            $numLetter = self::getLetter(self::getLastLetter($fileName[0]));
+            $arr = self::getName($fileName[0]);
+            $count = count($arr);
+            if ($numLetter!=26){
+                $arr[$count-1]=$array[$numLetter+1];
+                if ($type=='console') {
+                    mkdir(__DIR__ . '/app/img/' . implode($arr), 0700);
+                    mkdir(__DIR__ . '/app/img/' . implode($arr) . '/000/', 0700);
+                }
+                return implode($arr).'/000/000.jpg';
+            }else{
+                $arrLet = array();
+                for ($i=0;$i<$count+1;$i++){
+                    $arrLet[$i]='a';
+                }
+                if ($type=='console') {
+                    mkdir(__DIR__ . '/app/img/' . implode($arrLet), 0700);
+                    mkdir(__DIR__ . '/app/img/' . implode($arrLet) . '/000/', 0700);
+                }
+                return implode($arrLet).'/000/000.jpg';
+            }
+        }
+    }
+
+    /**
+     * @param $folder
+     */
+    public function showTree($folder) {
+        /* Получаем полный список файлов и каталогов внутри $folder */
+        $files = scandir($folder);
+
+        foreach($files as $file) {
+            /* Отбрасываем текущий и родительский каталог */
+            if (($file == '.') || ($file == '..')) continue;
+
+            $f0 = $folder.'/'.$file; //Получаем полный путь к файлу
+            $fileName = file_get_contents(self::dir());
+            /* Если это директория */
+            if (is_dir($f0)) {
+                $this->copy($file,$this->showTree($f0), self::dirImg().$fileName);
+            }
+            $this->copy($file,$f0,self::dirImg().$fileName);
+
+            file_put_contents(self::dir(), $this->nextLetter($fileName,'console'));
+        }
+    }
+
+    /**
+     * @param $filename
+     * @param $dirFile
+     * @param $dirToCopy
+     */
+    private function copy($filename, $dirFile, $dirToCopy)
+    {
+        $db = new SafeMySQL();
+        if (!empty($dirFile) && !empty($dirToCopy)) {
+            if (!copy($dirFile, $dirToCopy)) {
+                unlink($dirFile);
+                echo "не удалось скопировать $filename...\n";
+            } else {
+                $db->query("INSERT INTO avatars (name, new_path) VALUES ('" . $filename . "','/" . $dirToCopy . "')");
+                unlink($dirFile);
+            }
         }
     }
 }
