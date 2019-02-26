@@ -68,6 +68,7 @@ namespace app\db;
  */
 class SafeMySQL
 {
+//    private $conf = file_get_contents('../db.php');
     protected $conn;
     protected $stats;
     protected $emode;
@@ -88,7 +89,9 @@ class SafeMySQL
     const RESULT_NUM   = MYSQLI_NUM;
     function __construct($opt = array())
     {
-        $opt = array_merge($this->defaults,$opt);
+        $conf = require __DIR__.'/../config/db.php';
+//        var_dump($opt);exit;
+        $opt = array_merge($conf,$opt);
         $this->emode  = $opt['errmode'];
         $this->exname = $opt['exception'];
         if (isset($opt['mysqli']))
