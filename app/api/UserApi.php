@@ -19,10 +19,12 @@ class UserApi extends Api
         $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
 
         if ($user) {
+//            echo 11111;exit;
             $type = 'image/jpeg';
             header('Content-Type:'.$type);
-            header('Content-Length: ' . filesize('img/'.$user['Profilepicture']));
-            return   readfile('img/'.$user['Profilepicture']);
+            header('Content-Length: ' . filesize(__DIR__.'/../img/'.$user['Profilepicture']));
+
+            return   readfile(__DIR__.'/../img/'.$user['Profilepicture']);
         }
 
         return $this->response('Data not found', 404);
@@ -34,6 +36,7 @@ class UserApi extends Api
      */
     public function addAction()
     {
+//        echo 111; exit;
         $get = $this->requestParams;
 
         if( isset( $get['login'])&& isset( $get['password'])&&
@@ -42,7 +45,9 @@ class UserApi extends Api
             isset( $get['fullname'])&& isset( $get['age'])) {
 
                 $uniq = $this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'");
-                if (!$uniq) {
+//                var_dump($this->db->fetch($uniq)); exit;
+                if ($this->db->fetch($uniq)==null) {
+//                if (!$uniq) {
                     $lastUser = $this->db->fetch($this->db->query("SELECT * FROM users WHERE id=(SELECT MAX(id) FROM users)"));
 
                     $lastPic = Helper::nextLetter($lastUser['Profilepicture']);

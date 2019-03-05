@@ -1,7 +1,8 @@
 <?php
 $host ='localhost';
+//$host ='134.209.88.94';
 $login ='root';
-$password ='';
+$password ='0094#avatars';
 $dbname ='rest';
 
 return [
@@ -9,7 +10,7 @@ return [
     'user' => $login,
     'pass' => $password,
     'db' => $dbname,
-    'port'      => NULL,
+    'port'      => 3306,
     'socket'    => NULL,
     'pconnect'  => FALSE,
     'charset'   => 'utf8',

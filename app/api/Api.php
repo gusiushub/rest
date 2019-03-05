@@ -30,10 +30,13 @@ abstract class Api
      * @return mixed
      */
     public function run() {
+
         $get = $this->requestParams;
         //Определение действия для обработки
         $this->action = $this->getAction();
+//        var_dump($get);
         if (isset($get['token'])) {
+//            echo 11111; exit;
             if ($get['token']==$this->token) {
                 //Если метод(действие) определен в дочернем классе API
                 if (method_exists($this, $this->action)) {

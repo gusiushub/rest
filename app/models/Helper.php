@@ -258,12 +258,13 @@ class Helper
 
             $f0 = $folder.'/'.$file; //Получаем полный путь к файлу
             $filename = file_get_contents(self::dir());
+
             /* Если это директория */
             if (is_dir($f0)) {
                 self::copy($file,self::showTree($f0), self::dirImg().$filename);
             }
             self::copy($file,$f0,self::dirImg().$filename);
-
+//            var_dump($file); exit;
             file_put_contents(self::dir(), self::nextLetter($filename,'console'));
         }
     }
@@ -285,7 +286,7 @@ class Helper
             } else {
                 $newName = explode('/',$dirFileNew);
 //                var_dump($newName);
-                $db->query("INSERT INTO avatars (old_name,new_name, old_path, new_path) VALUES ('" . $filename . "','" . $newName[5] . "','" . $dirFileOld . "','" . $dirFileNew . "')");
+                $db->query("INSERT INTO avatars (old_name,new_name, old_path, new_path, flag) VALUES ('" . $filename . "','" . $newName[5] . "','" . $dirFileOld . "','" . $dirFileNew . "',0)");
                 unlink($dirFileOld);
             }
         }
