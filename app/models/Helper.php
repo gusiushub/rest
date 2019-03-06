@@ -270,7 +270,7 @@ class Helper
      * @param $dirFileOld
      * @param $dirFileNew
      */
-    private static function copy($filename, $dirFileOld, $dirFileNew)
+    public static function copy($filename, $dirFileOld, $dirFileNew)
     {
         $db = new SafeMySQL();
         if (!empty($dirFileOld) && !empty($dirFileNew)) {
