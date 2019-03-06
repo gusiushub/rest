@@ -249,22 +249,18 @@ class Helper
      * @param $folder
      */
     public static function showTree($folder) {
-        /* Получаем полный список файлов и каталогов внутри $folder */
         $files = scandir($folder);
 
         foreach($files as $file) {
-            /* Отбрасываем текущий и родительский каталог */
             if (($file == '.') || ($file == '..')) continue;
 
             $f0 = $folder.'/'.$file; //Получаем полный путь к файлу
             $filename = file_get_contents(self::dir());
 
-            /* Если это директория */
             if (is_dir($f0)) {
                 self::copy($file,self::showTree($f0), self::dirImg().$filename);
             }
             self::copy($file,$f0,self::dirImg().$filename);
-//            var_dump($file); exit;
             file_put_contents(self::dir(), self::nextLetter($filename,'console'));
         }
     }
@@ -289,6 +285,71 @@ class Helper
                 $db->query("INSERT INTO avatars (old_name,new_name, old_path, new_path, flag) VALUES ('" . $filename . "','" . $newName[5] . "','" . $dirFileOld . "','" . $dirFileNew . "',0)");
                 unlink($dirFileOld);
             }
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function getBio()
+    {
+        $bio = file('bio.txt',FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES);
+        return $bio[0];
+    }
+
+    public static function getInbetweenStrings($start, $end, $str){
+        $matches = array();
+        $regex = "/$start([a-zA-Z0-9_]*)$end/";
+        preg_match_all($regex, $str, $matches);
+//        var_dump(array_walk($matches[1], self::arr($matches[1])));
+        return $matches[0];
+//        var_dump($matches[0]);
+//        return array_walk($matches[0], '%'.$matches[0].'%');
+    }
+
+    public static function arr(&$arr)
+    {
+//        function myFunc(&$arr) {
+            $arr = '<strong>'.$arr.'</strong>';
+
+    }
+    public static function bio()
+    {
+//        var_dump(self::getInbetweenStrings('%','%',self::getBio()));
+//        exit;
+        // присваивает: You should eat pizza, beer, and ice cream every day
+//        $phrase  = "You should eat fruits, vegetables, and fiber every day.";
+        $search = self::getInbetweenStrings('%','%',self::getBio());
+//        var_dump($search);
+//        $search = array("%name%", "%sex%", "%country%, %age%");
+        $val   = array($_GET['fullname'], $_GET['sex'], $_GET['country'], $_GET['age']);
+        if(preg_match("/%(.*?)%/",self::getBio(),$matches))
+            $text1 = $matches;
+        $newphrase = str_replace($search, $val, self::getBio());
+        self::delStr();
+        $file=__DIR__.'/../../bio.txt';
+        $filearray=file($file);
+        if (trim($filearray[0])=='---'){
+            self::delStr();
+        }
+        var_dump($filearray);
+        exit;
+
+    }
+
+    public static function delStr()
+    {
+        $file=__DIR__.'/../../bio.txt';
+        $filearray=file($file);
+        var_dump($filearray);
+        if(is_array($filearray))
+        {
+            $f=fopen($file,'w');
+            for($i=1;$i<sizeof($filearray);$i++)
+            {
+                fwrite($f,$filearray[$i]);
+            }
+            fclose($f);
         }
     }
 }
