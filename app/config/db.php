@@ -1,9 +1,9 @@
 <?php
-$host ='localhost';
-//$host ='134.209.88.94';
+//$host ='localhost';
+$host ='134.209.88.94';
 $login ='root';
-$password ='';
-//$password ='0094#avatars';
+//$password ='';
+$password ='0094#avatars';
 $dbname ='rest';
 
 return [

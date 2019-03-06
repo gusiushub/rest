@@ -7,6 +7,9 @@ class Log
 {
     public static $file = __DIR__.'/../log/log.log';
 
+    /**
+     * @return bool
+     */
     public static function run()
     {
         switch ($_SERVER['REQUEST_METHOD']){
@@ -17,9 +20,11 @@ class Log
                 return self::post();
                 break;
         }
-
     }
 
+    /**
+     * @return bool
+     */
     public static function post()
     {
         if (!empty($_POST)) {
@@ -30,6 +35,9 @@ class Log
         }
     }
 
+    /**
+     * @return bool
+     */
     public static function get()
     {
         if (!empty($_GET)) {
@@ -40,8 +48,4 @@ class Log
         }
     }
 
-    public static function cUrl()
-    {
-
-    }
 }
