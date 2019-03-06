@@ -9,8 +9,15 @@ class Log
 
     public static function run()
     {
-        self::get();
-        self::post();
+        switch ($_SERVER['REQUEST_METHOD']){
+            case 'GET':
+                return self::get();
+                break;
+            case 'POST':
+                return self::post();
+                break;
+        }
+
     }
 
     public static function post()
@@ -19,6 +26,7 @@ class Log
             $fw = fopen(self::$file, "a");
             fwrite($fw, "POST " . var_export($_POST, true));
             fclose($fw);
+            return true;
         }
     }
 
@@ -28,6 +36,12 @@ class Log
             $fw = fopen(self::$file, "a");
             fwrite($fw, "GET " . var_export($_GET, true));
             fclose($fw);
+            return true;
         }
+    }
+
+    public static function cUrl()
+    {
+
     }
 }

@@ -9,6 +9,14 @@ use app\models\Helper;
 
 class UserApi extends Api
 {
+    private function getImg($img)
+    {
+        $type = 'image/jpeg';
+        header('Content-Type:'.$type);
+        header('Content-Length: ' . filesize(__DIR__.'/../img/'.$img));
+
+        return   readfile(__DIR__.'/../img/'.$img);
+    }
     /**
      * @return false|int|string
      */
@@ -19,15 +27,23 @@ class UserApi extends Api
         $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
 
         if ($user) {
-//            echo 11111;exit;
-            $type = 'image/jpeg';
-            header('Content-Type:'.$type);
-            header('Content-Length: ' . filesize(__DIR__.'/../img/'.$user['Profilepicture']));
-
-            return   readfile(__DIR__.'/../img/'.$user['Profilepicture']);
+            return $this->getImg($user['Profilepicture']);
         }
 
         return $this->response('Data not found', 404);
+    }
+
+    /**
+     * @return bool
+     */
+    private function isLoginUniq()
+    {
+        $get = $this->requestParams;
+        $login =$this->db->getRow("SELECT * FROM users WHERE Login='".$get['login']."'");
+        if ($login==null) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -36,7 +52,6 @@ class UserApi extends Api
      */
     public function addAction()
     {
-//        echo 111; exit;
         $get = $this->requestParams;
 
         if( isset( $get['login'])&& isset( $get['password'])&&
@@ -44,32 +59,23 @@ class UserApi extends Api
             isset( $get['country'])&& isset( $get['sex'])&&
             isset( $get['fullname'])&& isset( $get['age'])) {
 
-                $uniq = $this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'");
-//                var_dump($this->db->fetch($uniq)); exit;
-                if ($this->db->fetch($uniq)==null) {
-//                if (!$uniq) {
-                    $lastUser = $this->db->fetch($this->db->query("SELECT * FROM users WHERE id=(SELECT MAX(id) FROM users)"));
-
+                if ($this->isLoginUniq()) {
+                    $lastUser = $this->db->getRow("SELECT * FROM users WHERE id=(SELECT MAX(id) FROM users)");
                     $lastPic = Helper::nextLetter($lastUser['Profilepicture']);
                     if ($lastUser['Profilepicture']=="") {
                         $lastPic='a/000/000.jpg';
                     }
 
                     $user = $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,
-                     Sex,Age,Fullname,Date,Profilepicture) VALUES ('" . $get['login'] . "','" . $get['password'] . "',
+                     Sex, Age, Fullname, Date, Bio, Profilepicture) VALUES ('" . $get['login'] . "','" . $get['password'] . "',
                     '" . $get['phone'] . "','" . $get['ip'] . "',
                     '" . $get['country'] . "','" . $get['sex'] . "',
                     '" . $get['age'] . "','" . $get['fullname'] . "',
                     '" . date('Y-m-d H:i:s', time()) . "',
+                    '" . Helper::getBio() . "',
                     '" . $lastPic. "')");
 
-                    if ($user) {
-                        $type = 'image/jpeg';
-                        header('Content-Type:'.$type);
-                        header('Content-Length: ' . filesize('img/'.$lastPic));
-                        readfile('img/'.$lastPic);
-                        return $this->response('Data updated.', 200);
-                    }
+                        return $this->getImg($lastPic);
                 }
 
                 return $this->response("login exists", 500);

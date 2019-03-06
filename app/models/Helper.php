@@ -281,7 +281,6 @@ class Helper
                 echo "не удалось скопировать $filename...\n";
             } else {
                 $newName = explode('/',$dirFileNew);
-//                var_dump($newName);
                 $db->query("INSERT INTO avatars (old_name,new_name, old_path, new_path, flag) VALUES ('" . $filename . "','" . $newName[5] . "','" . $dirFileOld . "','" . $dirFileNew . "',0)");
                 unlink($dirFileOld);
             }
@@ -291,57 +290,51 @@ class Helper
     /**
      * @return mixed
      */
-    public static function getBio()
+    public static function getStr($file)
     {
-        $bio = file('bio.txt',FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES);
+        $bio = file($file,FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES);
         return $bio[0];
     }
 
+    /**
+     * @param $start
+     * @param $end
+     * @param $str
+     * @return mixed
+     */
     public static function getInbetweenStrings($start, $end, $str){
         $matches = array();
         $regex = "/$start([a-zA-Z0-9_]*)$end/";
         preg_match_all($regex, $str, $matches);
-//        var_dump(array_walk($matches[1], self::arr($matches[1])));
         return $matches[0];
-//        var_dump($matches[0]);
-//        return array_walk($matches[0], '%'.$matches[0].'%');
     }
 
-    public static function arr(&$arr)
+    /**
+     * @return mixed
+     */
+    public static function getBio()
     {
-//        function myFunc(&$arr) {
-            $arr = '<strong>'.$arr.'</strong>';
-
-    }
-    public static function bio()
-    {
-//        var_dump(self::getInbetweenStrings('%','%',self::getBio()));
-//        exit;
-        // присваивает: You should eat pizza, beer, and ice cream every day
-//        $phrase  = "You should eat fruits, vegetables, and fiber every day.";
-        $search = self::getInbetweenStrings('%','%',self::getBio());
-//        var_dump($search);
-//        $search = array("%name%", "%sex%", "%country%, %age%");
-        $val   = array($_GET['fullname'], $_GET['sex'], $_GET['country'], $_GET['age']);
-        if(preg_match("/%(.*?)%/",self::getBio(),$matches))
-            $text1 = $matches;
-        $newphrase = str_replace($search, $val, self::getBio());
-        self::delStr();
+        $search = self::getInbetweenStrings('%','%',self::getStr('bio.txt'));
+        $val   = array(self::getFullname($_GET['fullname']), $_GET['sex'], $_GET['country'], $_GET['age']);
+        if(preg_match("/%(.*?)%/",self::getStr('bio.txt'),$matches))
+        $newphrase = str_replace($search, $val, self::getStr('bio.txt'));
         $file=__DIR__.'/../../bio.txt';
+        self::delStr($file);
+
         $filearray=file($file);
         if (trim($filearray[0])=='---'){
-            self::delStr();
+            self::delStr($file);
         }
-        var_dump($filearray);
-        exit;
 
+        return $newphrase;
     }
 
-    public static function delStr()
+    /**
+     *
+     */
+    public static function delStr($file)
     {
-        $file=__DIR__.'/../../bio.txt';
         $filearray=file($file);
-        var_dump($filearray);
         if(is_array($filearray))
         {
             $f=fopen($file,'w');
@@ -351,5 +344,44 @@ class Helper
             }
             fclose($f);
         }
+    }
+
+    /**
+     * @param $url
+     * @param $arrPost
+     */
+    public static function sendPost($url, $arrPost)
+    {
+
+        if( $curl = curl_init() ) {
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
+            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $arrPost);
+            $out = curl_exec($curl);
+            if ($out === FALSE) {
+                //Тут-то мы о ней и скажем
+                echo "cURL Error: " . curl_error($curl);
+                return;
+            }
+            echo $out;
+            curl_close($curl);
+        }
+    }
+
+
+    /**
+     * @param $fullname
+     * @return mixed
+     */
+    private static function getFullname($fullname)
+    {
+        $arr = explode(' ', trim($fullname));
+
+        $randName = array();
+        $randName[] = $arr[0].' '.$arr[1].' '.$arr[2];
+        $randName[] = $arr[1];
+        $num = mt_rand(0, count($randName) - 1);
+        return $randName[$num];
     }
 }
