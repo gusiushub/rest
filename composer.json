@@ -12,6 +12,7 @@
             "app/api/Api.php",
             "app/db/SafeMySQL.php",
             "app/models/Helper.php",
+            "app/models/Log.php",
             "app/api/UserApi.php"
         ]
     },
