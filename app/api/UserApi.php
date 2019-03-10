@@ -122,10 +122,9 @@ class UserApi extends Api
 
     public function logAction()
     {
-//        exit('asdasd');
         $log = file_get_contents(__DIR__.'/../log/log.log');
 
-        var_dump($log);
+        echo $log;
     }
 
 }
