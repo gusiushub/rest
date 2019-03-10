@@ -1,3 +1,5 @@
+OLD
+
 config/config.php - основные настройки
 app/db/SafeMySql.php - конфигурации бд 
 damp/new/rest.sql - дамп бд

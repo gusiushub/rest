@@ -12,4 +12,6 @@
 
         'dir' => __DIR__.'/../../dir.txt',
 
+        'log' => __DIR__.'/../log/log.log',
+
     ];

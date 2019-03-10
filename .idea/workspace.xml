@@ -2,16 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d9c51d14-867d-44b0-85aa-bd82baab9aac" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/app/log/.htaccess" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/Api.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/Api.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/UserApi.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/UserApi.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/config/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/config/config.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/config/db.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/config/db.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/log/log.log" beforeDir="false" afterPath="$PROJECT_DIR$/app/log/log.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/Helper.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/Helper.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/Log.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/Log.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bio.txt" beforeDir="false" afterPath="$PROJECT_DIR$/bio.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/console.php" beforeDir="false" afterPath="$PROJECT_DIR$/console.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -43,8 +41,8 @@
       <file leaf-file-name="UserApi.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/api/UserApi.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="15" column="27" selection-start-line="15" selection-start-column="21" selection-end-line="15" selection-end-column="27" />
+            <state relative-caret-position="2250">
+              <caret line="125" column="25" lean-forward="true" selection-start-line="125" selection-start-column="25" selection-end-line="125" selection-end-column="25" />
               <folding>
                 <element signature="e#28#44#0#PHP" expanded="true" />
               </folding>
@@ -52,7 +50,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor>
+                <caret column="3" selection-start-column="3" selection-end-column="3" />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".htaccess" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/log/.htaccess">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="54">
+              <caret line="3" column="13" lean-forward="true" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="144">
@@ -64,11 +83,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Helper.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/models/Helper.php">
+      <file leaf-file-name=".htaccess" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.htaccess">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
-              <caret line="346" column="9" lean-forward="true" selection-start-line="346" selection-start-column="9" selection-end-line="346" selection-end-column="9" />
+            <state relative-caret-position="378">
+              <caret line="21" column="19" selection-start-line="21" selection-start-column="19" selection-end-line="21" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -76,8 +95,8 @@
       <file leaf-file-name="Api.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/api/Api.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="713">
-              <caret line="108" column="44" selection-start-line="108" selection-start-column="32" selection-end-line="108" selection-end-column="44" />
+            <state relative-caret-position="-396">
+              <caret line="14" column="35" selection-start-line="14" selection-start-column="24" selection-end-line="14" selection-end-column="35" />
               <folding>
                 <element signature="e#28#49#0#PHP" expanded="true" />
               </folding>
@@ -88,7 +107,7 @@
       <file leaf-file-name="SafeMySQL.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/db/SafeMySQL.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2664">
+            <state relative-caret-position="3834">
               <caret line="213" column="26" selection-start-line="213" selection-start-column="20" selection-end-line="213" selection-end-column="26" />
             </state>
           </provider>
@@ -97,8 +116,8 @@
       <file leaf-file-name="config.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/config/config.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="10" column="34" selection-start-line="10" selection-start-column="34" selection-end-line="10" selection-end-column="34" />
+            <state relative-caret-position="252">
+              <caret line="14" column="41" selection-start-line="14" selection-start-column="41" selection-end-line="14" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -107,25 +126,16 @@
         <entry file="file://$PROJECT_DIR$/app/config/db.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="108">
-              <caret line="6" column="14" lean-forward="true" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
+              <caret line="6" column="5" lean-forward="true" selection-start-line="6" selection-start-column="5" selection-end-line="6" selection-end-column="5" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="bio.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bio.txt">
+      <file leaf-file-name="Log.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/models/Log.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="1" selection-start-line="1" selection-end-line="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="console.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/console.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="9" column="17" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="17" />
+            <state relative-caret-position="119">
+              <caret line="10" column="19" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -176,13 +186,11 @@
         <option value="$PROJECT_DIR$/app/api/ShowpicApi.php" />
         <option value="$PROJECT_DIR$/app/models/Users.php" />
         <option value="$PROJECT_DIR$/.htaccess" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$USER_HOME$/AppData/Local/Temp/fz3temp-2/ParsController.php" />
         <option value="$USER_HOME$/AppData/Local/Temp/fz3temp-2/index-test.php" />
         <option value="$USER_HOME$/AppData/Local/Temp/fz3temp-2/web.php" />
         <option value="$USER_HOME$/AppData/Local/Temp/fz3temp-2/app.conf" />
         <option value="$PROJECT_DIR$/dir.txt" />
-        <option value="$PROJECT_DIR$/app/config/config.php" />
         <option value="$PROJECT_DIR$/app/db/SafeMySQL.php" />
         <option value="$USER_HOME$/AppData/Local/Temp/fz3temp-2/index 2.php" />
         <option value="$USER_HOME$/AppData/Local/Temp/fz3temp-2/index 3.php" />
@@ -207,9 +215,12 @@
         <option value="$PROJECT_DIR$/console.php" />
         <option value="$PROJECT_DIR$/bio.txt" />
         <option value="$PROJECT_DIR$/app/models/Helper.php" />
-        <option value="$PROJECT_DIR$/app/api/UserApi.php" />
         <option value="$PROJECT_DIR$/app/config/db.php" />
         <option value="$PROJECT_DIR$/app/api/Api.php" />
+        <option value="$PROJECT_DIR$/app/api/UserApi.php" />
+        <option value="$PROJECT_DIR$/app/log/.htaccess" />
+        <option value="$PROJECT_DIR$/app/config/config.php" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -235,6 +246,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -263,12 +275,6 @@
               <item name="rest" type="b2602c69:ProjectViewProjectNode" />
               <item name="rest" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="app" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="db" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="rest" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rest" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="app" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="log" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
@@ -280,13 +286,17 @@
             <path>
               <item name="rest" type="b2602c69:ProjectViewProjectNode" />
               <item name="rest" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="damp" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="rest" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rest" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="incoming" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -296,7 +306,7 @@
     <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../ist" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
@@ -342,14 +352,16 @@
       <workItem from="1551387268419" duration="9866000" />
       <workItem from="1551821843130" duration="20091000" />
       <workItem from="1551885804183" duration="9073000" />
+      <workItem from="1552233217017" duration="2496000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="130863000" />
+    <option name="totallyTimeSpent" value="133359000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="886" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
@@ -358,7 +370,7 @@
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Terminal" order="9" weight="0.32965517" />
       <window_info anchor="right" id="Remote Host" order="3" weight="0.32969153" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2692802" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27249357" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="4" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -384,20 +396,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="..." />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/models/Log.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="684">
-          <caret line="38" column="24" selection-start-line="38" selection-start-column="24" selection-end-line="38" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/api/Api.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="5" column="17" lean-forward="true" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/db/SafeMySQL.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3834">
@@ -412,13 +410,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/app/index.php" />
     <entry file="file://$PROJECT_DIR$/app/log/log.log">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6768">
@@ -488,13 +480,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.htaccess">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="10" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/composer.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
@@ -516,31 +501,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/Log.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="10" column="19" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rename.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="29" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/app/index.php" />
+    <entry file="file://$PROJECT_DIR$/rename.php" />
     <entry file="file://$PROJECT_DIR$/app/models/Helper.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="346" column="9" lean-forward="true" selection-start-line="346" selection-start-column="9" selection-end-line="346" selection-end-column="9" />
+        <state relative-caret-position="6228">
+          <caret line="346" column="9" selection-start-line="346" selection-start-column="9" selection-end-line="346" selection-end-column="9" />
         </state>
       </provider>
     </entry>
@@ -558,54 +524,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/api/UserApi.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="15" column="27" selection-start-line="15" selection-start-column="21" selection-end-line="15" selection-end-column="27" />
-          <folding>
-            <element signature="e#28#44#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/db/SafeMySQL.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2664">
+        <state relative-caret-position="3834">
           <caret line="213" column="26" selection-start-line="213" selection-start-column="20" selection-end-line="213" selection-end-column="26" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/config/config.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="10" column="34" selection-start-line="10" selection-start-column="34" selection-end-line="10" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/config/db.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" column="14" lean-forward="true" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/api/Api.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="713">
-          <caret line="108" column="44" selection-start-line="108" selection-start-column="32" selection-end-line="108" selection-end-column="44" />
-          <folding>
-            <element signature="e#28#49#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dir.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="9" selection-start-column="9" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/dir.txt" />
     <entry file="file://$PROJECT_DIR$/index.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
@@ -613,6 +539,71 @@
           <folding>
             <element signature="e#7#27#0#PHP" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.htaccess">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="21" column="19" selection-start-line="21" selection-start-column="19" selection-end-line="21" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/config/db.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="5" lean-forward="true" selection-start-line="6" selection-start-column="5" selection-end-line="6" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/Log.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="10" column="19" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/log/.htaccess">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="3" column="13" lean-forward="true" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/config/config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="14" column="41" selection-start-line="14" selection-start-column="41" selection-end-line="14" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api/Api.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-396">
+          <caret line="14" column="35" selection-start-line="14" selection-start-column="24" selection-end-line="14" selection-end-column="35" />
+          <folding>
+            <element signature="e#28#49#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api/UserApi.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2250">
+          <caret line="125" column="25" lean-forward="true" selection-start-line="125" selection-start-column="25" selection-end-line="125" selection-end-column="25" />
+          <folding>
+            <element signature="e#28#44#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor>
+            <caret column="3" selection-start-column="3" selection-end-column="3" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
