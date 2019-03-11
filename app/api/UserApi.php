@@ -120,6 +120,9 @@ class UserApi extends Api
         return $this->response("Update error", 400);
     }
 
+    /**
+     * log
+     */
     public function logAction()
     {
         $log = file_get_contents(__DIR__.'/../log/log.log');

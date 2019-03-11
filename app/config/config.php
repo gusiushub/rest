@@ -13,5 +13,6 @@
         'dir' => __DIR__.'/../../dir.txt',
 
         'log' => __DIR__.'/../log/log.log',
+        'bio' => __DIR__.'/../../bio.txt',
 
     ];

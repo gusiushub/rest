@@ -89,7 +89,6 @@ abstract class Api
                 return 'addAction';
                 break;
             case 'log':
-//                exit('asdasd');
                 return 'logAction';
                 break;
             default:
