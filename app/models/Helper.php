@@ -9,6 +9,7 @@ class Helper
 {
 
     public static $bio = __DIR__ . '/../../bio.txt';
+    public static $ip = __DIR__ . '/../../ip.txt';
     /**
      * @return array
      */
@@ -50,36 +51,45 @@ class Helper
         return str_split($filename);
     }
 
-
+    private static function getArr($file)
+    {
+        return file($file,FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES);
+    }
     /**
      * @return mixed
      */
     public static function getStr($file)
     {
-        $bio = file($file,FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES);
+        $bio = self::getArr($file);
+
+//        var_dump($bio); exit;
         $i=0;
         $str = '';
 
         while (empty($bio[$i]) or $bio[$i]=='' or trim($bio[$i])=='---'){
-            if (self::delStr(self::$bio)){
+//            if (self::delStr(self::$bio)){
+            if (self::delStr($file)){
                 $i++;
             }
         }
-        self::delStr(self::$bio);
+        self::delStr($file);
+//        self::delStr(self::$bio);
 //        }
 //        $i=0;
 //            if (trim($bio[$i])=='---'){
 //                self::delStr(__DIR__ . '/../../bio.txt');
 //            }
         while (trim($bio[$i])!='---') {
-            if (self::delStr(self::$bio)) {
+//            if (self::delStr(self::$bio)) {
+            if (self::delStr($file)) {
                 $str = $str . $bio[$i];
                 $i++;
             }
         }
-        self::delStr(self::$bio);
-
-        return $str;
+//        self::delStr(self::$bio);
+        self::delStr($file);
+        $string = str_replace("'"," ",$str);
+        return $string;
     }
 
     /**
@@ -119,6 +129,27 @@ class Helper
         }
 
         return $str;
+    }
+
+    public static function getIp($db,$i=0)
+    {
+        $str = self::getArr(self::$ip);
+        $countStr = count($str);
+        $query = "select * from users where ip='".$str[$i]."' limit 5";
+        $result = $db->getAll($query);
+        if($result){
+            $count = count($result);
+            if ($count<4){
+                return $str[$i];
+            }
+            $i++;
+            if ($i<$countStr) {
+                return self::getIp($db, $i);
+            }
+
+            return false;
+        }
+        return $str[$i];
     }
 
     /**

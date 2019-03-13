@@ -1,7 +1,6 @@
 <?php
 
     return[
-
         'token' => '',
 
         'defaultDir' => 'a/000/000.jpg',
@@ -13,6 +12,8 @@
         'dir' => __DIR__.'/../../dir.txt',
 
         'log' => __DIR__.'/../log/log.log',
+
         'bio' => __DIR__.'/../../bio.txt',
 
+        'ip' => __DIR__.'/../../ip.txt',
     ];

@@ -56,14 +56,8 @@ class UserApi extends Api
      */
     private function insertUser($get, $lastPic)
     {
-        $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,
-                     Sex, Age, Fullname, Date, Bio, Profilepicture) VALUES ('" . $get['login'] . "','" . $get['password'] . "',
-                    '" . $get['phone'] . "','" . $get['ip'] . "',
-                    '" . $get['country'] . "','" . $get['sex'] . "',
-                    '" . $get['age'] . "','" . $get['fullname'] . "',
-                    '" . date('Y-m-d H:i:s', time()) . "',
-                    '" . Helper::getBio() . "',
-                    '" . $lastPic. "')");
+//        var_dump(Helper::getIp($this->db)); exit;
+        $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . Helper::getIp($this->db) . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic. "')");
     }
 
 
@@ -75,8 +69,7 @@ class UserApi extends Api
         $get = $this->requestParams;
 
         if( isset( $get['login'])&& isset( $get['password'])&&
-            isset( $get['phone'])&& isset( $get['ip'])&&
-            isset( $get['country'])&& isset( $get['sex'])&&
+            isset( $get['phone'])&&isset( $get['country'])&& isset( $get['sex'])&&
             isset( $get['fullname'])&& isset( $get['age'])) {
 
                 if ($this->isLoginUniq()) {
