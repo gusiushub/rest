@@ -91,6 +91,9 @@ abstract class Api
             case 'log':
                 return 'logAction';
                 break;
+            case 'ip':
+                return 'ipAction';
+                break;
             default:
                 return null;
         }
@@ -111,4 +114,5 @@ abstract class Api
      */
     abstract protected function statusAction();
     abstract protected function logAction();
+    abstract protected function ipAction();
 }
