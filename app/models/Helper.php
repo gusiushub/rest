@@ -131,6 +131,24 @@ class Helper
         return $str;
     }
 
+    public static function getPort($db, $from=24001, $to=24250)
+    {
+        $port = rand($from, $to);
+        $query = "SELECT ip FROM ip GROUP BY ip HAVING count(*)>3;";// where ip='".$str[$i]."' limit 5";
+        $result = $db->getAll($query);
+        if (isset($result)){
+
+        foreach ($result as $res){
+            if(array_search($port,$res)==false){
+//
+                return $port;
+            }
+        }
+        return false;
+        }
+        return $port;
+    }
+
     public static function getIp($db,$i=0)
     {
         $str = self::getArr(self::$ip);

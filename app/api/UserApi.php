@@ -62,7 +62,9 @@ class UserApi extends Api
 
     public function ipAction()
     {
-        $ip = Helper::getIp($this->db);
+        $ip = Helper::getPort($this->db);
+//        var_dump($port);exit;
+//        $ip = Helper::getIp($this->db);
 //        var_dump($ip);
         if (isset($ip)){
             $this->db->query("INSERT INTO ip ( ip ) values ('".$ip."')");
