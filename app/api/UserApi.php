@@ -63,7 +63,7 @@ class UserApi extends Api
     public function ipAction()
     {
         $ip = Helper::getIp($this->db);
-        var_dump($ip);
+//        var_dump($ip);
         if (isset($ip)){
             $this->db->query("INSERT INTO ip ( ip ) values ('".$ip."')");
             return $this->response($ip, 200);
@@ -74,7 +74,7 @@ class UserApi extends Api
      */
     public function addAction()
     {
-        var_dump(Helper::getIp($this->db)); exit;
+//        var_dump(Helper::getIp($this->db)); exit;
         $get = $this->requestParams;
 
         if( isset( $get['login'])&& isset( $get['password'])&&
