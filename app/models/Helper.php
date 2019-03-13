@@ -134,26 +134,21 @@ class Helper
     public static function getIp($db,$i=0)
     {
         $str = self::getArr(self::$ip);
-//        var_dump($str);
-//        return $str;
-        $countStr = count($str);
-//        $query = "select * from users where ip='29.292.92' ";// where ip='".$str[$i]."' limit 5";
-//        $query = "select ip ,count(*) from users group by ip ";// where ip='".$str[$i]."' limit 5";
-        $query = "SELECT ip FROM users GROUP BY ip HAVING count(*)>3;";// where ip='".$str[$i]."' limit 5";
-//        $query = "SELECT ip,COUNT(*) AS total FROM users GROUP BY ip ORDER BY total asc ";// where ip='".$str[$i]."' limit 5";
+        $query = "SELECT ip FROM ip GROUP BY ip HAVING count(*)>3;";// where ip='".$str[$i]."' limit 5";
         $result = $db->getAll($query);
-//        $array = array('name' => 'Иван', 'lastname' => 'Шамшур','site' => 'http://biznesguide.ru');
-
         foreach ($result as $res){
-
             if(($key = array_search($res['ip'],$str)) !== FALSE){
                 unset($str[$key]);
             }
         }
 
-
-        return $str[array_rand($str, 1)];
-
+        if (isset($result)){
+            return [
+                'ok'=>$str[array_rand($str, 1)],
+                'error'=>$result
+            ];
+        }
+            return ['ok' => $str[array_rand($str, 1)]];
     }
 
     /**
