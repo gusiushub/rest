@@ -3882,4 +3882,12 @@ GET array (
   'action' => 'bio',
   'login' => 'illld3473',
   'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'avatar',
+  'login' => 'illld3473',
+  'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'avatar',
+  'login' => 'illld3473',
+  'token' => 'li2j3fojewf',
 )

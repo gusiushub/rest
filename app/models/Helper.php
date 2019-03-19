@@ -144,6 +144,8 @@ class Helper
     }
 
 
+
+
     /**
      * @param $db
      * @param int $from
@@ -216,26 +218,46 @@ class Helper
 
 
     /**
+     * http://104.248.82.215/sfparser.php
      * @param $url
      * @param $arrPost
      */
-    public static function sendPost($url, $arrPost)
+    public static function sendPost($params)
     {
 
-        if( $curl = curl_init() ) {
-            curl_setopt($curl, CURLOPT_URL, $url);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
-            curl_setopt($curl, CURLOPT_POST, 1);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $arrPost);
-            $out = curl_exec($curl);
-            if ($out === FALSE) {
-                //Тут-то мы о ней и скажем
-                echo "cURL Error: " . curl_error($curl);
-                return;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,$params['url']);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $params['headers']);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params['postfields']);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+        $response = curl_exec($ch);
+        if (!curl_errno($ch)) {
+            $info = curl_getinfo($ch);
+            if ($info['http_code'] == 200 && !empty($response)) {
+                $response = json_decode($response);
             }
-            echo $out;
-            curl_close($curl);
         }
+        curl_close($ch);
+        return $response;
+
+//        if( $curl = curl_init() ) {
+//            curl_setopt($curl, CURLOPT_URL, $url);
+//            curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
+//            curl_setopt($curl, CURLOPT_POST, 1);
+//            curl_setopt($curl, CURLOPT_POSTFIELDS, $arrPost);
+//            $out = curl_exec($curl);
+//            if ($out === FALSE) {
+//                //Тут-то мы о ней и скажем
+//                echo "cURL Error: " . curl_error($curl);
+//                return;
+//            }
+//            echo $out;
+//            curl_close($curl);
+//        }
     }
 
     /**

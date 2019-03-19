@@ -21,6 +21,8 @@ class UserApi extends Api
 
         return   readfile(__DIR__.'/../../incoming/'.$img);
     }
+
+
     /**
      * @return false|int|string
      */
@@ -37,6 +39,49 @@ class UserApi extends Api
         return $this->response('Data not found', 404);
     }
 
+
+    public function avatarAction()
+    {
+        $get = $this->requestParams;
+
+        if (isset($get['status']) && isset($get['login'])){
+
+            if ($get['status']=='ok'){
+
+                $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
+
+                if ($user) {
+
+                    $post = [
+                        'id_profile' => $user['id'],
+                        'image' => $user['Profilepicture']
+                    ];
+                    $headers = array();
+                    $headers[] = 'Accept-Encoding: gzip, deflate, sdch';
+                    $headers[] = 'Accept-Language: ru,en-US;q=0.8,en;q=0.6';
+                    $headers[] = 'Upgrade-Insecure-Requests: 1';
+                    $headers[] = 'User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.75 Safari/537.36';
+                    $headers[] = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8';
+                    $headers[] = 'Cache-Control: max-age=0';
+                    $headers[] = 'Connection: keep-alive';
+
+                    $params = [
+                      'url' => 'http://104.248.82.215/sfparser.php',
+                        'headers' => $headers,
+                        'postfields' => $post,
+
+                    ];
+                    return Helper::sendPost($params);
+                }
+
+                return $this->response('Not found', 404);
+            }
+        }
+    }
+
+    /**
+     * @return mixed|string
+     */
     public function bioAction()
     {
         $get = $this->requestParams;

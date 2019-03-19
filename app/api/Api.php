@@ -96,6 +96,9 @@ abstract class Api
             case 'bio':
                 return 'bioAction';
                 break;
+            case 'avatar':
+                return 'avatarAction';
+                break;
             default:
                 return null;
         }
@@ -130,4 +133,9 @@ abstract class Api
      * @return mixed
      */
     abstract protected function bioAction();
+
+    /**
+     * @return mixed
+     */
+    abstract protected function avatarAction();
 }
