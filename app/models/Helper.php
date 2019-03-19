@@ -131,6 +131,12 @@ class Helper
         return $str;
     }
 
+    /**
+     * @param $db
+     * @param int $from
+     * @param int $to
+     * @return bool|int
+     */
     public static function getPort($db, $from=24001, $to=24250)
     {
         $port = rand($from, $to);
@@ -149,7 +155,12 @@ class Helper
         return $port;
     }
 
-    public static function getIp($db,$i=0)
+    /**
+     * @param $db
+     * @param int $i
+     * @return array
+     */
+    public static function getIp($db, $i=0)
     {
         $str = self::getArr(self::$ip);
         $query = "SELECT ip FROM ip GROUP BY ip HAVING count(*)>3;";// where ip='".$str[$i]."' limit 5";
