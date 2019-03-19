@@ -37,6 +37,20 @@ class UserApi extends Api
         return $this->response('Data not found', 404);
     }
 
+    public function bioAction()
+    {
+        $get = $this->requestParams;
+        if (isset($get['login'])) {
+            $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='" . $get['login'] . "'"));
+
+            if ($user) {
+                return $this->response($user['Bio'], 200);
+            }
+        }
+
+        return $this->response('Data not found', 404);
+    }
+
     /**
      * @return bool
      */
@@ -81,8 +95,8 @@ class UserApi extends Api
         $get = $this->requestParams;
 
         if( isset( $get['login'])&& isset( $get['password'])&&
-            isset( $get['phone'])&&isset( $get['country'])&& isset( $get['sex'])&&
-            isset( $get['fullname'])&& isset( $get['age'])) {
+            isset( $get['phone'])&&isset( $get['country'])&&
+            isset( $get['sex'])&& isset( $get['fullname'])&& isset( $get['age'])) {
 
                 if ($this->isLoginUniq()) {
                     $lastUser = $this->db->getRow("SELECT * FROM users WHERE Sex=".$get['sex']." ORDER BY id DESC");
@@ -92,15 +106,17 @@ class UserApi extends Api
                         case 0:
                              $lastPic = 'Male/'.str_pad ($lastPic, 4,"0",STR_PAD_LEFT).'.jpg';
                             $this->insertUser($get,$lastPic);
-                            return $this->getImg($lastPic);
+                            return Helper::downloadImg($lastPic);
                             break;
                         case 1:
                              $lastPic = 'Female/'.str_pad ($lastPic, 4,"0",STR_PAD_LEFT).'.jpg';
                             $this->insertUser($get,$lastPic);
-                            return $this->getImg($lastPic);
+                            Helper::downloadImg(__DIR__.'/../../incoming/'.$lastPic,'image/jpeg');
+                            return $this->response("200", 200);
                              break;
                     }
-                    return $this->getImg($lastPic);
+                    return $this->response("200", 200);
+//                    return $this->getImg($lastPic);
                 }
                 return $this->response("login exists", 500);
         }

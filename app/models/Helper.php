@@ -7,9 +7,10 @@ use app\db\SafeMySQL;
 
 class Helper
 {
-
     public static $bio = __DIR__ . '/../../bio.txt';
     public static $ip = __DIR__ . '/../../ip.txt';
+
+
     /**
      * @return array
      */
@@ -18,10 +19,15 @@ class Helper
         return require __DIR__.'/../config/config.php';
     }
 
+
+    /**
+     * @return mixed
+     */
     public static function config()
     {
         return require __DIR__.'/../config/config.php';
     }
+
 
     /**
      * @return mixed
@@ -31,6 +37,7 @@ class Helper
         $config = self::getConfig();
         return $config['dir'];
     }
+
 
     /**
      * @return mixed
@@ -51,18 +58,23 @@ class Helper
         return str_split($filename);
     }
 
+
+    /**
+     * @param $file
+     * @return array|bool
+     */
     private static function getArr($file)
     {
         return file($file,FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES);
     }
+
+
     /**
      * @return mixed
      */
     public static function getStr($file)
     {
         $bio = self::getArr($file);
-
-//        var_dump($bio); exit;
         $i=0;
         $str = '';
 
@@ -131,6 +143,7 @@ class Helper
         return $str;
     }
 
+
     /**
      * @param $db
      * @param int $from
@@ -154,6 +167,7 @@ class Helper
         }
         return $port;
     }
+
 
     /**
      * @param $db
@@ -180,6 +194,7 @@ class Helper
             return ['ok' => $str[array_rand($str, 1)]];
     }
 
+
     /**
      *
      */
@@ -198,6 +213,7 @@ class Helper
         }
         return false;
     }
+
 
     /**
      * @param $url
@@ -220,6 +236,24 @@ class Helper
             echo $out;
             curl_close($curl);
         }
+    }
+
+    /**
+     * @param $file
+     * @return false|int
+     */
+    public static function downloadImg($file,$type)
+    {
+        header('Content-Description: File Transfer');
+        header('Content-Type: '.$type);
+        header('Content-Disposition: attachment; filename='.basename($file));
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length:'.filesize($file));
+
+        return readfile($file);
     }
 
 

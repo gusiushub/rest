@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d9c51d14-867d-44b0-85aa-bd82baab9aac" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/Api.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/Api.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/UserApi.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/UserApi.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/config/db.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/config/db.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/log/log.log" beforeDir="false" afterPath="$PROJECT_DIR$/app/log/log.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/models/Helper.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/Helper.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bio.txt" beforeDir="false" afterPath="$PROJECT_DIR$/bio.txt" afterDir="false" />
@@ -62,7 +63,7 @@
         <entry file="file://$PROJECT_DIR$/bio.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="36">
-              <caret line="2" column="2" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="3" />
+              <caret line="2" column="2" selection-start-line="2" selection-start-column="2" selection-end-line="2" selection-end-column="2" />
             </state>
           </provider>
         </entry>
@@ -70,8 +71,17 @@
       <file leaf-file-name="Helper.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/models/Helper.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="657">
-              <caret line="162" column="27" selection-start-line="162" selection-start-column="27" selection-end-line="162" selection-end-column="27" />
+            <state relative-caret-position="3143">
+              <caret line="254" selection-start-line="254" selection-end-line="254" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test_sf.php" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Downloads/Telegram Desktop/test_sf.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -88,10 +98,22 @@
       <file leaf-file-name="UserApi.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/api/UserApi.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="393">
-              <caret line="59" column="239" selection-start-line="59" selection-start-column="239" selection-end-line="59" selection-end-column="239" />
+            <state relative-caret-position="497">
+              <caret line="43" column="97" selection-start-line="43" selection-start-column="92" selection-end-line="43" selection-end-column="97" />
               <folding>
                 <element signature="e#28#44#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Api.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/api/Api.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-79">
+              <caret line="96" column="27" selection-start-line="96" selection-start-column="27" selection-end-line="96" selection-end-column="27" />
+              <folding>
+                <element signature="e#28#49#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -188,7 +210,6 @@
         <option value="$USER_HOME$/AppData/Local/Temp/fz3temp-3/addkeyword.php" />
         <option value="$PROJECT_DIR$/app/config/config.php" />
         <option value="$PROJECT_DIR$/bio.txt" />
-        <option value="$PROJECT_DIR$/app/api/Api.php" />
         <option value="$PROJECT_DIR$/ip.txt" />
         <option value="$USER_HOME$/AppData/Local/Temp/fz3temp-3/profile.php" />
         <option value="$USER_HOME$/AppData/Local/Temp/fz3temp-3/SiteController.php" />
@@ -197,6 +218,7 @@
         <option value="$USER_HOME$/AppData/Local/Temp/fz3temp-3/index.php" />
         <option value="$PROJECT_DIR$/app/config/db.php" />
         <option value="$PROJECT_DIR$/app/models/Helper.php" />
+        <option value="$PROJECT_DIR$/app/api/Api.php" />
         <option value="$PROJECT_DIR$/app/api/UserApi.php" />
       </list>
     </option>
@@ -213,9 +235,10 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="793" />
-    <option name="width" value="814" />
-    <option name="height" value="877" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1616" />
+    <option name="height" value="886" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -344,7 +367,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="216134000" />
+    <option name="totallyTimeSpent" value="222179000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="886" extended-state="6" />
@@ -357,7 +380,7 @@
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Terminal" order="9" weight="0.32965517" />
       <window_info anchor="right" id="Remote Host" order="3" weight="0.32969153" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.28277636" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14203085" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="4" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -397,14 +420,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="..." />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/AppData/Local/Temp/fz3temp-2/addkeyword.php" />
-    <entry file="file://$PROJECT_DIR$/app/models/Helper.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2700">
-          <caret line="150" column="46" selection-start-line="150" selection-start-column="46" selection-end-line="150" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Temp/fz3temp-3/db.php" />
     <entry file="file://$USER_HOME$/AppData/Local/Temp/fz3temp-3/.htaccess" />
     <entry file="file://$USER_HOME$/AppData/Local/Temp/fz3temp-3/SafeMySQL.php" />
@@ -477,16 +492,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/api/Api.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-529">
-          <caret line="55" column="13" lean-forward="true" selection-start-line="55" selection-start-column="13" selection-end-line="55" selection-end-column="13" />
-          <folding>
-            <element signature="e#28#49#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ip.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="324">
@@ -532,7 +537,7 @@
     <entry file="file://$PROJECT_DIR$/bio.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="36">
-          <caret line="2" column="2" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="3" />
+          <caret line="2" column="2" selection-start-line="2" selection-start-column="2" selection-end-line="2" selection-end-column="2" />
         </state>
       </provider>
     </entry>
@@ -553,17 +558,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/Downloads/0024.jpg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/Telegram Desktop/test_sf.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/models/Helper.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="657">
-          <caret line="162" column="27" selection-start-line="162" selection-start-column="27" selection-end-line="162" selection-end-column="27" />
+        <state relative-caret-position="3143">
+          <caret line="254" selection-start-line="254" selection-end-line="254" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api/Api.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-79">
+          <caret line="96" column="27" selection-start-line="96" selection-start-column="27" selection-end-line="96" selection-end-column="27" />
+          <folding>
+            <element signature="e#28#49#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/api/UserApi.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="393">
-          <caret line="59" column="239" selection-start-line="59" selection-start-column="239" selection-end-line="59" selection-end-column="239" />
+        <state relative-caret-position="497">
+          <caret line="43" column="97" selection-start-line="43" selection-start-column="92" selection-end-line="43" selection-end-column="97" />
           <folding>
             <element signature="e#28#44#0#PHP" expanded="true" />
           </folding>

@@ -77,7 +77,6 @@ abstract class Api
     protected function getAction()
     {
         $action = $this->requestParams['action'];
-//var_dump($action); exit;
         switch ($action) {
             case 'showpic':
                 return 'viewAction';
@@ -93,6 +92,9 @@ abstract class Api
                 break;
             case 'ip':
                 return 'ipAction';
+                break;
+            case 'bio':
+                return 'bioAction';
                 break;
             default:
                 return null;
@@ -113,6 +115,19 @@ abstract class Api
      * @return mixed
      */
     abstract protected function statusAction();
+
+    /**
+     * @return mixed
+     */
     abstract protected function logAction();
+
+    /**
+     * @return mixed
+     */
     abstract protected function ipAction();
+
+    /**
+     * @return mixed
+     */
+    abstract protected function bioAction();
 }
