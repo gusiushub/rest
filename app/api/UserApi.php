@@ -69,9 +69,6 @@ class UserApi extends Api
                       'url' => 'http://104.248.82.215/sfparser.php',
                         'headers' => $headers,
                         'postfields' => $post,
-//                        'id_profile' => $user['id'],
-//                        'image' => $user['Profilepicture']
-
                     ];
                     return Helper::sendPost($params);
                 }
@@ -117,7 +114,6 @@ class UserApi extends Api
      */
     private function insertUser($get, $lastPic)
     {
-//        var_dump(Helper::getIp($this->db)); exit;
         $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic. "')");
     }
 
@@ -153,7 +149,8 @@ class UserApi extends Api
                         case 0:
                              $lastPic = 'Male/'.str_pad ($lastPic, 4,"0",STR_PAD_LEFT).'.jpg';
                             $this->insertUser($get,$lastPic);
-                            return Helper::downloadImg($lastPic);
+                            Helper::downloadImg(__DIR__.'/../../incoming/'.$lastPic,'image/jpeg');
+                            return $this->response("200", 200);
                             break;
                         case 1:
                              $lastPic = 'Female/'.str_pad ($lastPic, 4,"0",STR_PAD_LEFT).'.jpg';
@@ -163,7 +160,6 @@ class UserApi extends Api
                              break;
                     }
                     return $this->response("200", 200);
-//                    return $this->getImg($lastPic);
                 }
                 return $this->response("login exists", 500);
         }

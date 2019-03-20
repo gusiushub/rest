@@ -30,13 +30,10 @@ abstract class Api
      * @return mixed
      */
     public function run() {
-
         $get = $this->requestParams;
-        //Определение действия для обработки
         $this->action = $this->getAction();
         if (isset($get['token'])) {
             if ($get['token']==$this->token) {
-                //Если метод(действие) определен в дочернем классе API
                 if (method_exists($this, $this->action)) {
                     return $this->{$this->action}();
                 } else {
@@ -44,6 +41,7 @@ abstract class Api
                 }
             }
         }
+
         return $this->response('Data not found', 404);
     }
 
@@ -68,6 +66,7 @@ abstract class Api
             405 => 'Method Not Allowed',
             500 => 'Internal Server Error',
         );
+
         return ($status[$code])?$status[$code]:$status[500];
     }
 

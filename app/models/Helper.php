@@ -79,26 +79,17 @@ class Helper
         $str = '';
 
         while (empty($bio[$i]) or $bio[$i]=='' or trim($bio[$i])=='---'){
-//            if (self::delStr(self::$bio)){
             if (self::delStr($file)){
                 $i++;
             }
         }
         self::delStr($file);
-//        self::delStr(self::$bio);
-//        }
-//        $i=0;
-//            if (trim($bio[$i])=='---'){
-//                self::delStr(__DIR__ . '/../../bio.txt');
-//            }
         while (trim($bio[$i])!='---') {
-//            if (self::delStr(self::$bio)) {
             if (self::delStr($file)) {
                 $str = $str . $bio[$i];
                 $i++;
             }
         }
-//        self::delStr(self::$bio);
         self::delStr($file);
         $string = str_replace("'"," ",$str);
         return $string;
@@ -129,13 +120,6 @@ class Helper
             $val = array(self::getFullname($_GET['fullname']), $_GET['sex'], $_GET['country'], $_GET['age']);
             if (preg_match("/%(.*?)%/", $str, $matches))
                 $newphrase = str_replace($search, $val, $str);
-//        $file=__DIR__.'/../../bio.txt';
-//        self::delStr($file);
-
-//        $filearray=file($file);
-//        if (trim($filearray[0])=='---'){
-//            self::delStr($file);
-//        }
 
             return $newphrase;
         }
@@ -152,21 +136,21 @@ class Helper
      * @param int $to
      * @return bool|int
      */
-    public static function getPort($db, $from=24001, $to=24250)
+    public static function getPort($db, $from=24100, $to=24250)
     {
         $port = rand($from, $to);
         $query = "SELECT ip FROM ip GROUP BY ip HAVING count(*)>3;";// where ip='".$str[$i]."' limit 5";
         $result = $db->getAll($query);
         if (isset($result)){
 
-        foreach ($result as $res){
-            if(array_search($port,$res)==false){
-//
-                return $port;
+            foreach ($result as $res){
+                if(array_search($port,$res)==false){
+                    return $port;
+                }
             }
+            return false;
         }
-        return false;
-        }
+
         return $port;
     }
 
@@ -240,22 +224,8 @@ class Helper
             }
         }
         curl_close($ch);
-        return $response;
 
-//        if( $curl = curl_init() ) {
-//            curl_setopt($curl, CURLOPT_URL, $url);
-//            curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
-//            curl_setopt($curl, CURLOPT_POST, 1);
-//            curl_setopt($curl, CURLOPT_POSTFIELDS, $arrPost);
-//            $out = curl_exec($curl);
-//            if ($out === FALSE) {
-//                //Тут-то мы о ней и скажем
-//                echo "cURL Error: " . curl_error($curl);
-//                return;
-//            }
-//            echo $out;
-//            curl_close($curl);
-//        }
+        return $response;
     }
 
     /**
