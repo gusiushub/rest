@@ -218,13 +218,11 @@ class Helper
 
 
     /**
-     * http://104.248.82.215/sfparser.php
-     * @param $url
-     * @param $arrPost
+     * @param $params
+     * @return mixed
      */
     public static function sendPost($params)
     {
-
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,$params['url']);
         curl_setopt($ch, CURLOPT_TIMEOUT, 60);

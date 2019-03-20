@@ -69,6 +69,8 @@ class UserApi extends Api
                       'url' => 'http://104.248.82.215/sfparser.php',
                         'headers' => $headers,
                         'postfields' => $post,
+//                        'id_profile' => $user['id'],
+//                        'image' => $user['Profilepicture']
 
                     ];
                     return Helper::sendPost($params);

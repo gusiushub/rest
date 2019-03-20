@@ -3890,4 +3890,20 @@ GET array (
   'action' => 'avatar',
   'login' => 'illld3473',
   'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'avatar',
+  'login' => 'illld3473',
+  'token' => 'li2j3fojewf',
+  'status' => 'ok',
+)GET array (
+  'action' => 'add',
+  'login' => 'dillllщllllard3473',
+  'token' => 'li2j3fojewf',
+  'fullname' => 'James Dillard',
+  'phone' => '79857916258',
+  'country' => 'Russia',
+  'sex' => '1',
+  'age' => '25',
+  'ip' => '24014',
+  'password' => 'be705ae609ed',
 )
