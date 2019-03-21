@@ -4343,4 +4343,35 @@ GET array (
   'age' => '11',
   'ip' => '132123',
   'password' => 'asdasd',
+)GET array (
+  'action' => 'avatar',
+  'login' => 'sdfsdfvvv',
+  'token' => 'li2j3fojewf',
+  'status' => 'ok',
+)GET array (
+  'action' => 'avatar',
+  'login' => 'yourlogin',
+  'token' => 'li2j3fojewf',
+  'status' => 'ok',
+)GET array (
+  'action' => 'avatar',
+  'login' => 'asdasdasd',
+  'token' => 'li2j3fojewf',
+  'status' => 'ok',
+)GET array (
+  'action' => 'avatar',
+  'login' => 'tesasd',
+  'token' => 'li2j3fojewf',
+  'status' => 'ok',
+)GET array (
+  'action' => 'add',
+  'login' => 'xfvcb',
+  'token' => 'li2j3fojewf',
+  'fullname' => 'asdasd',
+  'phone' => '7890',
+  'country' => 'asdasdasd',
+  'sex' => '1',
+  'age' => '11',
+  'ip' => '132123',
+  'password' => 'asdasd',
 )
