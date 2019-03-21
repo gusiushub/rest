@@ -39,6 +39,26 @@ class UserApi extends Api
         return $this->response('Data not found', 404);
     }
 
+    public function sendRequestInService($params) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,$params['url']);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $params['headers']);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params['postfields']);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+        $response = curl_exec($ch);
+        if (!curl_errno($ch)) {
+            $info = curl_getinfo($ch);
+            if ($info['http_code'] == 200 && !empty($response)) {
+                $response = json_decode($response);
+            }
+        }
+        curl_close($ch);
+        return $response;
+    }
 
     public function avatarAction()
     {
@@ -49,34 +69,37 @@ class UserApi extends Api
             if ($get['status']=='ok'){
 
                 $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
-
                 if ($user) {
 
-                    $post = [
-                        'id_profile' => $user['id'],
-                        'image' => $user['Profilepicture']
-                    ];
-                    $headers = array();
-                    $headers[] = 'Accept-Encoding: gzip, deflate, sdch';
-                    $headers[] = 'Accept-Language: ru,en-US;q=0.8,en;q=0.6';
-                    $headers[] = 'Upgrade-Insecure-Requests: 1';
-                    $headers[] = 'User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.75 Safari/537.36';
-                    $headers[] = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8';
-                    $headers[] = 'Cache-Control: max-age=0';
-                    $headers[] = 'Connection: keep-alive';
+                    $postfields = array();
 
-                    $params = [
-                      'url' => 'http://104.248.82.215/sfparser.php',
-                        'headers' => $headers,
-                        'postfields' => $post,
-                    ];
-                    return Helper::sendPost($params);
+                    // тут путь к картинке, которая будет отправляться
+                    $file = __DIR__.'/../../incoming/'.$user['Profilepicture'];
+
+                    $finfo = finfo_open(FILEINFO_MIME_TYPE); // возвращает mime-тип
+                    $mime = finfo_file($finfo, $file);
+                    finfo_close($finfo);
+
+                    $curlFile = curl_file_create($file, $mime, basename($file));
+                    $postfields['image'] = $curlFile;
+
+                    // id_profile
+                    $postfields['id_profile'] = 675;
+
+                    $url = 'http://104.248.82.215/sfparser.php';
+
+                    $headers = array("Content-Type" => "multipart/form-data");
+                    $resultSearching = $this->sendRequestInService(array('url' => $url, 'headers' => $headers, 'postfields' => $postfields));
+                    echo $resultSearching;
+                    die;
                 }
 
                 return $this->response('Not found', 404);
             }
         }
     }
+
+
 
     /**
      * @return mixed|string
@@ -150,12 +173,56 @@ class UserApi extends Api
                              $lastPic = 'Male/'.str_pad ($lastPic, 4,"0",STR_PAD_LEFT).'.jpg';
                             $this->insertUser($get,$lastPic);
                             Helper::downloadImg(__DIR__.'/../../incoming/'.$lastPic,'image/jpeg');
+//                            $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
+//                            if ($user) {
+
+                                $postfields = array();
+
+                                // тут путь к картинке, которая будет отправляться
+                                $file = __DIR__.'/../../incoming/'.$lastPic;
+
+                                $finfo = finfo_open(FILEINFO_MIME_TYPE); // возвращает mime-тип
+                                $mime = finfo_file($finfo, $file);
+                                finfo_close($finfo);
+
+                                $curlFile = curl_file_create($file, $mime, basename($file));
+                                $postfields['image'] = $curlFile;
+
+                                // id_profile
+                                $postfields['id_profile'] = 675;
+
+                                $url = 'http://104.248.82.215/sfparser.php';
+
+                                $headers = array("Content-Type" => "multipart/form-data");
+                              $this->sendRequestInService(array('url' => $url, 'headers' => $headers, 'postfields' => $postfields));
+//                                echo $resultSearching;
+//                                die;
+//                            }
                             return $this->response("200", 200);
                             break;
                         case 1:
                              $lastPic = 'Female/'.str_pad ($lastPic, 4,"0",STR_PAD_LEFT).'.jpg';
                             $this->insertUser($get,$lastPic);
                             Helper::downloadImg(__DIR__.'/../../incoming/'.$lastPic,'image/jpeg');
+                            $postfields = array();
+
+                            // тут путь к картинке, которая будет отправляться
+                            $file = __DIR__.'/../../incoming/'.$lastPic;
+
+                            $finfo = finfo_open(FILEINFO_MIME_TYPE); // возвращает mime-тип
+                            $mime = finfo_file($finfo, $file);
+                            finfo_close($finfo);
+
+                            $curlFile = curl_file_create($file, $mime, basename($file));
+                            $postfields['image'] = $curlFile;
+
+                            // id_profile
+                            $postfields['id_profile'] = 675;
+
+                            $url = 'http://104.248.82.215/sfparser.php';
+
+                            $headers = array("Content-Type" => "multipart/form-data");
+                            $this->sendRequestInService(array('url' => $url, 'headers' => $headers, 'postfields' => $postfields));
                             return $this->response("200", 200);
                              break;
                     }
