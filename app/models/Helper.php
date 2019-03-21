@@ -136,7 +136,7 @@ class Helper
      * @param int $to
      * @return bool|int
      */
-    public static function getPort($db, $from=24000, $to=24250)
+    public static function getPort($db, $from=24001, $to=24250)
     {
         $port = rand($from, $to);
         $query = "SELECT ip FROM ip GROUP BY ip HAVING count(*)>3;";// where ip='".$str[$i]."' limit 5";
