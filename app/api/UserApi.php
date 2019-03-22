@@ -267,4 +267,17 @@ class UserApi extends Api
         echo $log;
     }
 
+    public function csvAction()
+    {
+        $value = $this->db->getAll("SELECT * FROM users ORDER BY id ASC");
+        $dbData = array();
+        foreach ($value as $val) {
+            $dbData[] = $val;
+
+                $dbData;
+        }
+
+        echo $this->kama_create_csv_file( $dbData, __DIR__ .'/../../csv.csv' );
+    }
+
 }
