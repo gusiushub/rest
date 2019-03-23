@@ -16,4 +16,8 @@
         'bio' => __DIR__.'/../../bio.txt',
 
         'ip' => __DIR__.'/../../ip.txt',
+
+        'portFrom' => 24001,
+
+        'portTo' => 24250,
     ];

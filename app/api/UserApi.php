@@ -145,11 +145,14 @@ class UserApi extends Api
      */
     public function ipAction()
     {
-        $ip = Helper::getPort($this->db);
-        if (isset($ip)){
-            $this->db->query("INSERT INTO ip ( ip ) values ('".$ip."')");
-            return $this->response($ip, 200);
+        $port = Helper::getPort($this->db);
+        if (isset($port)) {
+            if ($port != false) {
+                $this->db->query("UPDATE port SET count=count+1 WHERE name=" . (int)$port . ";");
+                return $this->response($port, 200);
+            }
         }
+        return false;
     }
 
 
@@ -278,6 +281,26 @@ class UserApi extends Api
         }
 
         echo $this->kama_create_csv_file( $dbData, __DIR__ .'/../../csv.csv' );
+    }
+
+    public function dashboardAction()
+    {
+
+        $query = "SELECT * FROM port;";// where ip='".$str[$i]."' limit 5";
+//        $query = "SELECT ip, count(*) as num FROM ip GROUP BY ip ;";// where ip='".$str[$i]."' limit 5";
+        $result = $this->db->getAll($query);
+        foreach ($result as $res){
+//            echo '<pre>';
+
+//            echo '</br>';
+//            echo '</pre>';
+        }
+//        var_dump($result);
+        foreach ($result as $res) {
+            echo ' ' . $res['name'] . '  - ' . $res['count'] . '
+            ';
+        }
+
     }
 
 }

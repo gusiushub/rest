@@ -101,6 +101,9 @@ abstract class Api
             case 'csv':
                 return 'csvAction';
                 break;
+            case 'dashboard':
+                return 'dashboardAction';
+                break;
             default:
                 return null;
         }
@@ -204,5 +207,13 @@ abstract class Api
      */
     abstract protected function avatarAction();
 
+    /**
+     * @return mixed
+     */
     abstract protected function csvAction();
+
+    /**
+     * @return mixed
+     */
+    abstract protected function dashboardAction();
 }

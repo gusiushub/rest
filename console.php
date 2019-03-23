@@ -33,4 +33,20 @@ if ($argv[1]=='rename') {
     }
 }
 
+if ($argv[1]=='setport') {
+    $db = new \app\db\SafeMySQL();
+    for ($i=24001; $i<24250; $i++){
+        $db->query("INSERT INTO port ( name,  count) VALUES (".$i.", 0)");
+    }
+}
+
+if ($argv[1]=='count') {
+    $db = new \app\db\SafeMySQL();
+    $row = $db->getAll('SELECT * FROM ip;');
+    foreach ($row as $value){
+        $db->query("UPDATE port SET count=count+1 WHERE name=".(int)$value['ip'].";");
+    }
+    var_dump($row);
+}
+
 

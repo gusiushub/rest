@@ -1,6 +1,6 @@
 /vendor/
-/.idea/
+.idea
 /app/config/db.php
 /app/log/
-bio.txt
-ip.txt
+/bio.txt
+/ip.txt

@@ -2,13 +2,14 @@
 
 namespace app\models;
 
-
 use app\db\SafeMySQL;
+
 
 class Helper
 {
     public static $bio = __DIR__ . '/../../bio.txt';
     public static $ip = __DIR__ . '/../../ip.txt';
+    const config = __DIR__ . '/../config/config.php';
 
 
     /**
@@ -138,20 +139,15 @@ class Helper
      */
     public static function getPort($db, $from=24001, $to=24250)
     {
-        $port = rand($from, $to);
-        $query = "SELECT ip FROM ip GROUP BY ip HAVING count(*)>3;";// where ip='".$str[$i]."' limit 5";
+        $query = "SELECT f.id , name FROM port f JOIN ( SELECT rand() * (SELECT max(id) from port) AS max_id ) AS m WHERE f.id >= m.max_id and count<4 ORDER BY f.id ASC LIMIT 1;";
         $result = $db->getAll($query);
         if (isset($result)){
-
             foreach ($result as $res){
-                if(array_search($port,$res)==false){
-                    return $port;
-                }
+                    return $res['name'];
             }
             return false;
         }
-
-        return $port;
+        return false;
     }
 
 
@@ -160,7 +156,7 @@ class Helper
      * @param int $i
      * @return array
      */
-    public static function getIp($db, $i=0)
+    public static function getIp($db)
     {
         $str = self::getArr(self::$ip);
         $query = "SELECT ip FROM ip GROUP BY ip HAVING count(*)>3;";// where ip='".$str[$i]."' limit 5";
