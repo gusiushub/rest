@@ -46,7 +46,6 @@ if ($argv[1]=='count') {
     foreach ($row as $value){
         $db->query("UPDATE port SET count=count+1 WHERE name=".(int)$value['ip'].";");
     }
-    var_dump($row);
 }
 
 

@@ -39,7 +39,8 @@ class UserApi extends Api
         return $this->response('Data not found', 404);
     }
 
-    public function sendRequestInService($params) {
+    public function sendRequestInService($params)
+    {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,$params['url']);
         curl_setopt($ch, CURLOPT_TIMEOUT, 60);
@@ -58,6 +59,26 @@ class UserApi extends Api
         }
         curl_close($ch);
         return $response;
+    }
+
+    /**
+     * @param $file
+     * @param $userId
+     */
+    private function sendAvatar($file, $userId)
+    {
+        $postfields = array();
+        // тут путь к картинке, которая будет отправляться
+        $file = __DIR__ . '/../../incoming/' . $file;
+        $finfo = finfo_open(FILEINFO_MIME_TYPE); // возвращает mime-тип
+        $mime = finfo_file($finfo, $file);
+        finfo_close($finfo);
+        $curlFile = curl_file_create($file, $mime, basename($file));
+        $postfields['image'] = $curlFile;
+        $postfields['id_profile'] = $userId;
+        $url = 'http://104.248.82.215/sfparser.php';
+        $headers = array("Content-Type" => "multipart/form-data");
+        $this->sendRequestInService(array('url' => $url, 'headers' => $headers, 'postfields' => $postfields));
     }
 
     public function avatarAction()
@@ -148,11 +169,23 @@ class UserApi extends Api
         $port = Helper::getPort($this->db);
         if (isset($port)) {
             if ($port != false) {
-                $this->db->query("UPDATE port SET count=count+1 WHERE name=" . (int)$port . ";");
+
                 return $this->response($port, 200);
             }
         }
         return false;
+    }
+
+    /**
+     *
+     * @param $port
+     * @return FALSE|resource
+     */
+    private function plusPort($port)
+    {
+        return $this->db->query("UPDATE port SET count=count+1 WHERE name=" . (int)$port . ";");
+//        $sum = $sum2/2;
+
     }
 
 
@@ -176,32 +209,10 @@ class UserApi extends Api
                              $lastPic = 'Male/'.str_pad ($lastPic, 4,"0",STR_PAD_LEFT).'.jpg';
                             $this->insertUser($get,$lastPic);
                             Helper::downloadImg(__DIR__.'/../../incoming/'.$lastPic,'image/jpeg');
-//                            $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
-//                            if ($user) {
                             $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
                             if ($user) {
-                                $postfields = array();
-
-                                // тут путь к картинке, которая будет отправляться
-                                $file = __DIR__ . '/../../incoming/' . $lastPic;
-
-                                $finfo = finfo_open(FILEINFO_MIME_TYPE); // возвращает mime-тип
-                                $mime = finfo_file($finfo, $file);
-                                finfo_close($finfo);
-
-                                $curlFile = curl_file_create($file, $mime, basename($file));
-                                $postfields['image'] = $curlFile;
-
-                                // id_profile
-                                $postfields['id_profile'] = $user['id'];
-
-                                $url = 'http://104.248.82.215/sfparser.php';
-
-                                $headers = array("Content-Type" => "multipart/form-data");
-                                $this->sendRequestInService(array('url' => $url, 'headers' => $headers, 'postfields' => $postfields));
-//                                echo $resultSearching;
-//                                die;
-//                            }
+                                $this->sendAvatar($lastPic,$user['id']);
+                                $this->plusPort((int)$get['ip']);
                                 return $this->response("200", 200);
                             }
                             break;
@@ -211,30 +222,13 @@ class UserApi extends Api
                             Helper::downloadImg(__DIR__.'/../../incoming/'.$lastPic,'image/jpeg');
                             $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
                             if ($user) {
-                                $postfields = array();
-
-                                // тут путь к картинке, которая будет отправляться
-                                $file = __DIR__ . '/../../incoming/' . $lastPic;
-
-                                $finfo = finfo_open(FILEINFO_MIME_TYPE); // возвращает mime-тип
-                                $mime = finfo_file($finfo, $file);
-                                finfo_close($finfo);
-
-                                $curlFile = curl_file_create($file, $mime, basename($file));
-                                $postfields['image'] = $curlFile;
-
-                                // id_profile
-                                $postfields['id_profile'] = $user['id'];
-
-                                $url = 'http://104.248.82.215/sfparser.php';
-
-                                $headers = array("Content-Type" => "multipart/form-data");
-                                $this->sendRequestInService(array('url' => $url, 'headers' => $headers, 'postfields' => $postfields));
-
+                                $this->sendAvatar($lastPic,$user['id']);
+                                $this->plusPort((int)$get['ip']);
                                 return $this->response("200", 200);
                             }
                              break;
                     }
+
                     return $this->response("200", 200);
                 }
                 return $this->response("login exists", 500);
@@ -286,19 +280,22 @@ class UserApi extends Api
     public function dashboardAction()
     {
 
-        $query = "SELECT * FROM port;";// where ip='".$str[$i]."' limit 5";
-//        $query = "SELECT ip, count(*) as num FROM ip GROUP BY ip ;";// where ip='".$str[$i]."' limit 5";
-        $result = $this->db->getAll($query);
-        foreach ($result as $res){
-//            echo '<pre>';
+        $query = "SELECT * FROM port ORDER BY count DESC;";
+        $sum = $this->db->getRow("SELECT SUM(count) as sum FROM port;");
 
-//            echo '</br>';
-//            echo '</pre>';
-        }
-//        var_dump($result);
+        $result = $this->db->getAll($query);
+        $count = count($result)*4;
+
+        echo '
+        Всего '.$count.'
+        ';
+        $ost = $count-$sum['sum']/2;
+        echo 'Осталось '. $ost.'
+        ';
+        echo '--ниже список проксей и количество их использований по базе--';
         foreach ($result as $res) {
-            echo ' ' . $res['name'] . '  - ' . $res['count'] . '
-            ';
+            echo '
+             ' . $res['name'] . ' - ' . $res['count'] . '';
         }
 
     }

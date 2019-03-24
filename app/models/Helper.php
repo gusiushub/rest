@@ -139,8 +139,9 @@ class Helper
      */
     public static function getPort($db, $from=24001, $to=24250)
     {
-        $query = "SELECT f.id , name FROM port f JOIN ( SELECT rand() * (SELECT max(id) from port) AS max_id ) AS m WHERE f.id >= m.max_id and count<4 ORDER BY f.id ASC LIMIT 1;";
+        $query = "SELECT f.id , name FROM port f JOIN ( SELECT rand() * (SELECT max(id) from port  WHERE port.count < 4) AS max_id ) AS m WHERE f.id >= m.max_id and count<4 ORDER BY f.id ASC LIMIT 1;";
         $result = $db->getAll($query);
+//        var_dump($result); exit;
         if (isset($result)){
             foreach ($result as $res){
                     return $res['name'];
