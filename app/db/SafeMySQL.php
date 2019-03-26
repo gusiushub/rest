@@ -76,7 +76,7 @@ class SafeMySQL
     protected $defaults = array(
         'host'      => 'localhost',
         'user'      => 'root',
-        'pass'      => '',
+        'pass'      => '0094#avatars',
         'db'        => 'rest',
         'port'      => NULL,
         'socket'    => NULL,

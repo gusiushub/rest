@@ -158,7 +158,11 @@ class UserApi extends Api
      */
     private function insertUser($get, $lastPic)
     {
-        $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic. "')");
+        if (isset($get['mother'])){
+            $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture, Mother ) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic . "','".(int)$get['mother']."')");
+        }else {
+            $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic . "')");
+        }
     }
 
     /**
@@ -169,7 +173,7 @@ class UserApi extends Api
         $port = Helper::getPort($this->db);
         if (isset($port)) {
             if ($port != false) {
-
+                $this->plusPort((int)$port);
                 return $this->response($port, 200);
             }
         }
@@ -212,7 +216,7 @@ class UserApi extends Api
                             $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
                             if ($user) {
                                 $this->sendAvatar($lastPic,$user['id']);
-                                $this->plusPort((int)$get['ip']);
+
                                 return $this->response("200", 200);
                             }
                             break;
@@ -223,7 +227,7 @@ class UserApi extends Api
                             $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
                             if ($user) {
                                 $this->sendAvatar($lastPic,$user['id']);
-                                $this->plusPort((int)$get['ip']);
+//                                $this->plusPort((int)$get['ip']);
                                 return $this->response("200", 200);
                             }
                              break;
@@ -267,14 +271,33 @@ class UserApi extends Api
     public function csvAction()
     {
         $value = $this->db->getAll("SELECT * FROM users ORDER BY id ASC");
-        $dbData = array();
-        foreach ($value as $val) {
-            $dbData[] = $val;
+//        echo $this->kama_create_csv_file( $value, '/csv/csv.csv' );
+//        var_dump($list = array (
+//            array('aaa', 'bbb', 'ccc', 'dddd'),
+//            array('123', '456', '789'),
+//            array('"aaa"', '"bbb"')
+//        ));
+        $fp = fopen('file.csv', 'w');
 
-                $dbData;
+        foreach ($value as $fields) {
+            fputcsv($fp, $fields);
         }
 
-        echo $this->kama_create_csv_file( $dbData, __DIR__ .'/../../csv.csv' );
+        fclose($fp);
+        echo file_get_contents('file.csv');
+//        echo $this->kama_create_csv_file( $value);
+//var_dump($this->kama_create_csv_file( $value)); exit;
+//        $dbData = array();
+//        foreach ($value as $val) {
+//            $dbData[] = $val;
+//
+//                $dbData;
+//        }
+//        if ( !file_exists(__DIR__ .'/../../csv') ) {
+//            mkdir (__DIR__ .'/../../csv', 0744);
+//        }
+//        var_dump($this->kama_create_csv_file( $dbData, __DIR__ .'/../../csv.csv' )); exit;
+//        echo $this->kama_create_csv_file( $dbData, '/csv/csv.csv' );
     }
 
     public function dashboardAction()

@@ -117,7 +117,7 @@ abstract class Api
      * @return string/false        CSV строку или false, если не удалось создать файл.
      * ver 2
      */
-    public function kama_create_csv_file( $create_data, $file = null, $col_delimiter = '|', $row_delimiter = "\r\n\r\n" ){
+    public function kama_create_csv_file( $create_data, $file = null, $col_delimiter = ';', $row_delimiter = "\r\n\r\n" ){
 
         if( ! is_array($create_data) )
             return false;
@@ -164,7 +164,7 @@ abstract class Api
 
             // создаем csv файл и записываем в него строку
             $done = file_put_contents( $file, $CSV_str );
-
+//var_dump($done); exit;
             return $done ? $CSV_str : false;
         }
 
