@@ -72,6 +72,25 @@ if ($argv[1]=='sendavatar') {
     }
 }
 
+if ($argv[1]=='useport') {
+    $db = new \app\db\SafeMySQL();
+    $row = $db->getAll('SELECT * FROM port');
+    foreach ($row as $value){
+//        $users = $db->getAll("SELECT * FROM users WHERE ip='".$value['name']."'");
+            $users = $db->getAll("SELECT * FROM users WHERE ip=24095;");
+var_dump($users); exit;
+        if ($users){
+            if (count($users)<4){
+//                $db->query("UPDATE port SET count=".count($users)." WHERE name=24023;");
+                $db->query("UPDATE port SET count=".count($users)." WHERE name=".$value['name'].";");
+//                var_dump(count($users));
+            }
+        }
+
+    }
+//    var_dump($row);
+}
+
 function sendRequestInService($params)
 {
     $ch = curl_init();

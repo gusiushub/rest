@@ -177,7 +177,7 @@ class UserApi extends Api
                 return $this->response($port, 200);
             }
         }
-        return false;
+        return $this->response("0000", 500);
     }
 
     /**
@@ -312,7 +312,7 @@ class UserApi extends Api
         echo '
         Всего '.$count.'
         ';
-        $ost = $count-$sum['sum']/2;
+        $ost = $count-$sum['sum'];
         echo 'Осталось '. $ost.'
         ';
         echo '--ниже список проксей и количество их использований по базе--';
