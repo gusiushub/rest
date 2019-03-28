@@ -227,4 +227,5 @@ abstract class Api
     abstract protected function dashboardAction();
     abstract protected function postcountAction();
     abstract protected function useridbyloginAction();
+    abstract protected function userbystatusAction();
 }

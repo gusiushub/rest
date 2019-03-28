@@ -207,6 +207,21 @@ class UserApi extends Api
     /**
      * @return string
      */
+    public function userbystatusAction()
+    {
+        $get = $this->requestParams;
+        if (isset($get['status'])) {
+            $login = $this->db->getOne("SELECT Login FROM users WHERE Status=".(int)$get['status']);
+            if ($login) {
+                return $this->response($login, 200);
+            }
+        }
+        return $this->response("error", 500);
+    }
+
+    /**
+     * @return string
+     */
     public function ipAction()
     {
         $port = Helper::getPort($this->db);
