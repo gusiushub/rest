@@ -192,7 +192,7 @@ class UserApi extends Api
     /**
      * @return string
      */
-    public function userbyidAction()
+    public function useridbyloginAction()
     {
         $get = $this->requestParams;
         if (isset($get['login'])) {

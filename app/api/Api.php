@@ -107,8 +107,8 @@ abstract class Api
             case 'dashboard':
                 return 'dashboardAction';
                 break;
-            case 'userbyid':
-                return 'userbyidAction';
+            case 'useridbylogin':
+                return 'useridbyloginAction';
                 break;
             case 'userbystatus':
                 return 'userbystatusAction';
@@ -226,5 +226,5 @@ abstract class Api
      */
     abstract protected function dashboardAction();
     abstract protected function postcountAction();
-    abstract protected function userbyidAction();
+    abstract protected function useridbyloginAction();
 }
