@@ -6,6 +6,7 @@ namespace app\models;
 class Log
 {
     public static $file = __DIR__.'/../log/log.log';
+    public static $console_file = __DIR__.'/../log/console.log';
 
     /**
      * @return bool
@@ -46,6 +47,14 @@ class Log
             fclose($fw);
             return true;
         }
+    }
+
+    public static function consoleLog($data)
+    {
+        $fw = fopen(self::$console_file, "a");
+        fwrite($fw, '['.date('Y.m.d H:i:s').'] - '. json_encode($data) . "\n");
+        fclose($fw);
+        return true;
     }
 
 }

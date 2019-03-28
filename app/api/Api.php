@@ -204,6 +204,11 @@ abstract class Api
     /**
      * @return mixed
      */
+    
+    /**
+
+     * @return mixed
+     */
     abstract protected function ipAction();
 
     /**

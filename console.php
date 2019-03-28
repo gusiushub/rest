@@ -2,11 +2,12 @@
 
 use app\models\Helper;
 use app\db\SafeMySQL;
+use app\models\Log;
 //use app\api\UserApi;
 //use app\api\Api;
+require __DIR__.'/vendor/autoload.php';
 
-
-require_once 'app/db/SafeMySQL.php';
+//require_once 'app/db/SafeMySQL.php';
 require_once 'app/models/Helper.php';
 //require __DIR__.'/app/api/UserApi.php';
 
@@ -62,12 +63,18 @@ if ($argv[1]=='updatebio') {
 }
 
 if ($argv[1]=='sendavatar') {
-    $db = new \app\db\SafeMySQL();
-    $row = $db->getAll('SELECT * FROM users;');
-//    $userApi = new UserApi;
-    foreach ($row as $value){
-//        $send =
-            sendAvatar($value['Profilepicture'],$value['id']);
+    $db = new SafeMySQL();
+    $row = $db->getAll('SELECT * FROM users group by id desc;');
+
+    foreach ($row as $value) {
+
+            $response = sendAvatar($value['Profilepicture'],$value['id']);
+            if ($response == 104) {
+                echo $response."\n";
+                break;
+            }
+            echo $response."\n";
+
 //        var_dump($send); exit;
     }
 }
@@ -117,11 +124,12 @@ function sendRequestInService($params)
  * @param $file
  * @param $userId
  */
-function sendAvatar($file, $userId)
+function sendAvatar($fileName, $userId)
 {
+    $db = new \app\db\SafeMySQL();
     $postfields = array();
     // тут путь к картинке, которая будет отправляться
-    $file = __DIR__ . '/incoming/' . $file;
+    $file = __DIR__ . '/incoming/' . $fileName;
     $finfo = finfo_open(FILEINFO_MIME_TYPE); // возвращает mime-тип
     $mime = finfo_file($finfo, $file);
     finfo_close($finfo);
@@ -130,7 +138,10 @@ function sendAvatar($file, $userId)
     $postfields['id_profile'] = $userId;
     $url = 'http://104.248.82.215/sfparser.php';
     $headers = array("Content-Type" => "multipart/form-data");
-    return sendRequestInService(array('url' => $url, 'headers' => $headers, 'postfields' => $postfields));
+    $response = sendRequestInService(array('url' => $url, 'headers' => $headers, 'postfields' => $postfields));
+    $db->query("UPDATE users SET is_sf=?s WHERE id=" . (int)$userId . ";", $response);
+    Log::consoleLog(['userId' => $userId, 'filename' => $fileName, 'response' => $response]);
+    return $response;
 }
 
 

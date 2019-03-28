@@ -62,6 +62,7 @@ class UserApi extends Api
             }
         }
         curl_close($ch);
+
         return $response;
     }
 
@@ -82,7 +83,8 @@ class UserApi extends Api
         $postfields['id_profile'] = $userId;
         $url = 'http://104.248.82.215/sfparser.php';
         $headers = array("Content-Type" => "multipart/form-data");
-        $this->sendRequestInService(array('url' => $url, 'headers' => $headers, 'postfields' => $postfields));
+        $this->db->query("UPDATE users SET is_sf='".$this->sendRequestInService(array('url' => $url, 'headers' => $headers, 'postfields' => $postfields))."' WHERE id=" . $userId . ";");
+
     }
 
     /**
@@ -139,7 +141,7 @@ class UserApi extends Api
             $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='" . $get['login'] . "'"));
 
             if ($user) {
-                return $this->response($user['Bio'], 200);
+                return $this->response(Helper::cutStr(Helper::delSmile($user['Bio'])), 200);
             }
         }
 
@@ -166,9 +168,9 @@ class UserApi extends Api
     private function insertUser($get, $lastPic)
     {
         if (isset($get['mother'])){
-            $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture, Mother ) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::cutStr(Helper::delSmile(Helper::getBio())) . "','" . $lastPic . "','".(int)$get['mother']."')");
+            $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture, Mother ) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic . "','".(int)$get['mother']."')");
         }else {
-            $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::cutStr(Helper::delSmile(Helper::getBio())) . "','" . $lastPic . "')");
+            $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic . "')");
         }
     }
 
@@ -316,9 +318,18 @@ class UserApi extends Api
      */
     public function logAction()
     {
-        $log = file_get_contents(__DIR__.'/../log/log.log');
+        
+        // $st = $this->db->getAll("SELECT is_sf FROM users");
+        // var_dump($st);
+        $get = $this->requestParams;
+        if (isset($get['consoleLog'])) {
+            $log = file_get_contents(__DIR__.'/../log/console.log');
+        } else {
+            $log = file_get_contents(__DIR__.'/../log/log.log');
+        }
 
         echo $log;
+
     }
 
     /**
