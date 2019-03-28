@@ -6690,4 +6690,52 @@ GET array (
   'action' => 'log',
   'token' => 'li2j3fojewf',
   'consoleLog' => '',
+)GET array (
+  'action' => 'postcount',
+  'login' => 'sadfvdgbhjbn',
+  'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'postcount',
+  'login' => 'sadfvdgbhjbn',
+  'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'useridbylogin',
+  'login' => 'sadfvdgbhjbn',
+  'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'useridbylogin',
+  'login' => 'sadfvdgbhjbn',
+  'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'postcount',
+  'login' => 'sadfvdgbhjbn',
+  'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'useridbylogin',
+  'login' => 'queenmangrum',
+  'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'postcount',
+  'login' => 'queenmangrum',
+  'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'postcount',
+  'login' => 'queenmangrum',
+  'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'postcount',
+  'login' => 'queenmangrum',
+  'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'log',
+  'token' => 'li2j3fojewf',
+  'consoleLog' => '',
+)GET array (
+  'action' => 'postcount',
+  'login' => 'queenmangrum',
+  'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'userbystatus',
+  'status' => '1',
+  'token' => 'li2j3fojewf',
 )
