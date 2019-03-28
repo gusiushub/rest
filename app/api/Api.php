@@ -101,8 +101,17 @@ abstract class Api
             case 'csv':
                 return 'csvAction';
                 break;
+            case 'postcount':
+                return 'postcountAction';
+                break;
             case 'dashboard':
                 return 'dashboardAction';
+                break;
+            case 'userbyid':
+                return 'userbyidAction';
+                break;
+            case 'userbystatus':
+                return 'userbystatusAction';
                 break;
             default:
                 return null;
@@ -216,4 +225,6 @@ abstract class Api
      * @return mixed
      */
     abstract protected function dashboardAction();
+    abstract protected function postcountAction();
+    abstract protected function userbyidAction();
 }

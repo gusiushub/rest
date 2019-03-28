@@ -69,6 +69,19 @@ class Helper
         return file($file,FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES);
     }
 
+    public static function delSmile($string)
+    {
+        return preg_replace("/\[[^)]+\]/","",$string);
+    }
+
+    public static function cutStr($string)
+    {
+        $string = substr($string, 0, 150);
+//        $string = rtrim($string, "!,.-");
+
+        return substr ($string, 0, strrpos($string, '.')).'.';
+    }
+
 
     /**
      * @return mixed

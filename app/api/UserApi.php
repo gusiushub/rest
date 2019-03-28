@@ -39,6 +39,10 @@ class UserApi extends Api
         return $this->response('Data not found', 404);
     }
 
+    /**
+     * @param $params
+     * @return mixed
+     */
     public function sendRequestInService($params)
     {
         $ch = curl_init();
@@ -81,6 +85,9 @@ class UserApi extends Api
         $this->sendRequestInService(array('url' => $url, 'headers' => $headers, 'postfields' => $postfields));
     }
 
+    /**
+     * @return mixed|string
+     */
     public function avatarAction()
     {
         $get = $this->requestParams;
@@ -159,10 +166,42 @@ class UserApi extends Api
     private function insertUser($get, $lastPic)
     {
         if (isset($get['mother'])){
-            $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture, Mother ) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic . "','".(int)$get['mother']."')");
+            $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture, Mother ) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::cutStr(Helper::delSmile(Helper::getBio())) . "','" . $lastPic . "','".(int)$get['mother']."')");
         }else {
-            $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic . "')");
+            $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::cutStr(Helper::delSmile(Helper::getBio())) . "','" . $lastPic . "')");
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function postcountAction()
+    {
+        $get = $this->requestParams;
+        if (isset($get['login'])) {
+            $login = $this->db->getRow("SELECT * FROM users WHERE Login='" . $get['login'] . "'");
+            if ($login) {
+                $this->db->query("UPDATE users SET Postcount=Postcount+1 WHERE Login='" . $get['login'] . "';");
+                $this->db->query("UPDATE users SET Lastpostdate=" . time() . " WHERE Login='" . $get['login'] . "';");
+                return $this->response("200", 200);
+            }
+        }
+        return $this->response("error", 500);
+    }
+
+    /**
+     * @return string
+     */
+    public function userbyidAction()
+    {
+        $get = $this->requestParams;
+        if (isset($get['login'])) {
+            $login = $this->db->getRow("SELECT * FROM users WHERE Login='" . $get['login'] . "'");
+            if ($login) {
+                return $this->response($login['id'], 200);
+            }
+        }
+        return $this->response("error", 500);
     }
 
     /**
@@ -188,7 +227,6 @@ class UserApi extends Api
     private function plusPort($port)
     {
         return $this->db->query("UPDATE port SET count=count+1 WHERE name=" . (int)$port . ";");
-//        $sum = $sum2/2;
 
     }
 
@@ -268,15 +306,12 @@ class UserApi extends Api
         echo $log;
     }
 
+    /**
+     * @return mixed|void
+     */
     public function csvAction()
     {
         $value = $this->db->getAll("SELECT * FROM users ORDER BY id ASC");
-//        echo $this->kama_create_csv_file( $value, '/csv/csv.csv' );
-//        var_dump($list = array (
-//            array('aaa', 'bbb', 'ccc', 'dddd'),
-//            array('123', '456', '789'),
-//            array('"aaa"', '"bbb"')
-//        ));
         $fp = fopen('file.csv', 'w');
 
         foreach ($value as $fields) {
@@ -285,24 +320,13 @@ class UserApi extends Api
 
         fclose($fp);
         echo file_get_contents('file.csv');
-//        echo $this->kama_create_csv_file( $value);
-//var_dump($this->kama_create_csv_file( $value)); exit;
-//        $dbData = array();
-//        foreach ($value as $val) {
-//            $dbData[] = $val;
-//
-//                $dbData;
-//        }
-//        if ( !file_exists(__DIR__ .'/../../csv') ) {
-//            mkdir (__DIR__ .'/../../csv', 0744);
-//        }
-//        var_dump($this->kama_create_csv_file( $dbData, __DIR__ .'/../../csv.csv' )); exit;
-//        echo $this->kama_create_csv_file( $dbData, '/csv/csv.csv' );
     }
 
+    /**
+     * @return mixed|void
+     */
     public function dashboardAction()
     {
-
         $query = "SELECT * FROM port ORDER BY count DESC;";
         $sum = $this->db->getRow("SELECT SUM(count) as sum FROM port;");
 
