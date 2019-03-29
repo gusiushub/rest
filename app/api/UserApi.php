@@ -191,6 +191,21 @@ class UserApi extends Api
         return $this->response("error", 500);
     }
 
+    public function getuserAction()
+    {
+        $user = $this->db->getRow('SELECT * FROM users WHERE Lastpostdate = (SELECT MIN(Lastpostdate) and Status=1 FROM users)');
+
+        $result = [
+            'login' => $user['Login'],
+            'password' => $user['Password'],
+            'port' => $user['ip'],
+        ];
+
+        return $this->response($result, 200);
+//        var_dump($user);
+    }
+
+
     /**
      * @return string
      */
@@ -318,18 +333,9 @@ class UserApi extends Api
      */
     public function logAction()
     {
-        
-        // $st = $this->db->getAll("SELECT is_sf FROM users");
-        // var_dump($st);
-        $get = $this->requestParams;
-        if (isset($get['consoleLog'])) {
-            $log = file_get_contents(__DIR__.'/../log/console.log');
-        } else {
-            $log = file_get_contents(__DIR__.'/../log/log.log');
-        }
+        $log = file_get_contents(__DIR__.'/../log/log.log');
 
         echo $log;
-
     }
 
     /**

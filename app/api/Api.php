@@ -113,6 +113,9 @@ abstract class Api
             case 'userbystatus':
                 return 'userbystatusAction';
                 break;
+            case 'getuser':
+                return 'getuserAction';
+                break;
             default:
                 return null;
         }
@@ -233,4 +236,5 @@ abstract class Api
     abstract protected function postcountAction();
     abstract protected function useridbyloginAction();
     abstract protected function userbystatusAction();
+    abstract protected function getuserAction();
 }

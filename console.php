@@ -40,7 +40,7 @@ if ($argv[1]=='rename') {
 
 if ($argv[1]=='setport') {
     $db = new \app\db\SafeMySQL();
-    for ($i=24001; $i<24250; $i++){
+    for ($i=24250; $i<24500; $i++){
         $db->query("INSERT INTO port ( name,  count) VALUES (".$i.", 0)");
     }
 }

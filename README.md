@@ -105,7 +105,17 @@ textbio   <br>
     status - отправить если ok <br>
     
     
-/?action=avatar&login=illld3473&token=li2j3fojewf&status=ok
+/?action=avatar&login=yourlogin&token=li2j3fojewf&status=ok
+
+
+
+_____________________________________________________________
+
+/?action=useridbylogin&login=yourlogin&token=li2j3fojewf
+
+/?action=postcount&login=yourlogin&token=li2j3fojewf
+
+/?action=userbystatus&status=1&token=li2j3fojewf
 
 
 
