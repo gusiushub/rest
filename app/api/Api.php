@@ -167,16 +167,12 @@ abstract class Api
 
             $CSV_str .= implode( $col_delimiter, $cols ) . $row_delimiter; // добавляем строку в данные
         }
-
         $CSV_str = rtrim( $CSV_str, $row_delimiter );
-
         // задаем кодировку windows-1251 для строки
         if( $file ){
             $CSV_str = iconv( "UTF-8", "cp1251",  $CSV_str );
-
             // создаем csv файл и записываем в него строку
             $done = file_put_contents( $file, $CSV_str );
-//var_dump($done); exit;
             return $done ? $CSV_str : false;
         }
 
@@ -233,8 +229,25 @@ abstract class Api
      * @return mixed
      */
     abstract protected function dashboardAction();
+
+    /**
+     * @return mixed
+     */
     abstract protected function postcountAction();
+
+    /**
+     * @return mixed
+     */
     abstract protected function useridbyloginAction();
+
+    /**
+     * @return mixed
+     */
     abstract protected function userbystatusAction();
+
+    /**
+     * @return mixed
+     */
     abstract protected function getuserAction();
+//    abstract protected function getuserAction();
 }

@@ -191,11 +191,15 @@ class UserApi extends Api
         return $this->response("error", 500);
     }
 
+    /**
+     * @return string
+     */
     public function getuserAction()
     {
         $user = $this->db->getRow('SELECT * FROM users WHERE Lastpostdate = (SELECT MIN(Lastpostdate) and Status=1 FROM users)');
 
         $result = [
+            'id' => $user['id'],
             'login' => $user['Login'],
             'password' => $user['Password'],
             'port' => $user['ip'],
@@ -321,6 +325,10 @@ class UserApi extends Api
         if (isset($get['newstatus'])) {
             $update = $this->db->query("UPDATE users SET Status=".(int)$get['newstatus']." WHERE Login='".$get['login']."'");
             if ($update) {
+                if ($get['newstatus']==99){
+                    $user = $this->db->getRow("SELECT * FROM users WHERE Login='".$get['login']."'");
+                    $this->db->query("UPDATE port SET status=".(int)$get['newstatus']." WHERE name='".$user['ip']."'");
+                }
                 return $this->response('Status updated.', 200);
             }
         }

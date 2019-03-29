@@ -6919,4 +6919,43 @@ GET array (
   'action' => 'useridbylogin',
   'login' => 'bradleyultseh',
   'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'ip',
+  'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'ip',
+  'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'getuser',
+  'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'avatar',
+  'login' => 'yourlogin',
+  'token' => 'li2j3fojewf',
+  'status' => 'ok',
+)GET array (
+  'action' => 'avatar',
+  'login' => 'ggghhh',
+  'token' => 'li2j3fojewf',
+  'status' => 'ok',
+)GET array (
+  'action' => 'avatar',
+  'login' => 'ggghhh',
+  'token' => 'li2j3fojewf',
+  'status' => 'ok',
+)GET array (
+  'action' => 'avatar',
+  'login' => 'ggghhh',
+  'token' => 'li2j3fojewf',
+  'status' => 'ok',
+)GET array (
+  'action' => 'avatar',
+  'login' => 'ggghhh',
+  'token' => 'li2j3fojewf',
+  'status' => 'ok',
+)GET array (
+  'action' => 'setstatus',
+  'token' => 'li2j3fojewf',
+  'login' => 'admin',
+  'newstatus' => '99',
 )

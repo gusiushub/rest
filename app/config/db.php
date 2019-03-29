@@ -1,8 +1,8 @@
 <?php
 $host ='localhost';
 $login ='root';
-//$password ='';
-$password ='0094#avatars';
+$password ='';
+//$password ='0094#avatars';
 $dbname ='rest';
 
 return [
