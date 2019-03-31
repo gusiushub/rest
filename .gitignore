@@ -1,8 +1,10 @@
+bio.txt
+
 /vendor/
 .idea
 /app/config/db.php
 /app/log/log.log
-/bio.txt
-bio.txt
+
+
 /ip.txt
 .idea/*

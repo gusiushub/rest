@@ -164,6 +164,7 @@ class UserApi extends Api
     /**
      * @param $get
      * @param $lastPic
+     * @return string
      */
     private function insertUser($get, $lastPic)
     {
@@ -171,6 +172,15 @@ class UserApi extends Api
             $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture, Mother ) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic . "','".(int)$get['mother']."')");
         }else {
             $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic . "')");
+        }
+//        $this->insertUser($get,$lastPic);
+        Helper::downloadImg(__DIR__.'/../../incoming/'.$lastPic,'image/jpeg');
+        $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
+        if ($user) {
+            $this->db->query("UPDATE port SET last_update=".time()." WHERE name=". (int)$get['ip'].";");
+            $this->sendAvatar($lastPic,$user['id']);
+//                                $this->plusPort((int)$get['ip']);
+            return $this->response("200", 200);
         }
     }
 
@@ -206,7 +216,6 @@ class UserApi extends Api
         ];
 
         return $this->response($result, 200);
-//        var_dump($user);
     }
 
 
@@ -286,24 +295,17 @@ class UserApi extends Api
                         case 0:
                              $lastPic = 'Male/'.str_pad ($lastPic, 4,"0",STR_PAD_LEFT).'.jpg';
                             $this->insertUser($get,$lastPic);
-                            Helper::downloadImg(__DIR__.'/../../incoming/'.$lastPic,'image/jpeg');
-                            $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
-                            if ($user) {
-                                $this->sendAvatar($lastPic,$user['id']);
-
-                                return $this->response("200", 200);
-                            }
+//                            Helper::downloadImg(__DIR__.'/../../incoming/'.$lastPic,'image/jpeg');
+//                            $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
+//                            if ($user) {
+//                                $this->sendAvatar($lastPic,$user['id']);
+//
+//                                return $this->response("200", 200);
+//                            }
                             break;
                         case 1:
-                             $lastPic = 'Female/'.str_pad ($lastPic, 4,"0",STR_PAD_LEFT).'.jpg';
-                            $this->insertUser($get,$lastPic);
-                            Helper::downloadImg(__DIR__.'/../../incoming/'.$lastPic,'image/jpeg');
-                            $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
-                            if ($user) {
-                                $this->sendAvatar($lastPic,$user['id']);
-//                                $this->plusPort((int)$get['ip']);
-                                return $this->response("200", 200);
-                            }
+                            $lastPic = 'Female/'.str_pad ($lastPic, 4,"0",STR_PAD_LEFT).'.jpg';
+                            return $this->insertUser($get,$lastPic);
                              break;
                     }
 

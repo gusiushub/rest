@@ -49,6 +49,10 @@ class Log
         }
     }
 
+    /**
+     * @param $data
+     * @return bool
+     */
     public static function consoleLog($data)
     {
         $fw = fopen(self::$console_file, "a");

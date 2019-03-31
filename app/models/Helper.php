@@ -8,7 +8,6 @@ use app\db\SafeMySQL;
 class Helper
 {
     public static $bio = __DIR__ . '/../../bio.txt';
-    public static $ip = __DIR__ . '/../../ip.txt';
     const config = __DIR__ . '/../config/config.php';
 
 
@@ -149,13 +148,12 @@ class Helper
 
     /**
      * @param $db
-     * @param int $from
-     * @param int $to
      * @return bool|int
      */
-    public static function getPort($db, $from=24001, $to=24250)
+    public static function getPort($db)
     {
-        $query = "SELECT f.id , name FROM port f JOIN ( SELECT rand() * (SELECT max(id) from port  WHERE port.count < 4) AS max_id ) AS m WHERE f.id >= m.max_id and count<4 and name>24250 and status!=99 ORDER BY f.id ASC LIMIT 1;";
+        $time = time()-60*12;
+        $query = "SELECT f.id , name FROM port f JOIN ( SELECT rand() * (SELECT max(id) from port  WHERE port.count < 4) AS max_id ) AS m WHERE f.id >= m.max_id and count<4 and name>24250 and status!=99 and last_update<".$time." ORDER BY f.id ASC LIMIT 1;";
         $result = $db->getAll($query);
         if (isset($result)){
             foreach ($result as $res){
@@ -165,31 +163,6 @@ class Helper
         }
         return false;
     }
-
-
-    /**
-     * @param $db
-     * @return array
-     */
-    public static function getIp($db)
-    {
-        $str = self::getArr(self::$ip);
-        $query = "SELECT ip FROM ip GROUP BY ip HAVING count(*)>3;";// where ip='".$str[$i]."' limit 5";
-        $result = $db->getAll($query);
-        foreach ($result as $res){
-            if(($key = array_search($res['ip'],$str)) !== FALSE){
-                unset($str[$key]);
-            }
-        }
-        if (isset($result)){
-            return [
-                'ok'=>$str[array_rand($str, 1)],
-                'error'=>$result
-            ];
-        }
-            return ['ok' => $str[array_rand($str, 1)]];
-    }
-
 
     /**
      * @param $file
