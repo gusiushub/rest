@@ -10,14 +10,14 @@ require_once 'app/models/Helper.php';
 if ($argv[1]=='rename') {
     switch ($argv[2]) {
         case 'Male':
-            $folder = __DIR__ . '/incoming/Male'; //Папка с файлами
+            $folder = __DIR__ . '/incoming/Male';
             break;
         case 'Female':
-            $folder = __DIR__ . '/incoming/Female'; //Папка с файлами
+            $folder = __DIR__ . '/incoming/Female';
             break;
     }
 
-    $array_file = scandir($folder); //Масcив с именами файлов
+    $array_file = scandir($folder);
 
     $i = 1;
     foreach ($array_file as $name_file) {
@@ -52,7 +52,6 @@ if ($argv[1]=='count') {
 if ($argv[1]=='updatebio') {
     $db = new \app\db\SafeMySQL();
     $row = $db->getAll("SELECT * FROM users where Bio='I m working as a salesperson.Healthy Lifestyle [love]Olay, Сeline and [love] The future belongs to those, who believe of their dreams.';");
-//    var_dump($row); exit;
     foreach ($row as $value){
         $db->query("UPDATE users SET Bio='".Helper::getBio()."' WHERE id=".$value['id'].";");
     }
@@ -70,8 +69,6 @@ if ($argv[1]=='sendavatar') {
                 break;
             }
             echo $response."\n";
-
-//        var_dump($send); exit;
     }
 }
 

@@ -4,12 +4,13 @@ namespace test;
 
 require_once __DIR__."/../vendor/autoload.php";
 
-use PHPUnit_Framework_TestCase;
+use app\api\UserApi;
 use GuzzleHttp\Client;
+use PHPUnit\Framework\TestCase;
+use app\models\Helper;
+use app\db\SafeMySQL;
 
-
-
-class UserApiTest extends PHPUnit_Framework_TestCase
+class UserApiTest extends TestCase
 {
     protected $client;
 
@@ -21,11 +22,19 @@ class UserApiTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    public function tearDown()
+    {
+        $this->client = null;
+    }
+
     public function testAlwaysTrue()
     {
         $this->assertTrue(true);
     }
 
+    /**
+     *
+     */
     public function testGetPort()
     {
         $response = $this->client->get('/', [
@@ -37,6 +46,26 @@ class UserApiTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $data = json_decode($response->getBody(), true);
+        $this->expectOutputString('Выдан порт - '.$data);
+    }
+
+//    public function testFunctionCount()
+//    {
+//        // Протестируем работу стандартной функции count
+//        $array3 = array(1, 2, 3);
+//        $array0 = array();
+//        $array1 = array(1);
+//
+//        // count($array3) должно вернуть 3
+//        $this->assertEquals(3, count($array3));
+//        $this->assertEquals(0, count($array0));
+//        $this->assertEquals(1, count($array1));
+//    }
+
+    public function additionProvider()
+    {
+        $userApi = new UserApi();
+        return $userApi->csvAction();
     }
 
     public function testAddUser()
@@ -55,17 +84,10 @@ class UserApiTest extends PHPUnit_Framework_TestCase
                 'country' => 'loginuser',
             ]
         ]);
-
-//        $response2 = $this->client->request('GET', 'user-agent', ['http_errors' => false]);
-
-//        $this->assertEquals(500, $response2->getStatusCode());
-//
+        $this->expectOutputString($response->getStatusCode());
         $this->assertEquals(200, $response->getStatusCode());
         $data = json_decode($response->getBody(), true);
         $this->assertContains('200', $data);
-//        $this->assertEquals(500, $response->getStatusCode());
-//        $this->assertEquals('login exists', $response->getStatusCode());
-//        $data = json_decode($response->getBody(), true);
     }
 
     public function testShowpic()
@@ -74,19 +96,16 @@ class UserApiTest extends PHPUnit_Framework_TestCase
             'query' => [
                 'action' => 'showpic',
                 'token' => 'li2j3fojewf',
-                'login' => 'loginusssser',
+                'login' => 'logijssjjjn',
             ]
         ]);
 
-
+        $response->getStatusCode();
         $data = json_decode($response->getBody(), true);
-        echo $response->getStatusCode();
-        return $response->getStatusCode();
-//        $this->assertEquals($data, $response->getStatusCode());
+        $this->expectOutputString($response->getStatusCode());
     }
 
-    public function tearDown()
-    {
-        $this->client = null;
-    }
+
+
+
 }
