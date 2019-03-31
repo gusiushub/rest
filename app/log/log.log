@@ -7156,4 +7156,26 @@ GET array (
 )GET array (
   'action' => 'ip',
   'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'add',
+  'login' => 'dasdasdsdfsdfssssssdfsasdasdf',
+  'token' => 'li2j3fojewf',
+  'fullname' => 'asdasd',
+  'phone' => '7890',
+  'country' => 'asdasdasd',
+  'sex' => '1',
+  'age' => '11',
+  'ip' => '24255',
+  'password' => 'asdasd',
+)GET array (
+  'action' => 'add',
+  'login' => 'ascv',
+  'token' => 'li2j3fojewf',
+  'fullname' => 'asdasd',
+  'phone' => '7890',
+  'country' => 'asdasdasd',
+  'sex' => '1',
+  'age' => '11',
+  'ip' => '24255',
+  'password' => 'asdasd',
 )

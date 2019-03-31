@@ -6,6 +6,7 @@ namespace app\api;
 use app\db\SafeMySQL;
 use RuntimeException;
 
+
 abstract class Api
 {
     protected $method = ''; //GET|POST|PUT|DELETE
@@ -120,7 +121,6 @@ abstract class Api
                 return null;
         }
     }
-
 
     /**
      * @return mixed

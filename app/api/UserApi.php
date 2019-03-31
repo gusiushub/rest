@@ -21,16 +21,13 @@ class UserApi extends Api
         return   readfile(__DIR__.'/../../incoming/'.$img);
     }
 
-
     /**
      * @return false|int|string
      */
     public function viewAction()
     {
         $get = $this->requestParams;
-
-        $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
-
+        $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login=?s",$get['login']));
         if ($user) {
             return $this->getImg($user['Profilepicture']);
         }
@@ -72,9 +69,8 @@ class UserApi extends Api
     private function sendAvatar($file, $userId)
     {
         $postfields = array();
-        // тут путь к картинке, которая будет отправляться
         $file = __DIR__ . '/../../incoming/' . $file;
-        $finfo = finfo_open(FILEINFO_MIME_TYPE); // возвращает mime-тип
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mime = finfo_file($finfo, $file);
         finfo_close($finfo);
         $curlFile = curl_file_create($file, $mime, basename($file));
@@ -82,7 +78,8 @@ class UserApi extends Api
         $postfields['id_profile'] = $userId;
         $url = 'http://104.248.82.215/sfparser.php';
         $headers = array("Content-Type" => "multipart/form-data");
-        $this->db->query("UPDATE users SET is_sf='".$this->sendRequestInService(array('url' => $url, 'headers' => $headers, 'postfields' => $postfields))."' WHERE id=" . $userId . ";");
+        $send = $this->sendRequestInService(array('url' => $url, 'headers' => $headers, 'postfields' => $postfields));
+        $this->db->query("UPDATE users SET is_sf=?s WHERE id=" . $userId ." ", $send);
 
     }
 
@@ -92,29 +89,19 @@ class UserApi extends Api
     public function avatarAction()
     {
         $get = $this->requestParams;
-
         if (isset($get['status']) && isset($get['login'])){
-
             if ($get['status']=='ok'){
-
                 $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
                 if ($user) {
                     $postfields = array();
-                    // тут путь к картинке, которая будет отправляться
                     $file = __DIR__.'/../../incoming/'.$user['Profilepicture'];
-
                     $finfo = finfo_open(FILEINFO_MIME_TYPE); // возвращает mime-тип
                     $mime = finfo_file($finfo, $file);
                     finfo_close($finfo);
-
                     $curlFile = curl_file_create($file, $mime, basename($file));
                     $postfields['image'] = $curlFile;
-
-                    // id_profile
                     $postfields['id_profile'] = $user['id'];
-
                     $url = 'http://104.248.82.215/sfparser.php';
-
                     $headers = array("Content-Type" => "multipart/form-data");
                     $resultSearching = $this->sendRequestInService(array('url' => $url, 'headers' => $headers, 'postfields' => $postfields));
                     echo $resultSearching;
@@ -133,8 +120,7 @@ class UserApi extends Api
     {
         $get = $this->requestParams;
         if (isset($get['login'])) {
-            $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='" . $get['login'] . "'"));
-
+            $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login=?s",$get['login']));
             if ($user) {
                 return $this->response(Helper::cutStr(Helper::delSmile($user['Bio'])), 200);
             }
@@ -149,7 +135,7 @@ class UserApi extends Api
     private function isLoginUniq()
     {
         $get = $this->requestParams;
-        $login =$this->db->getRow("SELECT * FROM users WHERE Login='".$get['login']."'");
+        $login =$this->db->getRow("SELECT * FROM users WHERE Login=?s",$get['login']);
         if ($login==null) {
             return true;
         }
@@ -164,18 +150,25 @@ class UserApi extends Api
     private function insertUser($get, $lastPic)
     {
         if (isset($get['mother'])){
-            $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture, Mother ) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic . "','".(int)$get['mother']."')");
+            $addUser = $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture, Mother ) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic . "','".(int)$get['mother']."')");
         }else {
-            $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic . "')");
+            $addUser = $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic . "')");
         }
-        Helper::downloadImg(__DIR__.'/../../incoming/'.$lastPic,'image/jpeg');
-        $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login=?s",$get['login']));
-        if ($user) {
-            $this->db->query("UPDATE port SET last_update=".time()." WHERE name=". (int)$get['ip'].";");
-            $this->sendAvatar($lastPic,$user['id']);
-//                                $this->plusPort((int)$get['ip']);
-            return $this->response("200", 200);
+
+        if ($addUser) {
+            Helper::downloadImg(__DIR__ . '/../../incoming/' . $lastPic, 'image/jpeg');
+            $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login=?s", $get['login']));
+            if ($user) {
+                $this->db->query("UPDATE port SET last_update=?i WHERE name=" . (int)$get['ip'] . ";", time());
+                $this->sendAvatar($lastPic, $user['id']);
+                $this->plusPort((int)$get['ip']);
+                return $this->response("200", 200);
+            }
+
+            return $this->response("error", 500);
         }
+
+        return $this->response("error", 500);
     }
 
     /**
@@ -251,7 +244,7 @@ class UserApi extends Api
         $port = Helper::getPort($this->db);
         if (isset($port)) {
             if ($port != false) {
-                $this->plusPort((int)$port);
+//                $this->plusPort((int)$port);
                 return $this->response($port, 200);
             }
         }
@@ -298,7 +291,7 @@ class UserApi extends Api
 
                     return $this->response("200", 200);
                 }
-                return $this->response("login exists", 500);
+            return $this->response("login exists", 500);
         }
         return $this->response("Saving error", 500);
     }
@@ -312,16 +305,15 @@ class UserApi extends Api
         $get = $this->requestParams;
 
         if (isset($get['newstatus'])) {
-            $update = $this->db->query("UPDATE users SET Status=".(int)$get['newstatus']." WHERE Login='".$get['login']."'");
+            $update = $this->db->query("UPDATE users SET Status=?i WHERE Login='".$get['login']."'",(int)$get['newstatus']);
             if ($update) {
                 if ($get['newstatus']==99){
                     $user = $this->db->getRow("SELECT * FROM users WHERE Login=?s",$get['login']);
-                    $this->db->query("UPDATE port SET status=".(int)$get['newstatus']." WHERE name='".$user['ip']."'");
+                    $this->db->query("UPDATE port SET status=?i WHERE name='".$user['ip']."'",(int)$get['newstatus']);
                 }
                 return $this->response('Status updated.', 200);
             }
         }
-
         return $this->response("Update error", 400);
     }
 
@@ -342,11 +334,9 @@ class UserApi extends Api
     {
         $value = $this->db->getAll("SELECT * FROM users ORDER BY id ASC");
         $fp = fopen('file.csv', 'w');
-
         foreach ($value as $fields) {
             fputcsv($fp, $fields);
         }
-
         fclose($fp);
         echo file_get_contents('file.csv');
     }
@@ -358,10 +348,8 @@ class UserApi extends Api
     {
         $query = "SELECT * FROM port ORDER BY count DESC;";
         $sum = $this->db->getRow("SELECT SUM(count) as sum FROM port;");
-
         $result = $this->db->getAll($query);
         $count = count($result)*4;
-
         echo '
         Всего '.$count.'
         ';
@@ -373,7 +361,6 @@ class UserApi extends Api
             echo '
              ' . $res['name'] . ' - ' . $res['count'] . '';
         }
-
     }
 
 }

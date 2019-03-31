@@ -17,5 +17,14 @@
         ]
     },
 
-    "require": {}
+    "require": {
+        "guzzlehttp/guzzle": "^6.1",
+        "phpunit/phpunit": "^5.0",
+        "monolog/monolog": "*",
+        "guzzlehttp/oauth-subscriber": "*"
+    },
+
+    "scripts": {
+        "test": "./vendor/bin/phpunit"
+    }
 }
