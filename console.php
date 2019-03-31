@@ -3,13 +3,9 @@
 use app\models\Helper;
 use app\db\SafeMySQL;
 use app\models\Log;
-//use app\api\UserApi;
-//use app\api\Api;
-require __DIR__.'/vendor/autoload.php';
 
-//require_once 'app/db/SafeMySQL.php';
+require __DIR__.'/vendor/autoload.php';
 require_once 'app/models/Helper.php';
-//require __DIR__.'/app/api/UserApi.php';
 
 if ($argv[1]=='rename') {
     switch ($argv[2]) {
@@ -123,6 +119,7 @@ function sendRequestInService($params)
 /**
  * @param $file
  * @param $userId
+ * @return mixed
  */
 function sendAvatar($fileName, $userId)
 {

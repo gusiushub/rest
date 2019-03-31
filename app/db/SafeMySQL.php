@@ -90,7 +90,6 @@ class SafeMySQL
     function __construct($opt = array())
     {
         $conf = require __DIR__.'/../config/db.php';
-//        var_dump($opt);exit;
         $opt = array_merge($conf,$opt);
         $this->emode  = $opt['errmode'];
         $this->exname = $opt['exception'];
