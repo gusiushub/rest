@@ -116,6 +116,15 @@ abstract class Api
             case 'getuser':
                 return 'getuserAction';
                 break;
+            case 'getuniq':
+                return 'getUniqAction';
+                break;
+            case 'getuniqzero':
+                return 'getUniqZeroAction';
+                break;
+            case 'getip':
+                return 'getIpAction';
+                break;
             default:
                 return null;
         }
@@ -249,5 +258,20 @@ abstract class Api
      * @return mixed
      */
     abstract protected function getuserAction();
+
+    /**
+     * @return mixed
+     */
+    abstract protected function getuniqAction();
+
+    /**
+     * @return mixed
+     */
+    abstract protected function getuniqzeroAction();
+
+    /**
+     * @return mixed
+     */
+    abstract protected function getIpAction();
 //    abstract protected function getuserAction();
 }

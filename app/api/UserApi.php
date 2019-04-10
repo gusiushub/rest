@@ -168,18 +168,20 @@ class UserApi extends Api
      */
     private function insertUser($get, $lastPic)
     {
+        $sms = isset($get['smsservice']) ? (int)$get['smsservice'] : 0;
+
         if (isset($get['mother'])){
-            $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture, Mother ) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic . "','".(int)$get['mother']."')");
-        }else {
-            $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic . "')");
+            $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture, Smsservice, Mother ) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic . "','" . (int)$sms . "','".(int)$get['mother']."')");
+        } else {
+            $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture, Smsservice) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic . "','" . (int)$sms . "')");
         }
-//        $this->insertUser($get,$lastPic);
+
         Helper::downloadImg(__DIR__.'/../../incoming/'.$lastPic,'image/jpeg');
         $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
         if ($user) {
             $this->db->query("UPDATE port SET last_update=".time()." WHERE name=". (int)$get['ip'].";");
             $this->sendAvatar($lastPic,$user['id']);
-//                                $this->plusPort((int)$get['ip']);
+
             return $this->response("200", 200);
         }
     }
@@ -190,11 +192,19 @@ class UserApi extends Api
     public function postcountAction()
     {
         $get = $this->requestParams;
-        if (isset($get['login'])) {
-            $login = $this->db->getRow("SELECT * FROM users WHERE Login='" . $get['login'] . "'");
+        $userId = $get['userid'];
+
+        if (isset($get['login']) || isset($userId)) {
+            if ($userId) {
+                $str = "Id='" . $userId . "'";
+            } else {
+                $str = "Login='" . $get['login'] . "'";
+            }
+            $login = $this->db->getRow("SELECT * FROM users WHERE " . $str);
+
             if ($login) {
-                $this->db->query("UPDATE users SET Postcount=Postcount+1 WHERE Login='" . $get['login'] . "';");
-                $this->db->query("UPDATE users SET Lastpostdate=" . time() . " WHERE Login='" . $get['login'] . "';");
+                $this->db->query("UPDATE users SET Postcount=Postcount+1 WHERE " . $str . ";");
+                $this->db->query("UPDATE users SET Lastpostdate=" . time() . " WHERE " . $str . ";");
                 return $this->response("200", 200);
             }
         }
@@ -204,9 +214,84 @@ class UserApi extends Api
     /**
      * @return string
      */
+    public function getuniqAction()
+    {
+        $time = time() - 24*60*60;
+
+        $user = $this->db->getRow('SELECT * FROM users WHERE Lastpostdate < ' . $time . ' and Status < 50 and Used = 0');
+
+        $this->db->query("UPDATE users SET Used = 1 WHERE id = " . $user['id'] . ";");
+
+        $result = [
+            'id' => $user['id'],
+            'login' => $user['Login'],
+            'password' => $user['Password'],
+            'port' => $user['ip'],
+        ];
+
+        return $this->response($result, 200);
+
+    }
+
+    /**
+     * @return string
+     */
+    public function getuniqzeroAction()
+    {
+
+        $time = time() - 24*60*60;
+
+        $user = $this->db->getRow('SELECT * FROM users WHERE Lastpostdate < ' . $time . ' and Status < 50 and Used = 1');
+
+        $this->db->query("UPDATE users SET Used = 0 WHERE id = " . $user['id'] . ";");
+
+        $result = [
+            'id' => $user['id'],
+            'login' => $user['Login'],
+            'password' => $user['Password'],
+            'port' => $user['ip'],
+        ];
+
+        return $this->response($result, 200);
+
+    }
+
+    /**
+     * @return string
+     */
+    public function getIpAction()
+    {
+        $ipaddress = '';
+        if (isset($_SERVER['HTTP_CLIENT_IP']))
+            $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+        else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        else if(isset($_SERVER['HTTP_X_FORWARDED']))
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+        else if(isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP']))
+            $ipaddress = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
+        else if(isset($_SERVER['HTTP_FORWARDED_FOR']))
+            $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+        else if(isset($_SERVER['HTTP_FORWARDED']))
+            $ipaddress = $_SERVER['HTTP_FORWARDED'];
+        else if(isset($_SERVER['REMOTE_ADDR']))
+            $ipaddress = $_SERVER['REMOTE_ADDR'];
+        else
+            $ipaddress = 'UNKNOWN';
+        
+        $result = [
+            'ip' => $ipaddress
+        ];
+
+        return $this->response($result, 200);
+
+    }
+    /**
+     * @return string
+     */
     public function getuserAction()
     {
-        $user = $this->db->getRow('SELECT * FROM users WHERE Lastpostdate = (SELECT MIN(Lastpostdate) and Status=1 FROM users)');
+        $user = $this->db->getRow('SELECT * FROM users WHERE Lastpostdate = (SELECT MIN(Lastpostdate) FROM users) and Status < 50');
 
         $result = [
             'id' => $user['id'],
@@ -370,6 +455,8 @@ class UserApi extends Api
     public function dashboardAction()
     {
         $query = "SELECT * FROM port ORDER BY count DESC;";
+        $usedCount = $this->db->getAll("SELECT ip, count(*) as count FROM users GROUP BY ip;");
+
         $sum = $this->db->getRow("SELECT SUM(count) as sum FROM port;");
 
         $result = $this->db->getAll($query);
@@ -381,10 +468,16 @@ class UserApi extends Api
         $ost = $count-$sum['sum'];
         echo 'Осталось '. $ost.'
         ';
-        echo '--ниже список проксей и количество их использований по базе--';
+        echo '--ниже список проксей и количество успешных / количество попыток их использований по базе--';
         foreach ($result as $res) {
+            $count = 0;
+            foreach ($usedCount as $key => $val) {;
+               if ($val['ip'] === $res['name']) {
+                   $count = $val['count'];
+               }
+           }
             echo '
-             ' . $res['name'] . ' - ' . $res['count'] . '';
+             ' . $res['name'] . ' - ' . $count . ' / ' . $res['count'] . '';
         }
 
     }
