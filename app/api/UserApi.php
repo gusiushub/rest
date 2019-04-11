@@ -260,7 +260,7 @@ class UserApi extends Api
             if (isset($get['login'])) {
                 $user = $this->db->getRow("SELECT * FROM users WHERE Login = '".$get['login']."' ;");
                 if ($user) {
-                    $this->db->query("UPDATE users SET Used = 0 WHERE Login = '" . $user['login'] . "';");
+                    $this->db->query("UPDATE users SET Used = 0 WHERE Login = '" . $get['login'] . "';");
 
                     return $this->response('Used updated', 200);
                 }
