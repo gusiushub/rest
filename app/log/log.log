@@ -9070,4 +9070,30 @@ GET array (
 )GET array (
   'action' => 'getuniq',
   'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'bio',
+  'login' => 'admin',
+  'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'bio',
+  'login' => 'admin',
+  'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'bio',
+  'login' => 'admin',
+  'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'bio',
+  'login' => 'admin',
+  'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'getuniqzero',
+  'userid' => '1',
+  'login' => 'admin',
+  'token' => 'li2j3fojewf',
+)GET array (
+  'action' => 'getuniqzero',
+  'userid' => '1',
+  'login' => 'admin',
+  'token' => 'li2j3fojewf',
 )

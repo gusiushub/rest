@@ -141,7 +141,9 @@ class UserApi extends Api
             $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='" . $get['login'] . "'"));
 
             if ($user) {
-                return $this->response(Helper::cutStr(Helper::delSmile($user['Bio'])), 200);
+                $str = str_replace("I '", "I'", Helper::cutStr(Helper::delSmile($user['Bio'])));
+                return $str;
+//                return $this->response(Helper::cutStr(Helper::delSmile($user['Bio'])), 200);
             }
         }
 
@@ -217,21 +219,17 @@ class UserApi extends Api
     public function getuniqAction()
     {
         $time = time() - 24*60*60;
-
         $user = $this->db->getRow('SELECT * FROM users WHERE Lastpostdate < ' . $time . ' and Status < 50 and Used = 0');
-
         $this->db->query("UPDATE users SET Used = 1 WHERE id = " . $user['id'] . ";");
-
         $result = [
             'id' => $user['id'],
             'login' => $user['Login'],
             'password' => $user['Password'],
             'port' => $user['ip'],
         ];
-
         return $this->response($result, 200);
-
     }
+
 
     /**
      * @return string
@@ -239,20 +237,42 @@ class UserApi extends Api
     public function getuniqzeroAction()
     {
 
-        $time = time() - 24*60*60;
+        $get = $this->requestParams;
 
-        $user = $this->db->getRow('SELECT * FROM users WHERE Lastpostdate < ' . $time . ' and Status < 50 and Used = 1');
+        if (isset($get['login']) or isset($get['userid'])) {
 
-        $this->db->query("UPDATE users SET Used = 0 WHERE id = " . $user['id'] . ";");
+            if (isset($get['userid'])) {
+                $user = $this->db->getRow('SELECT * FROM users WHERE id = '.(int)$get['userid']);
+                $this->db->query("UPDATE users SET Used = 0 WHERE id = " . $user['id'] . ";");
 
-        $result = [
-            'id' => $user['id'],
-            'login' => $user['Login'],
-            'password' => $user['Password'],
-            'port' => $user['ip'],
-        ];
+                $result = [
+                    'id' => $user['id'],
+                    'login' => $user['Login'],
+                    'password' => $user['Password'],
+                    'port' => $user['ip'],
+                ];
 
-        return $this->response($result, 200);
+                return $this->response($result, 200);
+            }
+
+            if (isset($get['login'])) {
+                $user = $this->db->getRow("SELECT * FROM users WHERE Login = '".$get['login']."' ;");
+                $this->db->query("UPDATE users SET Used = 0 WHERE Login = '" . $user['login'] . "';");
+
+                $result = [
+                    'id' => $user['id'],
+                    'login' => $user['Login'],
+                    'password' => $user['Password'],
+                    'port' => $user['ip'],
+                ];
+
+                return $this->response($result, 200);
+            }
+
+
+
+        }
+        return $this->response("error", 500);
 
     }
 
