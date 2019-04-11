@@ -142,7 +142,10 @@ class UserApi extends Api
 
             if ($user) {
                 $str = str_replace("I '", "I'", Helper::cutStr(Helper::delSmile($user['Bio'])));
-                return $str;
+//                $str = str_replace("\n", " ", $str);
+//                return str_replace(chr(10),'',$str);
+                return preg_replace("/(\"|\r?\n)/", ' ', $str);
+//                ;
 //                return $this->response(Helper::cutStr(Helper::delSmile($user['Bio'])), 200);
             }
         }
@@ -241,17 +244,27 @@ class UserApi extends Api
         if (isset($get['login']) or isset($get['userid'])) {
 
             if (isset($get['userid'])) {
-                $user = $this->db->getRow('SELECT * FROM users WHERE id = '.(int)$get['userid']);
-                $this->db->query("UPDATE users SET Used = 0 WHERE id = " . $user['id'] . ";");
+                if (is_int((int)$get['userid'])) {
+                    $user = $this->db->getRow('SELECT * FROM users WHERE id = ' . (int)$get['userid']);
+                    if ($user) {
+                        $this->db->query("UPDATE users SET Used = 0 WHERE id = " . $user['id'] . ";");
 
-                return $this->response('Used updated', 200);
+                        return $this->response('Used updated', 200);
+                    }
+                    return $this->response('User not found', 500);
+                }
+
+                return $this->response('Error', 500);
             }
 
             if (isset($get['login'])) {
                 $user = $this->db->getRow("SELECT * FROM users WHERE Login = '".$get['login']."' ;");
-                $this->db->query("UPDATE users SET Used = 0 WHERE Login = '" . $user['login'] . "';");
+                if ($user) {
+                    $this->db->query("UPDATE users SET Used = 0 WHERE Login = '" . $user['login'] . "';");
 
-                return $this->response('Used updated', 200);
+                    return $this->response('Used updated', 200);
+                }
+                return $this->response('User not found', 500);
             }
 
         }
