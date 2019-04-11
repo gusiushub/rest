@@ -232,11 +232,10 @@ class UserApi extends Api
 
 
     /**
-     * @return string
+     * @return mixed|string
      */
     public function getuniqzeroAction()
     {
-
         $get = $this->requestParams;
 
         if (isset($get['login']) or isset($get['userid'])) {
@@ -245,35 +244,19 @@ class UserApi extends Api
                 $user = $this->db->getRow('SELECT * FROM users WHERE id = '.(int)$get['userid']);
                 $this->db->query("UPDATE users SET Used = 0 WHERE id = " . $user['id'] . ";");
 
-                $result = [
-                    'id' => $user['id'],
-                    'login' => $user['Login'],
-                    'password' => $user['Password'],
-                    'port' => $user['ip'],
-                ];
-
-                return $this->response($result, 200);
+                return $this->response('Used updated', 200);
             }
 
             if (isset($get['login'])) {
                 $user = $this->db->getRow("SELECT * FROM users WHERE Login = '".$get['login']."' ;");
                 $this->db->query("UPDATE users SET Used = 0 WHERE Login = '" . $user['login'] . "';");
 
-                $result = [
-                    'id' => $user['id'],
-                    'login' => $user['Login'],
-                    'password' => $user['Password'],
-                    'port' => $user['ip'],
-                ];
-
-                return $this->response($result, 200);
+                return $this->response('Used updated', 200);
             }
 
-
-
         }
-        return $this->response("error", 500);
 
+        return $this->response("error", 500);
     }
 
     /**

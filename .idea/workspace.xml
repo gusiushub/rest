@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d9c51d14-867d-44b0-85aa-bd82baab9aac" name="Default" comment="gitignore">
-      <change afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/UserApi.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/UserApi.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/config/db.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/config/db.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/log/log.log" beforeDir="false" afterPath="$PROJECT_DIR$/app/log/log.log" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -69,11 +64,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="UserApi.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="UserApi.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/api/UserApi.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="143" column="44" lean-forward="true" selection-start-line="143" selection-start-column="44" selection-end-line="143" selection-end-column="44" />
+            <state relative-caret-position="324">
+              <caret line="256" column="12" selection-start-line="256" selection-start-column="12" selection-end-line="256" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -99,7 +94,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="users" pinned="false" current-in-tab="true">
+      <file leaf-file-name="users" pinned="false" current-in-tab="false">
         <entry file="das://de818a7f-8f81-4faa-acc4-6953fbca9ce1/schema/rest/table/users">
           <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
             <state>
@@ -155,8 +150,8 @@
       <file leaf-file-name="db.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/config/db.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="5" column="16" lean-forward="true" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
+            <state relative-caret-position="54">
+              <caret line="3" column="16" lean-forward="true" selection-start-line="3" selection-start-column="16" selection-end-line="3" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -435,7 +430,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="286706000" />
+    <option name="totallyTimeSpent" value="287887000" />
   </component>
   <component name="TodoView" selected-index="3">
     <todo-panel id="selected-file">
@@ -744,13 +739,6 @@
     <entry file="file://$PROJECT_DIR$/bio.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/config/db.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="5" column="16" lean-forward="true" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/config/config.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
@@ -758,10 +746,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/api/UserApi.php">
+    <entry file="file://$PROJECT_DIR$/app/config/db.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="143" column="44" lean-forward="true" selection-start-line="143" selection-start-column="44" selection-end-line="143" selection-end-column="44" />
+        <state relative-caret-position="54">
+          <caret line="3" column="16" lean-forward="true" selection-start-line="3" selection-start-column="16" selection-end-line="3" selection-end-column="16" />
         </state>
       </provider>
     </entry>
@@ -769,6 +757,13 @@
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
           <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api/UserApi.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="256" column="12" selection-start-line="256" selection-start-column="12" selection-end-line="256" selection-end-column="12" />
         </state>
       </provider>
     </entry>
