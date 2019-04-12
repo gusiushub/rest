@@ -227,6 +227,7 @@ class UserApi extends Api
         $user = $this->db->getRow('SELECT * FROM users WHERE Lastpostdate < ' . $time . ' and Status < 50 and Used = 0 ;');
         if ($user) {
             $this->db->query("UPDATE users SET Used = 1 WHERE id = " . (int)$user['id'] . ";");
+            $this->db->query("UPDATE users SET Useddate = ".time()." WHERE id = " . (int)$user['id'] . ";");
             $result = [
                 'id' => $user['id'],
                 'login' => $user['Login'],
@@ -254,9 +255,11 @@ class UserApi extends Api
                     $user = $this->db->getRow('SELECT * FROM users WHERE id = ' . (int)$get['userid']);
                     if ($user) {
                         $this->db->query("UPDATE users SET Used = 0 WHERE id = " . $user['id'] . ";");
+                        $this->db->query("UPDATE users SET Useddate = 0 WHERE id = " . $user['id'] . ";");
 
                         return $this->response(200, 200);
                     }
+
                     return $this->response(404, 404);
                 }
 
@@ -267,12 +270,13 @@ class UserApi extends Api
                 $user = $this->db->getRow("SELECT * FROM users WHERE Login = '".$get['login']."' ;");
                 if ($user) {
                     $this->db->query("UPDATE users SET Used = 0 WHERE Login = '" . $get['login'] . "';");
+                    $this->db->query("UPDATE users SET Useddate = 0 WHERE id = " . $user['id'] . ";");
 
                     return $this->response(200, 200);
                 }
+
                 return $this->response(404, 404);
             }
-
         }
 
         return $this->response(404, 404);

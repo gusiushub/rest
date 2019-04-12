@@ -26,18 +26,44 @@ class AlgorithmTest extends TestCase
     public function testGetuniqzero()
     {
         $trueResponse = $this->http->request('GET', '?action=getuniqzero&login='.$this->login.'&token=li2j3fojewf');
-//        $falseResponse = $this->http->request('GET', '?action=getuniqzero&token=li2j3fojewf');
         $this->assertEquals(200, $trueResponse->getStatusCode());
-//        $this->assertEquals('404 Not Found', $falseResponse->getStatusCode());
-
     }
 
     public function testGetuniq()
     {
         $trueResponse = $this->http->request('GET', '?action=getuniq&token='.$this->token);
-//        $falseResponse = $this->http->request('GET', '?action=getuniq&token=li2j3fojewf');
         $this->assertEquals(200, $trueResponse->getStatusCode());
-//        $this->assertEquals(404, $falseResponse->getStatusCode());
-
     }
+
+    public function testGetPort()
+    {
+        $response = $this->http->request('GET', '?action=ip&token='.$this->token);
+//        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(200, $response->getStatusCode());
+        $data = json_decode($response->getBody(), true);
+        $this->expectOutputString('Выдан порт - '.$data);
+    }
+
+//    public function testAddUser()
+//    {
+//        $response = $this->client->get('/', [
+//            'query' => [
+//                'action' => 'add',
+//                'token' => 'li2j3fojewf',
+//                'login' => 'logijssjjjn',
+//                'password' => 'lo2345gisssaanuser',
+//                'ip' => 24501,
+//                'age' => 'loginuser',
+//                'sex' => 'loginuser',
+//                'fullname' => 'loginuser',
+//                'phone' => 'loginuser',
+//                'country' => 'loginuser',
+//            ]
+//        ]);
+//        $response = $this->http->request('GET', '?action=ip&token='.$this->token);
+//        $this->expectOutputString($response->getStatusCode());
+//        $this->assertEquals(200, $response->getStatusCode());
+//        $data = json_decode($response->getBody(), true);
+//        $this->assertContains('200', $data);
+//    }
 }

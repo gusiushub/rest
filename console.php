@@ -118,7 +118,7 @@ function sendRequestInService($params)
 }
 
 /**
- * @param $file
+ * @param $fileName
  * @param $userId
  * @return mixed
  */
@@ -141,6 +141,20 @@ function sendAvatar($fileName, $userId)
 //    $db->query("UPDATE users SET is_sf=?s WHERE id=" . (int)$userId . ";", $response);
     Log::consoleLog(['userId' => $userId, 'filename' => $fileName, 'response' => $response]);
     return $response;
+}
+
+
+function cron()
+{
+    $db = new \app\db\SafeMySQL();
+
+$time = time()-60*60;
+    $db->query("UPDATE users SET Used=0 WHERE Used=1 AND Useddate<".$time);
+//    $db->getAll('SELECT * FROM users WHERE Used = 0 ');
+}
+
+if ($argv[1]=='cron') {
+    cron();
 }
 
 

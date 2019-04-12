@@ -68,6 +68,7 @@ abstract class Api
             404 => 'Not Found',
 //            404 => 'Not Found',
             405 => 'Method Not Allowed',
+            406 => 'Not Acceptable',
             500 => 'Internal Server Error',
         );
 
