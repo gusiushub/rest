@@ -38,7 +38,6 @@ class AlgorithmTest extends TestCase
     public function testGetPort()
     {
         $response = $this->http->request('GET', '?action=ip&token='.$this->token);
-//        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals(200, $response->getStatusCode());
         $data = json_decode($response->getBody(), true);
         $this->expectOutputString('Выдан порт - '.$data);

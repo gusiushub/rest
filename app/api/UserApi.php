@@ -3,7 +3,7 @@
 
 namespace app\api;
 
-use app\api\Api;
+//use app\api\Api;
 use app\models\Helper;
 
 
@@ -35,7 +35,7 @@ class UserApi extends Api
             return $this->getImg($user['Profilepicture']);
         }
 
-        return $this->response('Data not found', 404);
+        return $this->response(460, 460);
     }
 
     /**
@@ -123,11 +123,11 @@ class UserApi extends Api
                     die;
                 }
 
-                return $this->response(404, 404);
+                return $this->response(460, 460);
             }
         }
 
-        return $this->response(404, 404);
+        return $this->response(400, 400);
     }
 
     /**
@@ -149,7 +149,7 @@ class UserApi extends Api
             }
         }
 
-        return $this->response(404, 404);
+        return $this->response(400, 400);
     }
 
     /**
@@ -213,9 +213,9 @@ class UserApi extends Api
                 $this->db->query("UPDATE users SET Lastpostdate=" . time() . " WHERE " . $str . ";");
                 return $this->response(200, 200);
             }
-            return $this->response(500, 500);
+            return $this->response(460, 460);
         }
-        return $this->response(500, 500);
+        return $this->response(400, 400);
     }
 
     /**
@@ -238,7 +238,7 @@ class UserApi extends Api
             return $this->response($result, 200);
         }
 
-        return $this->response(500, 500);
+        return $this->response(460, 460);
     }
 
     /**
@@ -260,10 +260,10 @@ class UserApi extends Api
                         return $this->response(200, 200);
                     }
 
-                    return $this->response(404, 404);
+                    return $this->response(460, 460);
                 }
 
-                return $this->response('Error', 500);
+                return $this->response(400, 400);
             }
 
             if (isset($get['login'])) {
@@ -275,11 +275,11 @@ class UserApi extends Api
                     return $this->response(200, 200);
                 }
 
-                return $this->response(404, 404);
+                return $this->response(460, 460);
             }
         }
 
-        return $this->response(404, 404);
+        return $this->response(400, 400);
     }
 
     /**
@@ -435,11 +435,11 @@ class UserApi extends Api
                     $user = $this->db->getRow("SELECT * FROM users WHERE Login='".$get['login']."'");
                     $this->db->query("UPDATE port SET status=".(int)$get['newstatus']." WHERE name='".$user['ip']."'");
                 }
-                return $this->response('Status updated.', 200);
+                return $this->response(200, 200);
             }
         }
 
-        return $this->response("Update error", 400);
+        return $this->response(400, 400);
     }
 
     /**

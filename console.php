@@ -147,10 +147,8 @@ function sendAvatar($fileName, $userId)
 function cron()
 {
     $db = new \app\db\SafeMySQL();
-
-$time = time()-60*60;
+    $time = time()-60*60;
     $db->query("UPDATE users SET Used=0 WHERE Used=1 AND Useddate<".$time);
-//    $db->getAll('SELECT * FROM users WHERE Used = 0 ');
 }
 
 if ($argv[1]=='cron') {
