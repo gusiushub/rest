@@ -93,7 +93,6 @@ var_dump($users); exit;
         }
 
     }
-//    var_dump($row);
 }
 
 function sendRequestInService($params)
@@ -121,6 +120,7 @@ function sendRequestInService($params)
 /**
  * @param $file
  * @param $userId
+ * @return mixed
  */
 function sendAvatar($fileName, $userId)
 {
@@ -137,7 +137,8 @@ function sendAvatar($fileName, $userId)
     $url = 'http://104.248.82.215/sfparser.php';
     $headers = array("Content-Type" => "multipart/form-data");
     $response = sendRequestInService(array('url' => $url, 'headers' => $headers, 'postfields' => $postfields));
-    $db->query("UPDATE users SET is_sf=?s WHERE id=" . (int)$userId . ";", $response);
+    $db->query("UPDATE users SET is_sf=".$response." WHERE id=" . (int)$userId . ";");
+//    $db->query("UPDATE users SET is_sf=?s WHERE id=" . (int)$userId . ";", $response);
     Log::consoleLog(['userId' => $userId, 'filename' => $fileName, 'response' => $response]);
     return $response;
 }

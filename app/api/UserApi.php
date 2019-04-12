@@ -22,7 +22,6 @@ class UserApi extends Api
         return   readfile(__DIR__.'/../../incoming/'.$img);
     }
 
-
     /**
      * @return false|int|string
      */
@@ -124,12 +123,12 @@ class UserApi extends Api
                     die;
                 }
 
-                return $this->response('Not found', 404);
+                return $this->response(404, 404);
             }
         }
+
+        return $this->response(404, 404);
     }
-
-
 
     /**
      * @return mixed|string
@@ -150,7 +149,7 @@ class UserApi extends Api
             }
         }
 
-        return $this->response('Data not found', 404);
+        return $this->response(404, 404);
     }
 
     /**
@@ -187,8 +186,10 @@ class UserApi extends Api
             $this->db->query("UPDATE port SET last_update=".time()." WHERE name=". (int)$get['ip'].";");
             $this->sendAvatar($lastPic,$user['id']);
 
-            return $this->response("200", 200);
+            return $this->response(200, 200);
         }
+
+//        return $this->response(404, 404);
     }
 
     /**
@@ -210,10 +211,11 @@ class UserApi extends Api
             if ($login) {
                 $this->db->query("UPDATE users SET Postcount=Postcount+1 WHERE " . $str . ";");
                 $this->db->query("UPDATE users SET Lastpostdate=" . time() . " WHERE " . $str . ";");
-                return $this->response("200", 200);
+                return $this->response(200, 200);
             }
+            return $this->response(500, 500);
         }
-        return $this->response("error", 500);
+        return $this->response(500, 500);
     }
 
     /**
@@ -222,17 +224,21 @@ class UserApi extends Api
     public function getuniqAction()
     {
         $time = time() - 24*60*60;
-        $user = $this->db->getRow('SELECT * FROM users WHERE Lastpostdate < ' . $time . ' and Status < 50 and Used = 0');
-        $this->db->query("UPDATE users SET Used = 1 WHERE id = " . $user['id'] . ";");
-        $result = [
-            'id' => $user['id'],
-            'login' => $user['Login'],
-            'password' => $user['Password'],
-            'port' => $user['ip'],
-        ];
-        return $this->response($result, 200);
-    }
+        $user = $this->db->getRow('SELECT * FROM users WHERE Lastpostdate < ' . $time . ' and Status < 50 and Used = 0 ;');
+        if ($user) {
+            $this->db->query("UPDATE users SET Used = 1 WHERE id = " . (int)$user['id'] . ";");
+            $result = [
+                'id' => $user['id'],
+                'login' => $user['Login'],
+                'password' => $user['Password'],
+                'port' => $user['ip'],
+            ];
 
+            return $this->response($result, 200);
+        }
+
+        return $this->response(500, 500);
+    }
 
     /**
      * @return mixed|string
@@ -249,9 +255,9 @@ class UserApi extends Api
                     if ($user) {
                         $this->db->query("UPDATE users SET Used = 0 WHERE id = " . $user['id'] . ";");
 
-                        return $this->response('Used updated', 200);
+                        return $this->response(200, 200);
                     }
-                    return $this->response('User not found', 500);
+                    return $this->response(404, 404);
                 }
 
                 return $this->response('Error', 500);
@@ -262,14 +268,14 @@ class UserApi extends Api
                 if ($user) {
                     $this->db->query("UPDATE users SET Used = 0 WHERE Login = '" . $get['login'] . "';");
 
-                    return $this->response('Used updated', 200);
+                    return $this->response(200, 200);
                 }
-                return $this->response('User not found', 500);
+                return $this->response(404, 404);
             }
 
         }
 
-        return $this->response("error", 500);
+        return $this->response(404, 404);
     }
 
     /**
@@ -302,6 +308,7 @@ class UserApi extends Api
         return $this->response($result, 200);
 
     }
+
     /**
      * @return string
      */
@@ -376,7 +383,6 @@ class UserApi extends Api
 
     }
 
-
     /**
      * @return false|int|string
      */
@@ -396,13 +402,6 @@ class UserApi extends Api
                         case 0:
                              $lastPic = 'Male/'.str_pad ($lastPic, 4,"0",STR_PAD_LEFT).'.jpg';
                             $this->insertUser($get,$lastPic);
-//                            Helper::downloadImg(__DIR__.'/../../incoming/'.$lastPic,'image/jpeg');
-//                            $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
-//                            if ($user) {
-//                                $this->sendAvatar($lastPic,$user['id']);
-//
-//                                return $this->response("200", 200);
-//                            }
                             break;
                         case 1:
                             $lastPic = 'Female/'.str_pad ($lastPic, 4,"0",STR_PAD_LEFT).'.jpg';
@@ -495,7 +494,6 @@ class UserApi extends Api
             echo '
              ' . $res['name'] . ' - ' . $count . ' / ' . $res['count'] . '';
         }
-
     }
 
 }
