@@ -56,7 +56,6 @@ if ($argv[1]=='count') {
 if ($argv[1]=='updatebio') {
     $db = new \app\db\SafeMySQL();
     $row = $db->getAll("SELECT * FROM users where Bio='I m working as a salesperson.Healthy Lifestyle [love]Olay, Сeline and [love] The future belongs to those, who believe of their dreams.';");
-//    var_dump($row); exit;
     foreach ($row as $value){
         $db->query("UPDATE users SET Bio='".Helper::getBio()."' WHERE id=".$value['id'].";");
     }
@@ -75,7 +74,6 @@ if ($argv[1]=='sendavatar') {
             }
             echo $response."\n";
 
-//        var_dump($send); exit;
     }
 }
 

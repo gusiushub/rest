@@ -7,4 +7,5 @@ bio.txt
 
 
 /ip.txt
-.idea/*
+.idea/*config/database.yml
+config/database.yml
