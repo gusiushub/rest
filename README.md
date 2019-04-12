@@ -4,7 +4,7 @@
 `git clone https://github.com/gusiushub/rest.git `
 
 `composer update`
-
+sxcv
 **Конфигурации** <hr>
 config/config.php - основные настройки
 config/db.php - настройки бд
@@ -99,7 +99,7 @@ textbio   <br>
 
 ---  <br>
 
-**Отправить аватар**  <br>
+**Отправить аватар**  <br>xsadh
 Требуются параметры:  <br>
     login   <br>
     status - отправить если ok <br>

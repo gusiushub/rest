@@ -1,11 +1,17 @@
 bio.txt
 
 /vendor/
-.idea
+
 /app/config/db.php
 /app/log/console.log
 /app/log/log.log
 
 
 /ip.txt
+
 .idea/*
+
+.idea/*config/database.yml
+config/database.yml
+config/database.yml
+

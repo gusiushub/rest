@@ -56,7 +56,6 @@ if ($argv[1]=='count') {
 if ($argv[1]=='updatebio') {
     $db = new \app\db\SafeMySQL();
     $row = $db->getAll("SELECT * FROM users where Bio='I m working as a salesperson.Healthy Lifestyle [love]Olay, Сeline and [love] The future belongs to those, who believe of their dreams.';");
-//    var_dump($row); exit;
     foreach ($row as $value){
         $db->query("UPDATE users SET Bio='".Helper::getBio()."' WHERE id=".$value['id'].";");
     }
@@ -78,7 +77,6 @@ if ($argv[1]=='sendavatar') {
             }
             echo $response."\n";
 
-//        var_dump($send); exit;
     }
 }
 
@@ -98,7 +96,6 @@ var_dump($users); exit;
         }
 
     }
-//    var_dump($row);
 }
 
 function sendRequestInService($params)
@@ -124,8 +121,9 @@ function sendRequestInService($params)
 }
 
 /**
- * @param $file
+ * @param $fileName
  * @param $userId
+ * @return mixed
  */
 function sendAvatar($fileName, $userId)
 {
@@ -142,9 +140,22 @@ function sendAvatar($fileName, $userId)
     $url = 'http://104.248.82.215/sfparser.php';
     $headers = array("Content-Type" => "multipart/form-data");
     $response = sendRequestInService(array('url' => $url, 'headers' => $headers, 'postfields' => $postfields));
-    $db->query("UPDATE users SET is_sf=?s WHERE id=" . (int)$userId . ";", $response);
+    $db->query("UPDATE users SET is_sf=".$response." WHERE id=" . (int)$userId . ";");
+//    $db->query("UPDATE users SET is_sf=?s WHERE id=" . (int)$userId . ";", $response);
     Log::consoleLog(['userId' => $userId, 'filename' => $fileName, 'response' => $response]);
     return $response;
+}
+
+
+function cron()
+{
+    $db = new \app\db\SafeMySQL();
+    $time = time()-60*60;
+    $db->query("UPDATE users SET Used=0 WHERE Used=1 AND Useddate<".$time);
+}
+
+if ($argv[1]=='cron') {
+    cron();
 }
 
 

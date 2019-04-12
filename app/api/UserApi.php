@@ -3,7 +3,7 @@
 
 namespace app\api;
 
-use app\api\Api;
+//use app\api\Api;
 use app\models\Helper;
 
 
@@ -22,8 +22,9 @@ class UserApi extends Api
         return   readfile(__DIR__.'/../../incoming/'.$img);
     }
 
-
     /**
+     * Получения в браузере фоток нужных айдишников по логину
+     *
      * @return false|int|string
      */
     public function viewAction()
@@ -36,7 +37,7 @@ class UserApi extends Api
             return $this->getImg($user['Profilepicture']);
         }
 
-        return $this->response('Data not found', 404);
+        return $this->response(460, 460);
     }
 
     /**
@@ -88,6 +89,8 @@ class UserApi extends Api
     }
 
     /**
+     * Отправить аватар
+     *
      * @return mixed|string
      */
     public function avatarAction()
@@ -124,14 +127,16 @@ class UserApi extends Api
                     die;
                 }
 
-                return $this->response('Not found', 404);
+                return $this->response(460, 460);
             }
         }
+
+        return $this->response(400, 400);
     }
 
-
-
     /**
+     * получение био
+     *
      * @return mixed|string
      */
     public function bioAction()
@@ -150,7 +155,7 @@ class UserApi extends Api
             }
         }
 
-        return $this->response('Data not found', 404);
+        return $this->response(400, 400);
     }
 
     /**
@@ -187,11 +192,13 @@ class UserApi extends Api
             $this->db->query("UPDATE port SET last_update=".time()." WHERE name=". (int)$get['ip'].";");
             $this->sendAvatar($lastPic,$user['id']);
 
-            return $this->response("200", 200);
+            return $this->response(200, 200);
         }
     }
 
     /**
+     * Увеличение postcount на единицу
+     *
      * @return string
      */
     public function postcountAction()
@@ -210,29 +217,37 @@ class UserApi extends Api
             if ($login) {
                 $this->db->query("UPDATE users SET Postcount=Postcount+1 WHERE " . $str . ";");
                 $this->db->query("UPDATE users SET Lastpostdate=" . time() . " WHERE " . $str . ";");
-                return $this->response("200", 200);
+                return $this->response(200, 200);
             }
+            return $this->response(460, 460);
         }
-        return $this->response("error", 500);
+        return $this->response(400, 400);
     }
 
     /**
+     * Получение не забаненых аккаунтов
+     *
      * @return string
      */
     public function getuniqAction()
     {
         $time = time() - 24*60*60;
-        $user = $this->db->getRow('SELECT * FROM users WHERE Lastpostdate < ' . $time . ' and Status < 50 and Used = 0');
-        $this->db->query("UPDATE users SET Used = 1 WHERE id = " . $user['id'] . ";");
-        $result = [
-            'id' => $user['id'],
-            'login' => $user['Login'],
-            'password' => $user['Password'],
-            'port' => $user['ip'],
-        ];
-        return $this->response($result, 200);
-    }
+        $user = $this->db->getRow('SELECT * FROM users WHERE Lastpostdate < ' . $time . ' and Status < 50 and Used = 0 and is_sf=1013 or is_sf=103;');
+        if ($user) {
+            $this->db->query("UPDATE users SET Used = 1 WHERE id = " . (int)$user['id'] . ";");
+            $this->db->query("UPDATE users SET Useddate = ".time()." WHERE id = " . (int)$user['id'] . ";");
+            $result = [
+                'id' => $user['id'],
+                'login' => $user['Login'],
+                'password' => $user['Password'],
+                'port' => $user['ip'],
+            ];
 
+            return $this->response($result, 200);
+        }
+
+        return $this->response(460, 460);
+    }
 
     /**
      * @return mixed|string
@@ -242,37 +257,44 @@ class UserApi extends Api
         $get = $this->requestParams;
 
         if (isset($get['login']) or isset($get['userid'])) {
-
+            $day = time()-60*60*24;
             if (isset($get['userid'])) {
                 if (is_int((int)$get['userid'])) {
-                    $user = $this->db->getRow('SELECT * FROM users WHERE id = ' . (int)$get['userid']);
-                    if ($user) {
-                        $this->db->query("UPDATE users SET Used = 0 WHERE id = " . $user['id'] . ";");
 
-                        return $this->response('Used updated', 200);
+                    $user = $this->db->getRow('SELECT * FROM users WHERE id = ' . (int)$get['userid'] . ' AND Lastpostdate < '.$day);
+                    if ($user) {
+
+                        $this->db->query("UPDATE users SET Used = ?i, Useddate = ?i WHERE id = ?i AND Lastpostdate < ".$day.";" , 0, 0,(int)$get['userid'] );
+//                        $this->db->query("UPDATE users SET Useddate = 0 WHERE id = " . $user['id'] . ";");
+
+                        return $this->response(200, 200);
                     }
-                    return $this->response('User not found', 500);
+
+                    return $this->response(460, 460);
                 }
 
-                return $this->response('Error', 500);
+                return $this->response(400, 400);
             }
 
             if (isset($get['login'])) {
-                $user = $this->db->getRow("SELECT * FROM users WHERE Login = '".$get['login']."' ;");
+                $user = $this->db->getRow("SELECT * FROM users WHERE Login = '".$get['login']."' AND Lastpostdate < ".$day." and is_sf=1013 or is_sf=103;");
                 if ($user) {
-                    $this->db->query("UPDATE users SET Used = 0 WHERE Login = '" . $get['login'] . "';");
+                    $this->db->query("UPDATE users SET Used = 0, Useddate = 0 WHERE Login = '" . $get['login'] . "';");
+//                    $this->db->query("UPDATE users SET Useddate = 0 WHERE id = " . $user['id'] . ";");
 
-                    return $this->response('Used updated', 200);
+                    return $this->response(200, 200);
                 }
-                return $this->response('User not found', 500);
-            }
 
+                return $this->response(460, 460);
+            }
         }
 
-        return $this->response("error", 500);
+        return $this->response(400, 400);
     }
 
     /**
+     * Вывод айпишника того кто делает запрос
+     *
      * @return string
      */
     public function getIpAction()
@@ -299,10 +321,16 @@ class UserApi extends Api
             'ip' => $ipaddress
         ];
 
-        return $this->response($result, 200);
+        if (!empty($result)) {
+            return $this->response($result, 200);
+        }
 
+        return $this->response(500, 500);
     }
+
     /**
+     * Получение не забаненых аккаунтов
+     *
      * @return string
      */
     public function getuserAction()
@@ -319,8 +347,9 @@ class UserApi extends Api
         return $this->response($result, 200);
     }
 
-
     /**
+     * Выдача айди записи из базы по логину юзера
+     *
      * @return string
      */
     public function useridbyloginAction()
@@ -332,10 +361,12 @@ class UserApi extends Api
                 return $this->response($login['id'], 200);
             }
         }
-        return $this->response("error", 500);
+        return $this->response(400, 400);
     }
 
     /**
+     * Выдача акка с определенным статусом
+     *
      * @return string
      */
     public function userbystatusAction()
@@ -347,10 +378,12 @@ class UserApi extends Api
                 return $this->response($login, 200);
             }
         }
-        return $this->response("error", 500);
+        return $this->response(400, 400);
     }
 
     /**
+     *  Доступ к портам (IP)
+     *
      * @return string
      */
     public function ipAction()
@@ -376,8 +409,9 @@ class UserApi extends Api
 
     }
 
-
     /**
+     * Создание пользователя
+     *
      * @return false|int|string
      */
     public function addAction()
@@ -396,13 +430,6 @@ class UserApi extends Api
                         case 0:
                              $lastPic = 'Male/'.str_pad ($lastPic, 4,"0",STR_PAD_LEFT).'.jpg';
                             $this->insertUser($get,$lastPic);
-//                            Helper::downloadImg(__DIR__.'/../../incoming/'.$lastPic,'image/jpeg');
-//                            $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
-//                            if ($user) {
-//                                $this->sendAvatar($lastPic,$user['id']);
-//
-//                                return $this->response("200", 200);
-//                            }
                             break;
                         case 1:
                             $lastPic = 'Female/'.str_pad ($lastPic, 4,"0",STR_PAD_LEFT).'.jpg';
@@ -410,15 +437,19 @@ class UserApi extends Api
                              break;
                     }
 
-                    return $this->response("200", 200);
+                    return $this->response(201, 201);
                 }
-                return $this->response("login exists", 500);
-        }
-        return $this->response("Saving error", 500);
+
+                return $this->response(460, 460);
+            }
+
+        return $this->response(501, 501);
     }
 
 
     /**
+     * изменить статус
+     *
      * @return string
      */
     public function statusAction()
@@ -432,14 +463,16 @@ class UserApi extends Api
                     $user = $this->db->getRow("SELECT * FROM users WHERE Login='".$get['login']."'");
                     $this->db->query("UPDATE port SET status=".(int)$get['newstatus']." WHERE name='".$user['ip']."'");
                 }
-                return $this->response('Status updated.', 200);
+                return $this->response(200, 200);
             }
         }
 
-        return $this->response("Update error", 400);
+        return $this->response(400, 400);
     }
 
     /**
+     * Доступ к логам. app/log/log.log - файл для записи логов
+     *
      * log
      */
     public function logAction()
@@ -450,6 +483,8 @@ class UserApi extends Api
     }
 
     /**
+     * Выгрузка csv
+     *
      * @return mixed|void
      */
     public function csvAction()
@@ -466,6 +501,8 @@ class UserApi extends Api
     }
 
     /**
+     * Статистика по портам
+     *
      * @return mixed|void
      */
     public function dashboardAction()
@@ -495,7 +532,6 @@ class UserApi extends Api
             echo '
              ' . $res['name'] . ' - ' . $count . ' / ' . $res['count'] . '';
         }
-
     }
 
 }
