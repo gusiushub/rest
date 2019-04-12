@@ -68,7 +68,10 @@ if ($argv[1]=='sendavatar') {
 
     foreach ($row as $value) {
 
-            $response = sendAvatar($value['Profilepicture'],$value['id']);
+            $response = sendAvatar('Female/00047.jpg',101);
+            var_dump($response);
+            exit;
+//            $response = sendAvatar($value['Profilepicture'],$value['id']);
             if ($response == 104) {
                 echo $response."\n";
                 break;
