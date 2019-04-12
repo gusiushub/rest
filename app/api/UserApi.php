@@ -261,7 +261,7 @@ class UserApi extends Api
             if (isset($get['userid'])) {
                 if (is_int((int)$get['userid'])) {
 
-                    $user = $this->db->getRow('SELECT * FROM users WHERE id = ' . (int)$get['userid'] . ' AND Lastpostdate < '.$day.' and is_sf=1013 or is_sf=103');
+                    $user = $this->db->getRow('SELECT * FROM users WHERE id = ' . (int)$get['userid'] . ' AND Lastpostdate < '.$day);
                     if ($user) {
 
                         $this->db->query("UPDATE users SET Used = ?i, Useddate = ?i WHERE id = ?i AND Lastpostdate < ".$day.";" , 0, 0,(int)$get['userid'] );
