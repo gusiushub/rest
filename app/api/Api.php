@@ -58,6 +58,7 @@ abstract class Api
 
     /**
      * 200 - успешный запрос,
+     * 201 - пользователь добавлен,
      * 400 - ошибка в запросе,
      * 403 - в запросе отсутствует токен или введенный токен не существует,
      * 404 - не найдено,
@@ -65,6 +66,7 @@ abstract class Api
      * 406 - запрошенный URI не может удовлетворить переданным в заголовке характеристикам,
      * 460 - пользователь не существует.
      * 500 - ошибка сервера
+     * 501 - ошибка при записи
      *
      *
      * @param $code
@@ -73,6 +75,7 @@ abstract class Api
     private function requestStatus($code) {
         $status = array(
             200 => 'OK',
+            201 => 'Created',
             400 => 'Bad Request',
             403 => 'Forbidden',
             404 => 'Not Found',
@@ -80,6 +83,7 @@ abstract class Api
             406 => 'Not Acceptable',
             460 => 'User not found',
             500 => 'Internal Server Error',
+            501 => 'Saving error',
         );
 
         return ($status[$code])?$status[$code]:$status[500];
