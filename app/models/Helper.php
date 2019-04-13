@@ -153,7 +153,8 @@ class Helper
     public static function getPort($db)
     {
         $time = time()-60*12;
-        $query = "SELECT f.id , name FROM port f JOIN ( SELECT rand() * (SELECT max(id) from port  WHERE port.count < 4) AS max_id ) AS m WHERE f.id >= m.max_id and count<4 and name>24250 and status!=99 and last_update<".$time." ORDER BY f.id ASC LIMIT 1;";
+        $query = "SELECT f.id , name FROM port f JOIN ( SELECT rand() * (SELECT max(id) from port  WHERE port.count < 4) AS max_id ) AS m WHERE f.id >= m.max_id and count<4 and name>24250 and status!=99  ORDER BY f.id ASC LIMIT 1;";
+//        $query = "SELECT f.id , name FROM port f JOIN ( SELECT rand() * (SELECT max(id) from port  WHERE port.count < 4) AS max_id ) AS m WHERE f.id >= m.max_id and count<4 and name>24250 and status!=99 and last_update<".$time." ORDER BY f.id ASC LIMIT 1;";
         $result = $db->getAll($query);
         if (isset($result)){
             foreach ($result as $res){
