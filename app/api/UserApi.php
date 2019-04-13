@@ -189,7 +189,7 @@ class UserApi extends Api
         Helper::downloadImg(__DIR__.'/../../incoming/'.$lastPic,'image/jpeg');
         $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
         if ($user) {
-            $this->db->query("UPDATE port SET last_update=".time()." WHERE name=". (int)$get['ip'].";");
+            $this->db->query("UPDATE port SET last_update=FROM_UNIXTIME(".time().") WHERE name=". (int)$get['ip'].";");
             $this->sendAvatar($lastPic,$user['id']);
 
             return $this->response(200, 200);
@@ -216,7 +216,7 @@ class UserApi extends Api
 
             if ($login) {
                 $this->db->query("UPDATE users SET Postcount=Postcount+1 WHERE " . $str . ";");
-                $this->db->query("UPDATE users SET Lastpostdate=" . time() . " WHERE " . $str . ";");
+                $this->db->query("UPDATE users SET Lastpostdate=FROM_UNIXTIME(" . time() . ") WHERE " . $str . ";");
                 return $this->response(200, 200);
             }
             return $this->response(460, 460);
@@ -232,10 +232,10 @@ class UserApi extends Api
     public function getuniqAction()
     {
         $time = time() - 24*60*60;
-        $user = $this->db->getRow('SELECT * FROM users WHERE Lastpostdate < ' . $time . ' and Status < 50 and Used = 0 and is_sf=1013 or is_sf=103;');
+        $user = $this->db->getRow('SELECT * FROM users WHERE IFNULL(UNIX_TIMESTAMP(Lastpostdate),0) < ' . $time . ' and Status < 50 and Used = 0 and is_sf=1013 or is_sf=103;');
         if ($user) {
             $this->db->query("UPDATE users SET Used = 1 WHERE id = " . (int)$user['id'] . ";");
-            $this->db->query("UPDATE users SET Useddate = ".time()." WHERE id = " . (int)$user['id'] . ";");
+            $this->db->query("UPDATE users SET Useddate = FROM_UNIXTIME(".time().") WHERE id = " . (int)$user['id'] . ";");
             $result = [
                 'id' => $user['id'],
                 'login' => $user['Login'],
@@ -256,15 +256,17 @@ class UserApi extends Api
     {
         $get = $this->requestParams;
 
+        $day = time()-60*60*24;
+
         if (isset($get['login']) or isset($get['userid'])) {
-            $day = time()-60*60*24;
+            
             if (isset($get['userid'])) {
                 if (is_int((int)$get['userid'])) {
 
-                    $user = $this->db->getRow('SELECT * FROM users WHERE id = ' . (int)$get['userid'] . ' AND Lastpostdate < '.$day);
+                    $user = $this->db->getRow('SELECT * FROM users WHERE id = ' . (int)$get['userid'] . ' AND IFNULL(UNIX_TIMESTAMP(Lastpostdate),0) < '.$day);
                     if ($user) {
 
-                        $this->db->query("UPDATE users SET Used = ?i, Useddate = ?i WHERE id = ?i AND Lastpostdate < ".$day.";" , 0, 0,(int)$get['userid'] );
+                        $this->db->query("UPDATE users SET Used = ?i, Useddate = ?i WHERE id = ?i AND IFNULL(UNIX_TIMESTAMP(Lastpostdate),0) < ".$day.";" , 0, 0,(int)$get['userid'] );
 //                        $this->db->query("UPDATE users SET Useddate = 0 WHERE id = " . $user['id'] . ";");
 
                         return $this->response(200, 200);
@@ -277,7 +279,7 @@ class UserApi extends Api
             }
 
             if (isset($get['login'])) {
-                $user = $this->db->getRow("SELECT * FROM users WHERE Login = '".$get['login']."' AND Lastpostdate < ".$day." and is_sf=1013 or is_sf=103;");
+                $user = $this->db->getRow("SELECT * FROM users WHERE Login = '".$get['login']."' AND IFNULL(UNIX_TIMESTAMP(Lastpostdate),0) < ".$day." and is_sf=1013 or is_sf=103;");
                 if ($user) {
                     $this->db->query("UPDATE users SET Used = 0, Useddate = 0 WHERE Login = '" . $get['login'] . "';");
 //                    $this->db->query("UPDATE users SET Useddate = 0 WHERE id = " . $user['id'] . ";");
