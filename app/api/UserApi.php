@@ -3,7 +3,6 @@
 
 namespace app\api;
 
-//use app\api\Api;
 use app\models\Helper;
 
 
@@ -31,13 +30,16 @@ class UserApi extends Api
     {
         $get = $this->requestParams;
 
-        $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
+        if (isset($get['login'])) {
+            $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='" . $get['login'] . "'"));
+            if ($user) {
+                return $this->response($this->getImg($user['Profilepicture']), 200);
+            }
 
-        if ($user) {
-            return $this->getImg($user['Profilepicture']);
+            return $this->response(460, 460);
         }
 
-        return $this->response(460, 460);
+        return $this->response(400, 400);
     }
 
     /**
@@ -219,8 +221,10 @@ class UserApi extends Api
                 $this->db->query("UPDATE users SET Lastpostdate=FROM_UNIXTIME(" . time() . ") WHERE " . $str . ";");
                 return $this->response(200, 200);
             }
+
             return $this->response(460, 460);
         }
+
         return $this->response(400, 400);
     }
 
@@ -339,14 +343,18 @@ class UserApi extends Api
     {
         $user = $this->db->getRow('SELECT * FROM users WHERE Lastpostdate = (SELECT MIN(Lastpostdate) FROM users) and Status < 50');
 
-        $result = [
-            'id' => $user['id'],
-            'login' => $user['Login'],
-            'password' => $user['Password'],
-            'port' => $user['ip'],
-        ];
+        if ($user) {
+            $result = [
+                'id' => $user['id'],
+                'login' => $user['Login'],
+                'password' => $user['Password'],
+                'port' => $user['ip'],
+            ];
 
-        return $this->response($result, 200);
+            return $this->response($result, 200);
+        }
+
+        return $this->response(460, 460);
     }
 
     /**
@@ -379,6 +387,8 @@ class UserApi extends Api
             if ($login) {
                 return $this->response($login, 200);
             }
+
+            return $this->response(460, 460);
         }
         return $this->response(400, 400);
     }

@@ -13,7 +13,7 @@ class AlgorithmTest extends TestCase
 
     public function setUp()
     {
-        $this->login = 'admin';
+        $this->login = 'mouamargaret';
         $this->token = 'li2j3fojewf';
         $this->http = new GuzzleHttp\Client(['base_uri' => 'http://api:8080/']);
 //        $this->http = new GuzzleHttp\Client(['base_uri' => 'http://api:8080/?action=showpic&login=admin&token=li2j3fojewf']);
@@ -27,12 +27,14 @@ class AlgorithmTest extends TestCase
     {
         $trueResponse = $this->http->request('GET', '?action=getuniqzero&login='.$this->login.'&token=li2j3fojewf');
         $this->assertEquals(200, $trueResponse->getStatusCode());
+        $this->expectOutputString('Статус у action=getuniqzero => '.$trueResponse->getStatusCode());
     }
 
     public function testGetuniq()
     {
         $trueResponse = $this->http->request('GET', '?action=getuniq&token='.$this->token);
         $this->assertEquals(200, $trueResponse->getStatusCode());
+        $this->expectOutputString('Статус у action=getuniq => '.$trueResponse->getStatusCode());
     }
 
     public function testGetPort()
@@ -40,29 +42,37 @@ class AlgorithmTest extends TestCase
         $response = $this->http->request('GET', '?action=ip&token='.$this->token);
         $this->assertEquals(200, $response->getStatusCode());
         $data = json_decode($response->getBody(), true);
-        $this->expectOutputString('Выдан порт - '.$data);
+        $this->expectOutputString('Выдан порт - '.$data.' | Статус у action=ip => '.$response->getStatusCode());
+//        $this->expectOutputString('Статус у action=ip => '.$response->getStatusCode());
     }
 
-//    public function testAddUser()
-//    {
-//        $response = $this->client->get('/', [
-//            'query' => [
-//                'action' => 'add',
-//                'token' => 'li2j3fojewf',
-//                'login' => 'logijssjjjn',
-//                'password' => 'lo2345gisssaanuser',
-//                'ip' => 24501,
-//                'age' => 'loginuser',
-//                'sex' => 'loginuser',
-//                'fullname' => 'loginuser',
-//                'phone' => 'loginuser',
-//                'country' => 'loginuser',
-//            ]
-//        ]);
-//        $response = $this->http->request('GET', '?action=ip&token='.$this->token);
-//        $this->expectOutputString($response->getStatusCode());
-//        $this->assertEquals(200, $response->getStatusCode());
-//        $data = json_decode($response->getBody(), true);
-//        $this->assertContains('200', $data);
-//    }
+    public function testShowpic()
+    {
+        $response = $this->http->request('GET', '?action=showpic&login='.$this->login.'&token='.$this->token);
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->expectOutputString('Статус у action=getuniq => '.$response->getStatusCode());
+    }
+
+    public function testAddUser()
+    {
+
+    }
+
+    public function testCsv()
+    {
+
+    }
+
+    public function testDashboard()
+    {
+
+    }
+
+    public function testGetIp()
+    {
+        $response = $this->http->request('GET', '?action=getip&token='.$this->token);
+        $this->assertEquals(200, $response->getStatusCode());
+        $data = json_decode($response->getBody(), true);
+        $this->expectOutputString('IP ------> '.$data['ip'].' | Статус у action=getip => '.$response->getStatusCode());
+    }
 }
