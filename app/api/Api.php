@@ -144,6 +144,12 @@ abstract class Api
             case 'getip':
                 return 'getIpAction';
                 break;
+            case 'gettable':
+                return 'getTableAction';
+                break;
+            case 'rewrite':
+                return 'rewriteAction';
+                break;
             default:
                 return null;
         }
@@ -233,5 +239,12 @@ abstract class Api
      * @return mixed
      */
     abstract protected function getIpAction();
+
+    /**
+     * @return mixed
+     */
+    abstract protected function getTableAction();
+    
+    abstract protected function rewriteAction();
 //    abstract protected function getuserAction();
 }

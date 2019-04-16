@@ -8,6 +8,7 @@ use app\db\SafeMySQL;
 class Helper
 {
     public static $bio = __DIR__ . '/../../bio.txt';
+    public static $bio2 = __DIR__ . '/../../goodbio.txt';
     const config = __DIR__ . '/../config/config.php';
 
 
@@ -73,8 +74,8 @@ class Helper
      * @return null|string|string[]
      */
     public static function delSmile($string)
-    {
-        return preg_replace("/\[[^)]+\]/","",$string);
+    {   ///\([^)]+\)/
+        return preg_replace("/\[.*?\]/is","",$string);
     }
 
     /**
@@ -82,12 +83,28 @@ class Helper
      * @return string
      */
     public static function cutStr($string)
-    {
+    {   
+        $string = preg_replace('/ {2,}/', ' ', $string);
+        $string = str_replace("I m", "I'm", str_replace("I '", "I'", $string));
+
         $string = substr($string, 0, 150);
+        $string = str_replace(" .", ".", $string);
         return substr ($string, 0, strrpos($string, '.')).'.';
     }
 
+    public static function rewrite($db)
+    {
 
+        // for ($i=1; $i <= 15; $i++) { 
+        //     $query = $db->getAll("SELECT id FROM `users` order by Date limit ".$i.";");
+        //     $id = $query[sizeof($query) - 1]["id"];
+        //     $str = str_replace("'", "/'", self::getStr(self::$bio2));
+        //     $str = self::cutStr(self::delSmile($str));
+        //     $db->query('UPDATE `users` SET gbio="'.$str.'" WHERE id='. (int)$id.';');
+        // }
+
+        // return $str;
+    }
     /**
      * @return mixed
      */
@@ -105,12 +122,24 @@ class Helper
         self::delStr($file);
         while (trim($bio[$i])!='---') {
             if (self::delStr($file)) {
-                $str = $str . $bio[$i];
+                if ($str != "") {
+                    if (substr($str, -2) != ". ") {
+                        if (substr($str, -1) == ".") {
+                            $str .= ' ';
+                        } elseif (substr($str, -1) == " ") {
+                            $str .= substr($str, 0, -1) . '. ';
+                        } else {
+                            $str .= '. ';
+                        }
+                    }
+                }
+                $str .= $bio[$i];
                 $i++;
             }
         }
         self::delStr($file);
-        $string = str_replace("'"," ",$str);
+        
+        $string = self::cutStr(self::delSmile($str));
         return $string;
     }
 
@@ -135,6 +164,7 @@ class Helper
         $str = self::getStr(self::$bio);
 
         $search = self::getInbetweenStrings('%','%',$str);
+
         if (!empty($search)) {
             $val = array(self::getFullname($_GET['fullname']), $_GET['sex'], $_GET['country'], $_GET['age']);
             if (preg_match("/%(.*?)%/", $str, $matches))

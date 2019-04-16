@@ -21,6 +21,27 @@ class UserApi extends Api
         return   readfile(__DIR__.'/../../incoming/'.$img);
     }
 
+    private function getAuth()
+    {
+       return array('user' => 'sdd5w%83');
+    }
+    private function runAuth() {
+
+        if (!isset($_SERVER['PHP_AUTH_USER'])) {
+            header('WWW-Authenticate: Basic realm="My Realm"');
+            header('HTTP/1.0 401 Unauthorized');
+            echo '400';
+            exit;
+        } else {
+            $user = $_SERVER['PHP_AUTH_USER'];
+            $pass = $_SERVER['PHP_AUTH_PW'];
+            $auth = $this->getAuth();
+            if (!($auth[$user] && $auth[$user] == $pass)) {
+                echo '400';
+                exit;
+            }
+        }
+    }
     /**
      * Получения в браузере фоток нужных айдишников по логину
      *
@@ -148,7 +169,7 @@ class UserApi extends Api
             $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='" . $get['login'] . "'"));
 
             if ($user) {
-                $str = str_replace("I '", "I'", Helper::cutStr(Helper::delSmile($user['Bio'])));
+                $str = $user['Bio'];
 //                $str = str_replace("\n", " ", $str);
 //                return str_replace(chr(10),'',$str);
                 return preg_replace("/(\"|\r?\n)/", ' ', $str);
@@ -183,16 +204,16 @@ class UserApi extends Api
         $sms = isset($get['smsservice']) ? (int)$get['smsservice'] : 0;
 
         if (isset($get['mother'])){
-            $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture, Smsservice, Mother ) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic . "','" . (int)$sms . "','".(int)$get['mother']."')");
+            $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture, Smsservice, Mother ) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "', ?s ,'" . $lastPic . "','" . (int)$sms . "','".(int)$get['mother']."')", Helper::getBio());
         } else {
-            $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture, Smsservice) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "','" . Helper::getBio() . "','" . $lastPic . "','" . (int)$sms . "')");
+            $this->db->query("INSERT INTO users ( Login,  Password,  Phone,  ip,  Country,Sex, Age, Fullname, Date, Bio, Profilepicture, Smsservice) VALUES ('" . $get['login'] . "','" . $get['password'] . "'," . (int)$get['phone'] . ",'" . $get['ip'] . "','" . $get['country'] . "'," . (int)$get['sex'] . "," . (int)$get['age'] . ",'" . $get['fullname'] . "','" . date('Y-m-d H:i:s', time()) . "', ?s ,'" . $lastPic . "','" . (int)$sms . "')", Helper::getBio());
         }
 
         Helper::downloadImg(__DIR__.'/../../incoming/'.$lastPic,'image/jpeg');
         $user = $this->db->fetch($this->db->query("SELECT * FROM users WHERE Login='".$get['login']."'"));
         if ($user) {
             $this->db->query("UPDATE port SET last_update=FROM_UNIXTIME(".time().") WHERE name=". (int)$get['ip'].";");
-            $this->sendAvatar($lastPic,$user['id']);
+            // $this->sendAvatar($lastPic,$user['id']);
 
             return $this->response(200, 200);
         }
@@ -236,10 +257,14 @@ class UserApi extends Api
     public function getuniqAction()
     {
         $time = time() - 24*60*60;
-        $user = $this->db->getRow('SELECT * FROM users WHERE IFNULL(UNIX_TIMESTAMP(Lastpostdate),0) < ' . $time . ' and Status < 50 and Used = 0 and is_sf=1013 or is_sf=103;');
+        $time3h = time() - 3*60*60;
+        $user = $this->db->getRow('SELECT * FROM users
+            LEFT JOIN port
+            ON users.ip = port.name 
+            WHERE IFNULL(UNIX_TIMESTAMP(users.Lastpostdate),0) < ' . $time . ' and users.Status < 50 and users.Used = 0 and (users.is_sf=1013 or users.is_sf=103) and IFNULL(UNIX_TIMESTAMP(port.dateuse),0) < ' . $time3h . ';');
         if ($user) {
-            $this->db->query("UPDATE users SET Used = 1 WHERE id = " . (int)$user['id'] . ";");
-            $this->db->query("UPDATE users SET Useddate = FROM_UNIXTIME(".time().") WHERE id = " . (int)$user['id'] . ";");
+            $this->db->query("UPDATE users SET Used = 1, Useddate = FROM_UNIXTIME(".time().") WHERE id = " . (int)$user['id'] . ";");
+            $this->db->query("UPDATE port SET dateuse = FROM_UNIXTIME(".time().") WHERE name = '" . $user['ip'] . "';");
             $result = [
                 'id' => $user['id'],
                 'login' => $user['Login'],
@@ -469,14 +494,20 @@ class UserApi extends Api
         $get = $this->requestParams;
 
         if (isset($get['newstatus'])) {
-            $update = $this->db->query("UPDATE users SET Status=".(int)$get['newstatus']." WHERE Login='".$get['login']."'");
-            if ($update) {
+            $user = $this->db->getRow("SELECT * FROM users WHERE Login='".$get['login']."'");
+            if ($user) {
+
+                $update = $this->db->query("UPDATE users SET Status=".(int)$get['newstatus'].", statuschangedate = FROM_UNIXTIME(".time().") WHERE Login='".$get['login']."'");
+
                 if ($get['newstatus']==99){
                     $user = $this->db->getRow("SELECT * FROM users WHERE Login='".$get['login']."'");
-                    $this->db->query("UPDATE port SET status=".(int)$get['newstatus']." WHERE name='".$user['ip']."'");
+                    if ($user) {
+                        $this->db->query("UPDATE port SET status=".(int)$get['newstatus'].", statuschangedate = FROM_UNIXTIME(".time().") WHERE name='".$user['ip']."'");
+                    }
                 }
                 return $this->response(200, 200);
             }
+            return $this->response(460, 460);
         }
 
         return $this->response(400, 400);
@@ -501,6 +532,9 @@ class UserApi extends Api
      */
     public function csvAction()
     {
+
+        $this->runAuth();
+
         $value = $this->db->getAll("SELECT * FROM users ORDER BY id ASC");
         $fp = fopen('file.csv', 'w');
 
@@ -536,14 +570,82 @@ class UserApi extends Api
         echo '--ниже список проксей и количество успешных / количество попыток их использований по базе--';
         foreach ($result as $res) {
             $count = 0;
-            foreach ($usedCount as $key => $val) {;
+            foreach ($usedCount as $key => $val) {
                if ($val['ip'] === $res['name']) {
                    $count = $val['count'];
                }
-           }
+            }
             echo '
              ' . $res['name'] . ' - ' . $count . ' / ' . $res['count'] . '';
         }
     }
+    public function rewriteAction() {
+        return Helper::rewrite($this->db);
+    }
 
+    /**
+     * Таблица с юзерами
+     *
+     * @return mixed|void
+     */
+    public function getTableAction()
+    {
+        header('Content-Type: text/html');
+
+        $this->runAuth();
+        
+        $get = $this->requestParams;
+        if (isset($get['query'])) {
+            $query = $get['query'];
+        } else {
+            $query = "SELECT * FROM `users` order by Date desc limit 50;";
+        }
+
+        $all = $this->db->getAll($query);
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $ids = '';
+            foreach ($all as $key => $val) {
+               $ids .= $val['id'] . ',';
+            }
+            $ids = substr($ids, 0, -1);
+            $this->db->query("UPDATE users SET Used = 0 WHERE id in ($ids)");
+        }
+        echo '<style>.row{border-bottom: 1px solid black} table td:not(:last-child), table th:not(:last-child) {border-right: 1px solid black;} table img {width: 50px;}</style><form method="get">
+            <input type="hidden" name="action" value="gettable" />
+            <input type="hidden" name="token" value="'.$get["token"].'" />
+          <input name="query" style="width:calc(100% - 40px)" type="text" value="'.$query.'">
+          <button type="submit">Set</button>
+         </form>';
+        $all = $this->db->getAll($query);
+
+        $time = time() - 24*60*60;
+        $time3h = time() - 3*60*60;
+        $user = $this->db->getAll('SELECT * FROM users
+            LEFT JOIN port
+            ON users.ip = port.name 
+            WHERE IFNULL(UNIX_TIMESTAMP(users.Lastpostdate),0) < ' . $time . ' and users.Status < 50 and users.Used = 0 and (users.is_sf=1013 or users.is_sf=103) and IFNULL(UNIX_TIMESTAMP(port.dateuse),0) < ' . $time3h . ';');
+
+        echo '<div style="float:left">Get unique user rows: '.sizeof($user).'. </div><form style="float:left; margin-left:20px" method="post">
+          <button type="submit">Set USED=0 for all</button>
+         </form>';
+        echo '<table style="border: 1px solid black; text-align: center; width: 100%; border-collapse: collapse;">
+           <tr class="row">
+            <th>Аватар</th>
+            <th>Логин</th>
+            <th>Дата создания</th>
+            <th>Пол</th>
+            <th>Возраст</th>
+            <th>Посткаунт</th>
+            <th>Дата последнего поста</th>
+            <th>Стата sf</th>
+           </tr>';
+        foreach ($all as $key => $val) {
+            echo '<tr class="row"><td><a href="http://104.248.82.215/filter_images.php?id_profile=' . $val['id'] . '"><img src="/incoming/' . $val['Profilepicture'] . '"></a></td><td>' . $val['Login'] . '</td><td>' . $val['Date'] . '</td><td>' . ($val['Sex'] ? 'female' : 'male') . '</td><td>' . $val['Age'] . '</td><td>' . $val['Postcount'] . '</td><td>' . $val['Lastpostdate'] . '</td><td>' . $val['is_sf'] . '</td>';
+            
+        }
+        echo '</table>
+
+        ';
+    }
 }
