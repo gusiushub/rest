@@ -249,24 +249,19 @@ class UserApi extends Api
         return $this->response(400, 400);
     }
 
-    /**
-     * Получение не забаненых аккаунтов
-     *
-     * @return string
-     */
     public function getuniqAction()
     {
         $time = time() - 24*60*60;
         $time3h = time() - 3*60*60;
-        $user = $this->db->getRow('SELECT * FROM users
+        $user = $this->db->getRow('SELECT users.id as userId, Login, Password, ip FROM users
             LEFT JOIN port
             ON users.ip = port.name 
             WHERE IFNULL(UNIX_TIMESTAMP(users.Lastpostdate),0) < ' . $time . ' and users.Status < 50 and users.Used = 0 and (users.is_sf=1013 or users.is_sf=103) and IFNULL(UNIX_TIMESTAMP(port.dateuse),0) < ' . $time3h . ';');
         if ($user) {
-            $this->db->query("UPDATE users SET Used = 1, Useddate = FROM_UNIXTIME(".time().") WHERE id = " . (int)$user['id'] . ";");
+            $this->db->query("UPDATE users SET Used = 1, Useddate = FROM_UNIXTIME(".time().") WHERE id = " . (int)$user['userId'] . ";");
             $this->db->query("UPDATE port SET dateuse = FROM_UNIXTIME(".time().") WHERE name = '" . $user['ip'] . "';");
             $result = [
-                'id' => $user['id'],
+                'id' => $user['userId'],
                 'login' => $user['Login'],
                 'password' => $user['Password'],
                 'port' => $user['ip'],
@@ -277,6 +272,35 @@ class UserApi extends Api
 
         return $this->response(460, 460);
     }
+
+    /**
+     * Получение не забаненых аккаунтов
+     *
+     * @return string
+     */
+//    public function getuniqAction()
+//    {
+//        $time = time() - 24*60*60;
+//        $time3h = time() - 3*60*60;
+//        $user = $this->db->getRow('SELECT * FROM users
+//            LEFT JOIN port
+//            ON users.ip = port.name
+//            WHERE IFNULL(UNIX_TIMESTAMP(users.Lastpostdate),0) < ' . $time . ' and users.Status < 50 and users.Used = 0 and (users.is_sf=1013 or users.is_sf=103) and IFNULL(UNIX_TIMESTAMP(port.dateuse),0) < ' . $time3h . ';');
+//        if ($user) {
+//            $this->db->query("UPDATE users SET Used = 1, Useddate = FROM_UNIXTIME(".time().") WHERE id = " . (int)$user['id'] . ";");
+//            $this->db->query("UPDATE port SET dateuse = FROM_UNIXTIME(".time().") WHERE name = '" . $user['ip'] . "';");
+//            $result = [
+//                'id' => $user['id'],
+//                'login' => $user['Login'],
+//                'password' => $user['Password'],
+//                'port' => $user['ip'],
+//            ];
+//
+//            return $this->response($result, 200);
+//        }
+//
+//        return $this->response(460, 460);
+//    }
 
     /**
      * @return mixed|string
