@@ -74,16 +74,16 @@ abstract class Api
      */
     private function requestStatus($code) {
         $status = array(
-            200 => 'OK',
-            201 => 'Created',
-            400 => 'Bad Request',
-            403 => 'Forbidden',
-            404 => 'Not Found',
-            405 => 'Method Not Allowed',
-            406 => 'Not Acceptable',
-            460 => 'User not found',
-            500 => 'Internal Server Error',
-            501 => 'Saving error',
+            1200 => 'OK',
+            1201 => 'Created',
+            1400 => 'Bad Request',
+            1403 => 'Forbidden',
+            1404 => 'Not Found',
+            1405 => 'Method Not Allowed',
+            1406 => 'Not Acceptable',
+            1460 => 'User not found',
+            1500 => 'Internal Server Error',
+            1501 => 'Saving error',
         );
 
         return ($status[$code])?$status[$code]:$status[500];

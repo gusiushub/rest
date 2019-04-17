@@ -30,14 +30,14 @@ class UserApi extends Api
         if (!isset($_SERVER['PHP_AUTH_USER'])) {
             header('WWW-Authenticate: Basic realm="My Realm"');
             header('HTTP/1.0 401 Unauthorized');
-            echo '400';
+            echo '1400';
             exit;
         } else {
             $user = $_SERVER['PHP_AUTH_USER'];
             $pass = $_SERVER['PHP_AUTH_PW'];
             $auth = $this->getAuth();
             if (!($auth[$user] && $auth[$user] == $pass)) {
-                echo '400';
+                echo '1400';
                 exit;
             }
         }
@@ -57,10 +57,10 @@ class UserApi extends Api
                 return $this->response($this->getImg($user['Profilepicture']), 200);
             }
 
-            return $this->response(460, 460);
+            return $this->response(1460, 1460);
         }
 
-        return $this->response(400, 400);
+        return $this->response(1400, 1400);
     }
 
     /**
@@ -150,11 +150,11 @@ class UserApi extends Api
                     die;
                 }
 
-                return $this->response(460, 460);
+                return $this->response(1460, 1460);
             }
         }
 
-        return $this->response(400, 400);
+        return $this->response(1400, 1400);
     }
 
     /**
@@ -178,7 +178,7 @@ class UserApi extends Api
             }
         }
 
-        return $this->response(400, 400);
+        return $this->response(1400, 1400);
     }
 
     /**
@@ -215,7 +215,7 @@ class UserApi extends Api
             $this->db->query("UPDATE port SET last_update=FROM_UNIXTIME(".time().") WHERE name=". (int)$get['ip'].";");
             // $this->sendAvatar($lastPic,$user['id']);
 
-            return $this->response(200, 200);
+            return $this->response(1200, 1200);
         }
     }
 
@@ -240,15 +240,20 @@ class UserApi extends Api
             if ($login) {
                 $this->db->query("UPDATE users SET Postcount=Postcount+1 WHERE " . $str . ";");
                 $this->db->query("UPDATE users SET Lastpostdate=FROM_UNIXTIME(" . time() . ") WHERE " . $str . ";");
-                return $this->response(200, 200);
+                return $this->response(1200, 1200);
             }
 
-            return $this->response(460, 460);
+            return $this->response(1460, 1460);
         }
 
-        return $this->response(400, 400);
+        return $this->response(1400, 1400);
     }
 
+    /**
+     * Получение не забаненых аккаунтов
+     *
+     * @return string
+     */
     public function getuniqAction()
     {
         $time = time() - 24*60*60;
@@ -267,40 +272,12 @@ class UserApi extends Api
                 'port' => $user['ip'],
             ];
 
-            return $this->response($result, 200);
+            return $this->response($result, 1200);
         }
 
-        return $this->response(460, 460);
+        return $this->response(1460, 1460);
     }
 
-    /**
-     * Получение не забаненых аккаунтов
-     *
-     * @return string
-     */
-//    public function getuniqAction()
-//    {
-//        $time = time() - 24*60*60;
-//        $time3h = time() - 3*60*60;
-//        $user = $this->db->getRow('SELECT * FROM users
-//            LEFT JOIN port
-//            ON users.ip = port.name
-//            WHERE IFNULL(UNIX_TIMESTAMP(users.Lastpostdate),0) < ' . $time . ' and users.Status < 50 and users.Used = 0 and (users.is_sf=1013 or users.is_sf=103) and IFNULL(UNIX_TIMESTAMP(port.dateuse),0) < ' . $time3h . ';');
-//        if ($user) {
-//            $this->db->query("UPDATE users SET Used = 1, Useddate = FROM_UNIXTIME(".time().") WHERE id = " . (int)$user['id'] . ";");
-//            $this->db->query("UPDATE port SET dateuse = FROM_UNIXTIME(".time().") WHERE name = '" . $user['ip'] . "';");
-//            $result = [
-//                'id' => $user['id'],
-//                'login' => $user['Login'],
-//                'password' => $user['Password'],
-//                'port' => $user['ip'],
-//            ];
-//
-//            return $this->response($result, 200);
-//        }
-//
-//        return $this->response(460, 460);
-//    }
 
     /**
      * @return mixed|string
@@ -320,31 +297,29 @@ class UserApi extends Api
                     if ($user) {
 
                         $this->db->query("UPDATE users SET Used = ?i, Useddate = ?i WHERE id = ?i AND IFNULL(UNIX_TIMESTAMP(Lastpostdate),0) < ".$day.";" , 0, 0,(int)$get['userid'] );
-//                        $this->db->query("UPDATE users SET Useddate = 0 WHERE id = " . $user['id'] . ";");
 
-                        return $this->response(200, 200);
+                        return $this->response(1200, 1200);
                     }
 
-                    return $this->response(460, 460);
+                    return $this->response(1460, 1460);
                 }
 
-                return $this->response(400, 400);
+                return $this->response(1400, 1400);
             }
 
             if (isset($get['login'])) {
                 $user = $this->db->getRow("SELECT * FROM users WHERE Login = '".$get['login']."' AND IFNULL(UNIX_TIMESTAMP(Lastpostdate),0) < ".$day." and is_sf=1013 or is_sf=103;");
                 if ($user) {
                     $this->db->query("UPDATE users SET Used = 0, Useddate = 0 WHERE Login = '" . $get['login'] . "';");
-//                    $this->db->query("UPDATE users SET Useddate = 0 WHERE id = " . $user['id'] . ";");
 
-                    return $this->response(200, 200);
+                    return $this->response(1200, 1200);
                 }
 
-                return $this->response(460, 460);
+                return $this->response(1460, 1460);
             }
         }
 
-        return $this->response(400, 400);
+        return $this->response(1400, 1400);
     }
 
     /**
@@ -377,10 +352,10 @@ class UserApi extends Api
         ];
 
         if (!empty($result)) {
-            return $this->response($result, 200);
+            return $this->response($result, 1200);
         }
 
-        return $this->response(500, 500);
+        return $this->response(1500, 1500);
     }
 
     /**
@@ -400,10 +375,10 @@ class UserApi extends Api
                 'port' => $user['ip'],
             ];
 
-            return $this->response($result, 200);
+            return $this->response($result, 1200);
         }
 
-        return $this->response(460, 460);
+        return $this->response(1460, 1460);
     }
 
     /**
@@ -417,10 +392,10 @@ class UserApi extends Api
         if (isset($get['login'])) {
             $login = $this->db->getRow("SELECT * FROM users WHERE Login='" . $get['login'] . "'");
             if ($login) {
-                return $this->response($login['id'], 200);
+                return $this->response($login['id'], 1200);
             }
         }
-        return $this->response(400, 400);
+        return $this->response(1400, 1400);
     }
 
     /**
@@ -434,12 +409,12 @@ class UserApi extends Api
         if (isset($get['status'])) {
             $login = $this->db->getOne("SELECT Login FROM users WHERE Status=".(int)$get['status']);
             if ($login) {
-                return $this->response($login, 200);
+                return $this->response($login, 1200);
             }
 
-            return $this->response(460, 460);
+            return $this->response(1460, 1460);
         }
-        return $this->response(400, 400);
+        return $this->response(1400, 1400);
     }
 
     /**
@@ -453,10 +428,10 @@ class UserApi extends Api
         if (isset($port)) {
             if ($port != false) {
                 $this->plusPort((int)$port);
-                return $this->response($port, 200);
+                return $this->response($port, 1200);
             }
         }
-        return $this->response("0000", 500);
+        return $this->response("0000", 1500);
     }
 
     /**
@@ -498,13 +473,13 @@ class UserApi extends Api
                              break;
                     }
 
-                    return $this->response(201, 201);
+                    return $this->response(1201, 1201);
                 }
 
-                return $this->response(460, 460);
+                return $this->response(1460, 1460);
             }
 
-        return $this->response(501, 501);
+        return $this->response(1501, 1501);
     }
 
 
@@ -529,12 +504,12 @@ class UserApi extends Api
                         $this->db->query("UPDATE port SET status=".(int)$get['newstatus'].", statuschangedate = FROM_UNIXTIME(".time().") WHERE name='".$user['ip']."'");
                     }
                 }
-                return $this->response(200, 200);
+                return $this->response(1200, 1200);
             }
-            return $this->response(460, 460);
+            return $this->response(1460, 1460);
         }
 
-        return $this->response(400, 400);
+        return $this->response(1400, 1400);
     }
 
     /**
